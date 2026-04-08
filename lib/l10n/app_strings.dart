@@ -148,6 +148,9 @@ class AppStrings {
       : 'Trim island text to 7 characters for cleaner rendering on AOSP ROMs.';
   String get appPresentationSettings =>
       isRu ? 'Поведение приложений' : 'Per-app behavior';
+  String get appPresentationSubtitle => isRu
+      ? 'Настройте источник текста и иконки отдельно для разных приложений.'
+      : 'Choose text and icon behavior separately for different applications.';
   String get appPresentationScreenTitle =>
       isRu ? 'Поведение приложений' : 'Per-app behavior';
   String get appPresentationLoadFailed => isRu
@@ -258,6 +261,11 @@ class AppStrings {
   String get smartDetectionSubtitle => isRu
       ? 'Преобразует текстовые статусы еды, такси и навигации в единый Live-прогресс.'
       : 'Converts text-only food/taxi/navigation status notifications into a single Live.';
+  String get smartMediaPlaybackTitle =>
+      isRu ? 'Media Playback' : 'Media Playback';
+  String get smartMediaPlaybackSubtitle => isRu
+      ? 'Преобразует уведомления медиаплеера в Live. На некоторых OEM может дублировать нативный плеер.'
+      : 'Converts media playback notifications into Live. On some OEMs this may duplicate native media UI.';
   String get smartNavigationTitle =>
       isRu ? 'Навигация (карты)' : 'Navigation (maps)';
   String get smartNavigationSubtitle => isRu

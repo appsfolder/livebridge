@@ -44,7 +44,7 @@
         },
         {
           "stage": 1,
-          "pattern": "((?:заказ|order)[^\\n]{0,40}(собира(?:ем|ют|ется)|готов(?:ится|им)|начали готовить|в работе|в процессе)|собира(?:ем|ют|ется)[^\\n]{0,30}(?:заказ|order)|preparing|in kitchen|is being prepared|is being cooked|being cooked|cooking|assembling)"
+          "pattern": "((?:заказ|order)[^\\n]{0,40}(собира(?:ем|ют|ется)|готов(?:ится|им|ят)|начали готовить|в работе|в процессе)|собира(?:ем|ют|ется)[^\\n]{0,30}(?:заказ|order)|preparing|in kitchen|is being prepared|is being cooked|being cooked|cooking|assembling)"
         },
         {
           "stage": 0,

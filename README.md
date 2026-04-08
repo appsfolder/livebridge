@@ -3,6 +3,20 @@
 
 LiveBridge is a Flutter Android app with native Kotlin logic that converts regular notifications into Android Live Updates (Live Activity-like UX on Android 16+)
 
+## Screenshots
+
+### First Slide
+
+![First Slide](assets/screenshots/FirstSlide-lb.png)
+
+### Second Slide
+
+![Second Slide](assets/screenshots/SecondSlide-lb.png)
+
+### Third Slide
+
+![Third Slide](assets/screenshots/ThirdSlide-lb.png)
+
 ## Core features
 
 - Converts progress notifications into Live Updates
@@ -11,6 +25,7 @@ LiveBridge is a Flutter Android app with native Kotlin logic that converts regul
 - Real-time island navigation
 - App filtering modes
 - Per-app presentation overrides
+- Much, much more
 
 ## Small features you'll love
 
@@ -68,7 +83,16 @@ For stable behavior, the app usually needs:
 - On AOSP, app icon and label behavior may differ from OEM firmware
 - AoD and `isOngoing` behavior vary across OEM vendors
 
+- NOT WORKING on Chinese OriginOS
+- NOT WORKING on CMF devices
+- Working badly on Nothing devices without Progress Glyph indicators
+
 ## Notes
 
 - Feel free to open issues or pull requests. LiveBridge is under active development
 - Testing on multiple OEMs is highly recommended
+
+## Credits
+
+- [D4vidDf](https://github.com/D4vidDf/HyperIsland-ToolKit) for the Hyper Island toolkit
+- [RossSihovsk](https://github.com/RossSihovsk/LiveMedia) for the Live Media

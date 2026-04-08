@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../models/app_models.dart';
+import '../utils/livebridge_haptics.dart';
 
 class InstalledAppAvatar extends StatelessWidget {
   const InstalledAppAvatar({super.key, required this.app});
@@ -149,7 +149,7 @@ class _PackagePickerSheetState extends State<PackagePickerSheet> {
                           ? widget.hideSystemAppsLabel
                           : widget.showSystemAppsLabel,
                       onSelected: (bool next) {
-                        HapticFeedback.selectionClick();
+                        LiveBridgeHaptics.toggle(next);
                         setState(() => _showSystemApps = next);
                       },
                       itemBuilder: (BuildContext context) =>
@@ -207,7 +207,7 @@ class _PackagePickerSheetState extends State<PackagePickerSheet> {
                     final checked = _selected.contains(app.packageName);
                     return ListTile(
                       onTap: () {
-                        HapticFeedback.selectionClick();
+                        LiveBridgeHaptics.toggle(!checked);
                         setState(() {
                           checked
                               ? _selected.remove(app.packageName)
@@ -240,7 +240,7 @@ class _PackagePickerSheetState extends State<PackagePickerSheet> {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         onChanged: (val) {
-                          HapticFeedback.selectionClick();
+                          LiveBridgeHaptics.toggle(val == true);
                           setState(() {
                             val == true
                                 ? _selected.add(app.packageName)
@@ -263,7 +263,7 @@ class _PackagePickerSheetState extends State<PackagePickerSheet> {
                     ),
                   ),
                   onPressed: () {
-                    HapticFeedback.lightImpact();
+                    LiveBridgeHaptics.confirm();
                     Navigator.of(context).pop(_selected);
                   },
                   icon: const Icon(Icons.check_rounded),
@@ -449,7 +449,7 @@ class _ToggleSegment<T> extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () {
-            HapticFeedback.selectionClick();
+            LiveBridgeHaptics.selection();
             onTap();
           },
           child: SizedBox(
@@ -517,7 +517,7 @@ class _ChoiceCard<T> extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () {
-          HapticFeedback.selectionClick();
+          LiveBridgeHaptics.selection();
           onTap();
         },
         child: AnimatedContainer(

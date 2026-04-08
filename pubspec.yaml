@@ -1,7 +1,7 @@
 name: livebridge
 description: "Bridge regular Android notifications into Live Updates."
 publish_to: "none"
-version: 1.0.2+25
+version: 1.2.4+28
 
 environment:
   sdk: ^3.9.2

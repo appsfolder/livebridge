@@ -1,0 +1,86 @@
+name: Feature request
+description: Suggest a new capability, workflow, parser rule set, or UX improvement
+title: "[Feature] "
+labels:
+  - enhancement
+  - needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement.
+        Please describe the feature as concretely as possible.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Quick summary
+      description: Describe the proposed feature in 1-2 sentences.
+      placeholder: Short summary of the feature idea.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: feature_area
+    attributes:
+      label: Area
+      options:
+        - Notification conversion
+        - Smart detection / parsing
+        - OTP / code detection
+        - UI / UX
+        - Device / OEM compatibility
+        - Hyper Island / OEM integrations
+        - Settings / configuration
+        - Diagnostics / reporting
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / use case
+      description: What is missing today? What user workflow is currently painful, limited, or impossible?
+      placeholder: Describe the current limitation and why the feature would help.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed solution
+      description: Describe the ideal behavior, UI, or rule logic.
+      placeholder: Explain what the app should do.
+    validations:
+      required: true
+
+  - type: textarea
+    id: example_flow
+    attributes:
+      label: Example scenario
+      description: Give a concrete example with app names, notifications, or user steps if possible.
+      placeholder: |
+        App package:
+        Example notification:
+        Expected LiveBridge behavior:
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered (optional)
+      description: Describe any workaround or alternative approach you considered.
+      placeholder: Existing workaround, tradeoffs, or rejected idea.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context (optional)
+      description: Add screenshots, mockups, links, or extra notes.
+      placeholder: Any extra details that may help evaluate the request.
+    validations:
+      required: false

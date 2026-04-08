@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../l10n/app_strings.dart';
 import '../models/app_models.dart';
 import '../platform/livebridge_platform.dart';
+import '../utils/livebridge_haptics.dart';
 import '../widgets/shared_widgets.dart';
 import 'app_presentation_settings_page.dart';
 
@@ -65,6 +66,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
   bool _networkSpeedLockscreenOnly = false;
   bool _networkSpeedChipBackgroundDisabled = false;
   bool _smartDetectionEnabled = true;
+  bool _smartMediaPlaybackEnabled = false;
   bool _smartNavigationEnabled = true;
   bool _smartWeatherEnabled = true;
   bool _smartExternalDevicesEnabled = true;
@@ -244,6 +246,8 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
           await LiveBridgePlatform.getNetworkSpeedChipBackgroundDisabled();
       final bool smartDetectionEnabled =
           await LiveBridgePlatform.getSmartStatusDetectionEnabled();
+      final bool smartMediaPlaybackEnabled =
+          await LiveBridgePlatform.getSmartMediaPlaybackEnabled();
       final bool smartNavigationEnabled =
           await LiveBridgePlatform.getSmartNavigationEnabled();
       final bool smartWeatherEnabled =
@@ -348,6 +352,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
         _networkSpeedChipBackgroundDisabled =
             networkSpeedChipBackgroundDisabled;
         _smartDetectionEnabled = smartDetectionEnabled;
+        _smartMediaPlaybackEnabled = smartMediaPlaybackEnabled;
         _smartNavigationEnabled = smartNavigationEnabled;
         _smartWeatherEnabled = smartWeatherEnabled;
         _smartExternalDevicesEnabled = smartExternalDevicesEnabled;
@@ -423,13 +428,13 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
   }
 
   Future<void> _setOnlyWithProgress(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _onlyWithProgress = value);
     await LiveBridgePlatform.setOnlyWithProgress(value);
   }
 
   Future<void> _setTextProgressEnabled(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _textProgressEnabled = value);
     await LiveBridgePlatform.setTextProgressEnabled(value);
   }
@@ -488,25 +493,25 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
 
   Future<void> _setConverterEnabled(bool value) async {
     if (!_canToggleMaster) return;
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _converterEnabled = value);
     await LiveBridgePlatform.setConverterEnabled(value);
   }
 
   Future<void> _setKeepAliveForeground(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _keepAliveForegroundEnabled = value);
     await LiveBridgePlatform.setKeepAliveForegroundEnabled(value);
   }
 
   Future<void> _setSyncDnd(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _syncDndEnabled = value);
     await LiveBridgePlatform.setSyncDndEnabled(value);
   }
 
   Future<void> _setAospCutting(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _aospCuttingEnabled = value);
     await LiveBridgePlatform.setAospCuttingEnabled(value);
   }
@@ -518,19 +523,19 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
   }
 
   Future<void> _setAnimatedIsland(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _animatedIslandEnabled = value);
     await LiveBridgePlatform.setAnimatedIslandEnabled(value);
   }
 
   Future<void> _setHyperBridge(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _hyperBridgeEnabled = value);
     await LiveBridgePlatform.setHyperBridgeEnabled(value);
   }
 
   Future<void> _setUpdateChecksEnabled(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _updateChecksEnabled = value);
     await LiveBridgePlatform.setUpdateChecksEnabled(value);
     if (value) {
@@ -845,41 +850,44 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
 
     _masterBlockedHapticInProgress = true;
     try {
-      for (int i = 0; i < 3; i++) {
-        HapticFeedback.selectionClick();
-        await Future<void>.delayed(const Duration(milliseconds: 75));
-      }
+      await LiveBridgeHaptics.blockedPulse();
     } finally {
       _masterBlockedHapticInProgress = false;
     }
   }
 
   Future<void> _setSmartDetection(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _smartDetectionEnabled = value);
     await LiveBridgePlatform.setSmartStatusDetectionEnabled(value);
   }
 
+  Future<void> _setSmartMediaPlayback(bool value) async {
+    LiveBridgeHaptics.toggle(value);
+    setState(() => _smartMediaPlaybackEnabled = value);
+    await LiveBridgePlatform.setSmartMediaPlaybackEnabled(value);
+  }
+
   Future<void> _setSmartNavigation(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _smartNavigationEnabled = value);
     await LiveBridgePlatform.setSmartNavigationEnabled(value);
   }
 
   Future<void> _setSmartWeather(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _smartWeatherEnabled = value);
     await LiveBridgePlatform.setSmartWeatherEnabled(value);
   }
 
   Future<void> _setSmartExternalDevices(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _smartExternalDevicesEnabled = value);
     await LiveBridgePlatform.setSmartExternalDevicesEnabled(value);
   }
 
   Future<void> _setSmartVpn(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _smartVpnEnabled = value);
     await LiveBridgePlatform.setSmartVpnEnabled(value);
   }
@@ -1053,13 +1061,13 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
   }
 
   Future<void> _setOtpDetection(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _otpDetectionEnabled = value);
     await LiveBridgePlatform.setOtpDetectionEnabled(value);
   }
 
   Future<void> _setOtpAutoCopy(bool value) async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.toggle(value);
     setState(() => _otpAutoCopyEnabled = value);
     await LiveBridgePlatform.setOtpAutoCopyEnabled(value);
   }
@@ -1118,7 +1126,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
     required _PackagePickerTarget target,
   }) async {
     if (!await _ensureAppListAccess()) return;
-    HapticFeedback.lightImpact();
+    LiveBridgeHaptics.openSurface();
 
     await _ensurePreviewAppsLoaded();
     final List<InstalledApp> apps = _previewAppsByPackage.values.toList();
@@ -1180,12 +1188,16 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
   Future<void> _openAppPresentationSettings() async {
     if (!await _ensureAppListAccess()) return;
     if (!mounted) return;
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.openSurface();
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (BuildContext context) => const AppPresentationSettingsPage(),
       ),
     );
+  }
+
+  Future<void> _openDefaultAppPresentationBehavior() async {
+    await showDefaultAppPresentationBehaviorEditor(context);
   }
 
   Future<bool> _ensureAppListAccess() async {
@@ -1207,11 +1219,17 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
               content: Text(s.appsAccessMessage),
               actions: <Widget>[
                 TextButton(
-                  onPressed: () => Navigator.of(dialogContext).pop(false),
+                  onPressed: () {
+                    LiveBridgeHaptics.selection();
+                    Navigator.of(dialogContext).pop(false);
+                  },
                   child: Text(s.cancel),
                 ),
                 FilledButton(
-                  onPressed: () => Navigator.of(dialogContext).pop(true),
+                  onPressed: () {
+                    LiveBridgeHaptics.confirm();
+                    Navigator.of(dialogContext).pop(true);
+                  },
                   child: Text(s.allow),
                 ),
               ],
@@ -1228,6 +1246,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
   }
 
   Future<void> _requestNotificationPermission() async {
+    LiveBridgeHaptics.confirm();
     final bool granted =
         await LiveBridgePlatform.requestNotificationPermission();
     if (!mounted) return;
@@ -1237,6 +1256,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
   }
 
   Future<void> _openListenerSettings() async {
+    LiveBridgeHaptics.openSurface();
     final bool opened =
         await LiveBridgePlatform.openNotificationListenerSettings();
     if (!mounted || opened) return;
@@ -1244,12 +1264,14 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
   }
 
   Future<void> _openAppNotificationSettings() async {
+    LiveBridgeHaptics.openSurface();
     final bool opened = await LiveBridgePlatform.openAppNotificationSettings();
     if (!mounted || opened) return;
     _snack(AppStrings.of(context).notificationsUnavailable);
   }
 
   Future<void> _openPromotedSettings() async {
+    LiveBridgeHaptics.openSurface();
     final bool opened =
         await LiveBridgePlatform.openPromotedNotificationSettings();
     if (!mounted || opened) return;
@@ -1257,6 +1279,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
   }
 
   Future<void> _acknowledgeBlockedJoke() async {
+    LiveBridgeHaptics.confirm();
     final bool saved = await LiveBridgePlatform.setPixelJokeBypassEnabled(true);
     if (!mounted) return;
     if (!saved) {
@@ -1268,7 +1291,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
 
   Future<void> _downloadParserDictionary() async {
     if (_dictionaryActionInProgress) return;
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.confirm();
     setState(() => _dictionaryActionInProgress = true);
     final AppStrings s = AppStrings.of(context);
 
@@ -1289,7 +1312,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
 
   Future<void> _updateParserDictionaryFromGithub() async {
     if (_dictionaryActionInProgress) return;
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.confirm();
     setState(() => _dictionaryActionInProgress = true);
     final AppStrings s = AppStrings.of(context);
     final HttpClient client = HttpClient()
@@ -1344,7 +1367,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
 
   Future<void> _uploadParserDictionary() async {
     if (_dictionaryActionInProgress) return;
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.confirm();
     setState(() => _dictionaryActionInProgress = true);
     final AppStrings s = AppStrings.of(context);
 
@@ -1399,7 +1422,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
 
   Future<void> _resetParserDictionary() async {
     if (_dictionaryActionInProgress) return;
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.warning();
     setState(() => _dictionaryActionInProgress = true);
     final AppStrings s = AppStrings.of(context);
     try {
@@ -1430,7 +1453,8 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
     return launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
-  Future<void> _openProjectGithub() async {
+  Future<void> _openGithub() async {
+    LiveBridgeHaptics.openSurface();
     final Uri uri = Uri.parse(
       _hasUpdateAlert ? _projectGithubReleasesUrl : _projectGithubUrl,
     );
@@ -1518,6 +1542,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
         'only_with_progress': _onlyWithProgress,
         'text_progress_enabled': _textProgressEnabled,
         'smart_detection_enabled': _smartDetectionEnabled,
+        'smart_media_playback_enabled': _smartMediaPlaybackEnabled,
         'smart_navigation_enabled': _smartNavigationEnabled,
         'smart_weather_enabled': _smartWeatherEnabled,
         'smart_external_devices_enabled': _smartExternalDevicesEnabled,
@@ -1562,6 +1587,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
   }
 
   Future<void> _openBugReport() async {
+    LiveBridgeHaptics.confirm();
     final AppStrings s = AppStrings.of(context);
     final bool copied = await _copyBugReportDiagnosticsToClipboard();
     if (mounted) {
@@ -1575,14 +1601,14 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
   }
 
   Future<void> _hideBackgroundWarning() async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.selection();
     await LiveBridgePlatform.setBackgroundWarningDismissed(true);
     if (!mounted) return;
     setState(() => _showBackgroundWarning = false);
   }
 
   Future<void> _hideSamsungWarning() async {
-    HapticFeedback.selectionClick();
+    LiveBridgeHaptics.selection();
     await LiveBridgePlatform.setSamsungWarningDismissed(true);
     if (!mounted) return;
     setState(() => _showSamsungDeveloperWarning = false);
@@ -1662,6 +1688,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
       'smart',
       'otp',
       'experimental',
+      'app_presentation',
       'settings',
     };
     return raw
@@ -1685,9 +1712,10 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
   }
 
   void _toggleSection(String sectionId) {
-    HapticFeedback.selectionClick();
+    final bool opening = !_expandedSections.contains(sectionId);
+    LiveBridgeHaptics.expand(opening);
     setState(() {
-      if (_expandedSections.contains(sectionId)) {
+      if (!opening) {
         _expandedSections.remove(sectionId);
       } else {
         _expandedSections.add(sectionId);
@@ -1754,6 +1782,8 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
                     _buildOtpCard(s),
                     const SizedBox(height: 24),
                     _buildExperimentalCard(s),
+                    const SizedBox(height: 24),
+                    _buildAppPresentationCard(s),
                     const SizedBox(height: 24),
                     _buildSettingsCard(s),
                   ],
@@ -1995,15 +2025,6 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
               activeThumbColor: colorScheme.primary,
             ),
           ],
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: _openAppPresentationSettings,
-              icon: const Icon(Icons.tune_rounded, size: 18),
-              label: Text(s.appPresentationSettings),
-            ),
-          ),
           const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
@@ -2103,6 +2124,86 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
               onPressed: _openBugReport,
               icon: const Icon(Icons.bug_report_rounded, size: 18),
               label: Text(s.reportBug),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAppPresentationCard(AppStrings s) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+    return _sectionPanel(
+      sectionId: 'app_presentation',
+      title: s.appPresentationSettings,
+      icon: Icons.tune_rounded,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            s.appPresentationSubtitle,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+              height: 1.35,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              onTap: _openDefaultAppPresentationBehavior,
+              child: Ink(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  color: colorScheme.primaryContainer.withValues(alpha: 0.38),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: 34,
+                      height: 34,
+                      decoration: BoxDecoration(
+                        color: colorScheme.primary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        Icons.auto_fix_high_rounded,
+                        size: 18,
+                        color: colorScheme.primary,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        s.appPresentationDefaultSummary,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: _openAppPresentationSettings,
+              icon: const Icon(Icons.tune_rounded, size: 18),
+              label: Text(s.appPresentationSettings),
             ),
           ),
         ],
@@ -2410,14 +2511,14 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
             currentValue: _packageMode,
             onChanged: (val) {
               if (val != null) {
-                HapticFeedback.selectionClick();
+                LiveBridgeHaptics.selection();
                 setState(() => _packageMode = val);
                 unawaited(
                   _persistRules(target: _PackagePickerTarget.conversion),
                 );
               }
             },
-            onTap: () => HapticFeedback.lightImpact(),
+            onTap: LiveBridgeHaptics.openSurface,
             s: s,
           ),
           const SizedBox(height: 16),
@@ -2519,6 +2620,24 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
       icon: Icons.auto_awesome_rounded,
       child: Column(
         children: <Widget>[
+          SwitchListTile.adaptive(
+            value: _smartMediaPlaybackEnabled,
+            onChanged: _setSmartMediaPlayback,
+            title: Text(
+              s.smartMediaPlaybackTitle,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+            subtitle: Text(
+              s.smartMediaPlaybackSubtitle,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontSize: 13,
+              ),
+            ),
+            contentPadding: EdgeInsets.zero,
+            activeThumbColor: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(height: 8),
           SwitchListTile.adaptive(
             value: _smartDetectionEnabled,
             onChanged: _setSmartDetection,
@@ -2873,14 +2992,14 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
                     currentValue: _otpPackageMode,
                     onChanged: (val) {
                       if (val != null) {
-                        HapticFeedback.selectionClick();
+                        LiveBridgeHaptics.selection();
                         setState(() => _otpPackageMode = val);
                         unawaited(
                           _persistRules(target: _PackagePickerTarget.otp),
                         );
                       }
                     },
-                    onTap: () => HapticFeedback.lightImpact(),
+                    onTap: LiveBridgeHaptics.openSurface,
                     s: s,
                   ),
                   const SizedBox(height: 16),
@@ -3005,8 +3124,8 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
       if (selectedCount == 0) {
         return;
       }
-      HapticFeedback.selectionClick();
       final bool opening = !expanded;
+      LiveBridgeHaptics.expand(opening);
       setState(() {
         if (opening) {
           _expandedSelectedAppNotes.add(noteId);

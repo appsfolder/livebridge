@@ -4,13 +4,21 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.drawable.IconCompat
 import io.github.d4viddf.hyperisland_kit.HyperAction
 import io.github.d4viddf.hyperisland_kit.HyperIslandNotification
 import io.github.d4viddf.hyperisland_kit.HyperPicture
+import io.github.d4viddf.hyperisland_kit.models.CircularProgressInfo
+import io.github.d4viddf.hyperisland_kit.models.ImageTextInfoLeft
+import io.github.d4viddf.hyperisland_kit.models.PicInfo
+import io.github.d4viddf.hyperisland_kit.models.ProgressTextInfo
+import io.github.d4viddf.hyperisland_kit.models.TextInfo
 import java.util.Locale
 
 internal object HyperBridgeAdapter {
@@ -19,6 +27,8 @@ internal object HyperBridgeAdapter {
     private const val PIC_KEY_MAIN = "main"
     private const val MAX_HYPER_ACTIONS = 2
     private const val MAX_ACTION_TITLE_LENGTH = 22
+    private const val BIG_ISLAND_TEXT_MAX_LENGTH = 72
+    private const val HYPER_PROGRESS_COLOR = "#0F766E"
 
     fun apply(
         context: Context,
@@ -30,14 +40,25 @@ internal object HyperBridgeAdapter {
         ticker: String,
         progressPercent: Int?,
         largeIcon: Bitmap?,
+        fallbackSmallIcon: IconCompat?,
         sourceActions: Array<Notification.Action>?
     ) {
         try {
+            if (!HyperIslandNotification.isSupported(context)) {
+                return
+            }
+
             val normalizedTitle = title.ifBlank { appName }.ifBlank { sourcePackageName }.take(96)
             val normalizedContent = content.ifBlank { appName }.ifBlank { normalizedTitle }.take(220)
             val normalizedTicker = ticker.ifBlank { normalizedTitle }.take(40)
             val normalizedAppName = appName.take(48).ifBlank { null }
             val businessName = buildBusinessName(sourcePackageName)
+            val progress = progressPercent?.coerceIn(0, 100)
+            val hyperPicture = buildMainPicture(
+                context = context,
+                largeIcon = largeIcon,
+                fallbackSmallIcon = fallbackSmallIcon
+            )
 
             val hyperBuilder = HyperIslandNotification.Builder(
                 context = context,
@@ -46,34 +67,64 @@ internal object HyperBridgeAdapter {
             )
             val hyperActions = buildHyperActions(sourceActions)
             hyperActions.forEach(hyperBuilder::addAction)
+            hyperPicture?.let(hyperBuilder::addPicture)
 
-            if (largeIcon != null) {
-                hyperBuilder
-                    .addPicture(HyperPicture(PIC_KEY_MAIN, largeIcon))
-                    .setChatInfo(
-                        title = normalizedTitle,
-                        content = normalizedContent,
-                        pictureKey = PIC_KEY_MAIN
-                    )
-                    .setSmallIsland(PIC_KEY_MAIN)
-            } else {
-                hyperBuilder.setBaseInfo(
-                    title = normalizedTitle,
-                    content = normalizedContent,
-                    subTitle = normalizedAppName
-                )
+            hyperBuilder.setBaseInfo(
+                title = normalizedTitle,
+                content = normalizedContent,
+                subTitle = normalizedAppName,
+                pictureKey = hyperPicture?.key
+            )
+
+            if (hyperPicture != null) {
+                hyperBuilder.setPicInfo(2, PIC_KEY_MAIN)
+                if (progress != null) {
+                    hyperBuilder
+                        .setSmallIslandCircularProgress(
+                            pictureKey = PIC_KEY_MAIN,
+                            progress = progress,
+                            color = HYPER_PROGRESS_COLOR,
+                            isCCW = true
+                        )
+                        .setBigIslandInfo(
+                            left = ImageTextInfoLeft(
+                                type = 1,
+                                picInfo = PicInfo(type = 1, pic = PIC_KEY_MAIN),
+                                textInfo = TextInfo(title = normalizedTitle)
+                            ),
+                            progressText = ProgressTextInfo(
+                                progressInfo = CircularProgressInfo(
+                                    progress = progress,
+                                    colorReach = HYPER_PROGRESS_COLOR,
+                                    isCCW = true
+                                ),
+                                textInfo = TextInfo(title = "$progress%")
+                            )
+                        )
+                } else {
+                    hyperBuilder
+                        .setSmallIsland(PIC_KEY_MAIN)
+                        .setBigIslandInfo(
+                            left = ImageTextInfoLeft(
+                                type = 1,
+                                picInfo = PicInfo(type = 1, pic = PIC_KEY_MAIN),
+                                textInfo = TextInfo(title = normalizedTitle)
+                            ),
+                            centerText = TextInfo(
+                                title = normalizedContent.take(BIG_ISLAND_TEXT_MAX_LENGTH)
+                            )
+                        )
+                }
             }
+
             if (hyperActions.isNotEmpty()) {
                 hyperBuilder.setTextButtons(*hyperActions.toTypedArray())
             }
 
-            progressPercent?.coerceIn(0, 100)?.let(hyperBuilder::setProgressBar)
+            progress?.let(hyperBuilder::setProgressBar)
+            hyperBuilder.setIslandConfig(priority = 2)
 
             val resourceBundle = hyperBuilder.buildResourceBundle()
-            if (resourceBundle.keySet().isEmpty()) {
-                return
-            }
-
             builder.addExtras(resourceBundle)
             builder.addExtras(
                 Bundle().apply {
@@ -91,6 +142,20 @@ internal object HyperBridgeAdapter {
             .replace(Regex("[^a-z0-9_.-]"), "_")
             .take(80)
         return "livebridge.$normalized"
+    }
+
+    private fun buildMainPicture(
+        context: Context,
+        largeIcon: Bitmap?,
+        fallbackSmallIcon: IconCompat?
+    ): HyperPicture? {
+        largeIcon?.let { return HyperPicture(PIC_KEY_MAIN, it) }
+        val fallbackBitmap = try {
+            fallbackSmallIcon?.loadDrawable(context)?.let(::drawableToBitmap)
+        } catch (_: Throwable) {
+            null
+        }
+        return fallbackBitmap?.let { HyperPicture(PIC_KEY_MAIN, it) }
     }
 
     private fun buildHyperActions(sourceActions: Array<Notification.Action>?): List<HyperAction> {
@@ -148,5 +213,18 @@ internal object HyperBridgeAdapter {
             pendingIntent.isBroadcast -> 2
             else -> 3
         }
+    }
+
+    private fun drawableToBitmap(drawable: Drawable): Bitmap {
+        if (drawable is android.graphics.drawable.BitmapDrawable && drawable.bitmap != null) {
+            return drawable.bitmap
+        }
+        val width = drawable.intrinsicWidth.coerceAtLeast(1).coerceAtMost(512)
+        val height = drawable.intrinsicHeight.coerceAtLeast(1).coerceAtMost(512)
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        return bitmap
     }
 }

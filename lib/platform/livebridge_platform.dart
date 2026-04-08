@@ -149,6 +149,10 @@ class LiveBridgePlatform {
       _askBool('getSmartStatusDetectionEnabled');
   static Future<bool> setSmartStatusDetectionEnabled(bool value) =>
       _askBool('setSmartStatusDetectionEnabled', {'value': value});
+  static Future<bool> getSmartMediaPlaybackEnabled() =>
+      _askBool('getSmartMediaPlaybackEnabled');
+  static Future<bool> setSmartMediaPlaybackEnabled(bool value) =>
+      _askBool('setSmartMediaPlaybackEnabled', {'value': value});
   static Future<bool> getSmartNavigationEnabled() =>
       _askBool('getSmartNavigationEnabled');
   static Future<bool> setSmartNavigationEnabled(bool value) =>

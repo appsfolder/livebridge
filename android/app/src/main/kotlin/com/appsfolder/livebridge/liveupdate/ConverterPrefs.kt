@@ -249,6 +249,14 @@ class ConverterPrefs(context: Context) {
         prefs.edit().putBoolean(KEY_SMART_STATUS_ENABLED, value).apply()
     }
 
+    fun getSmartMediaPlaybackEnabled(): Boolean {
+        return prefs.getBoolean(KEY_SMART_MEDIA_PLAYBACK_ENABLED, false)
+    }
+
+    fun setSmartMediaPlaybackEnabled(value: Boolean) {
+        prefs.edit().putBoolean(KEY_SMART_MEDIA_PLAYBACK_ENABLED, value).apply()
+    }
+
     fun getSmartNavigationEnabled(): Boolean {
         return prefs.getBoolean(KEY_SMART_NAVIGATION_ENABLED, true)
     }
@@ -486,6 +494,7 @@ class ConverterPrefs(context: Context) {
         private const val KEY_ANIMATED_ISLAND_ENABLED = "animated_island_enabled"
         private const val KEY_HYPERBRIDGE_ENABLED = "hyperbridge_enabled"
         private const val KEY_SMART_STATUS_ENABLED = "smart_status_enabled"
+        private const val KEY_SMART_MEDIA_PLAYBACK_ENABLED = "smart_media_playback_enabled"
         private const val KEY_SMART_NAVIGATION_ENABLED = "smart_navigation_enabled"
         private const val KEY_SMART_WEATHER_ENABLED = "smart_weather_enabled"
         private const val KEY_SMART_EXTERNAL_DEVICES_ENABLED = "smart_external_devices_enabled"

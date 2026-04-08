@@ -394,6 +394,12 @@ class MainActivity : FlutterActivity() {
                 res.success(true)
             }
 
+            "getSmartMediaPlaybackEnabled" -> res.success(prefs.getSmartMediaPlaybackEnabled())
+            "setSmartMediaPlaybackEnabled" -> {
+                prefs.setSmartMediaPlaybackEnabled(call.argument<Boolean>("value") ?: false)
+                res.success(true)
+            }
+
             "getSmartNavigationEnabled" -> res.success(prefs.getSmartNavigationEnabled())
             "setSmartNavigationEnabled" -> {
                 prefs.setSmartNavigationEnabled(call.argument<Boolean>("value") ?: true)

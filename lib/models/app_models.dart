@@ -50,10 +50,22 @@ class DeviceInfo {
         '$manufacturer $brand $marketName $model $rawModel $product '
                 '$fingerprint $display'
             .toLowerCase();
+    const List<String> customRomMarkers = <String>[
+      'lineage',
+      'evolution',
+      'evox',
+      'crdroid',
+      'pixelos',
+      'arrowos',
+      'risingos',
+      'yaap',
+      'derpfest',
+      'aosp',
+    ];
     return isPixel ||
         all.contains('nothing') ||
         all.contains('motorola') ||
-        all.contains('lineage');
+        customRomMarkers.any(all.contains);
   }
 
   bool get shouldHideLiveUpdatesPromotion => isSamsung || isAospDevice;
