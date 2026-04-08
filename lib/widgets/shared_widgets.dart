@@ -347,6 +347,35 @@ class LiveBridgeChoiceSelector<T> extends StatelessWidget {
   }
 }
 
+class LiveBridgeMultiChoiceSelector<T> extends StatelessWidget {
+  const LiveBridgeMultiChoiceSelector({
+    super.key,
+    required this.values,
+    required this.options,
+    required this.onToggle,
+  });
+
+  final Set<T> values;
+  final List<SelectorOption<T>> options;
+  final ValueChanged<T> onToggle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        for (int index = 0; index < options.length; index++) ...<Widget>[
+          _ChoiceCard<T>(
+            option: options[index],
+            selected: values.contains(options[index].value),
+            onTap: () => onToggle(options[index].value),
+          ),
+          if (index != options.length - 1) const SizedBox(height: 10),
+        ],
+      ],
+    );
+  }
+}
+
 class LiveBridgeToggleSelector<T> extends StatelessWidget {
   const LiveBridgeToggleSelector({
     super.key,

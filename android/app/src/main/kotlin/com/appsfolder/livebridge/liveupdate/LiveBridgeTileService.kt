@@ -8,6 +8,7 @@ import android.service.notification.NotificationListenerService
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.core.app.NotificationManagerCompat
+import com.appsfolder.livebridge.liveupdate.networkspeed.NetworkSpeedController
 
 class LiveBridgeTileService : TileService() {
     private val prefs by lazy { ConverterPrefs(applicationContext) }
@@ -29,6 +30,7 @@ class LiveBridgeTileService : TileService() {
     private fun toggleConverter() {
         val newValue = !prefs.getConverterEnabled()
         prefs.setConverterEnabled(newValue)
+        NetworkSpeedController.sync(applicationContext, prefs)
         if (!newValue) {
             LiveUpdateNotifier.clearRuntimeState()
             NotificationManagerCompat.from(applicationContext).cancelAll()

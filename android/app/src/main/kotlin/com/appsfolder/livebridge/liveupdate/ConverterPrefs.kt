@@ -1,6 +1,9 @@
 package com.appsfolder.livebridge.liveupdate
 
 import android.content.Context
+import com.appsfolder.livebridge.liveupdate.networkspeed.NetworkSpeedDisplayMode
+import com.appsfolder.livebridge.liveupdate.networkspeed.NetworkSpeedSettings
+import com.appsfolder.livebridge.liveupdate.networkspeed.NetworkSpeedUnit
 import java.util.Locale
 
 class ConverterPrefs(context: Context) {
@@ -202,6 +205,96 @@ class ConverterPrefs(context: Context) {
         prefs.edit().putBoolean(KEY_SMART_VPN_ENABLED, value).apply()
     }
 
+    fun getNetworkSpeedEnabled(): Boolean {
+        return prefs.getBoolean(KEY_NETWORK_SPEED_ENABLED, false)
+    }
+
+    fun setNetworkSpeedEnabled(value: Boolean) {
+        prefs.edit().putBoolean(KEY_NETWORK_SPEED_ENABLED, value).apply()
+    }
+
+    fun getNetworkSpeedDisplayMode(): NetworkSpeedDisplayMode {
+        val raw = prefs.getString(KEY_NETWORK_SPEED_DISPLAY_MODE, NetworkSpeedDisplayMode.TOTAL.id)
+        return NetworkSpeedDisplayMode.from(raw)
+    }
+
+    fun setNetworkSpeedDisplayMode(value: String?) {
+        val displayMode = NetworkSpeedDisplayMode.from(value)
+        prefs.edit().putString(KEY_NETWORK_SPEED_DISPLAY_MODE, displayMode.id).apply()
+    }
+
+    fun getNetworkSpeedUploadPrefix(): String {
+        val value = prefs.getString(
+            KEY_NETWORK_SPEED_UPLOAD_PREFIX,
+            NetworkSpeedSettings.DEFAULT_UPLOAD_PREFIX
+        )
+        return value ?: NetworkSpeedSettings.DEFAULT_UPLOAD_PREFIX
+    }
+
+    fun setNetworkSpeedUploadPrefix(value: String?) {
+        prefs.edit()
+            .putString(
+                KEY_NETWORK_SPEED_UPLOAD_PREFIX,
+                value ?: NetworkSpeedSettings.DEFAULT_UPLOAD_PREFIX
+            )
+            .apply()
+    }
+
+    fun getNetworkSpeedDownloadPrefix(): String {
+        val value = prefs.getString(
+            KEY_NETWORK_SPEED_DOWNLOAD_PREFIX,
+            NetworkSpeedSettings.DEFAULT_DOWNLOAD_PREFIX
+        )
+        return value ?: NetworkSpeedSettings.DEFAULT_DOWNLOAD_PREFIX
+    }
+
+    fun setNetworkSpeedDownloadPrefix(value: String?) {
+        prefs.edit()
+            .putString(
+                KEY_NETWORK_SPEED_DOWNLOAD_PREFIX,
+                value ?: NetworkSpeedSettings.DEFAULT_DOWNLOAD_PREFIX
+            )
+            .apply()
+    }
+
+    fun getNetworkSpeedPrioritizeUploadSpeed(): Boolean {
+        return prefs.getBoolean(KEY_NETWORK_SPEED_PRIORITIZE_UPLOAD, true)
+    }
+
+    fun setNetworkSpeedPrioritizeUploadSpeed(value: Boolean) {
+        prefs.edit().putBoolean(KEY_NETWORK_SPEED_PRIORITIZE_UPLOAD, value).apply()
+    }
+
+    fun getNetworkSpeedChipBackgroundDisabled(): Boolean {
+        return prefs.getBoolean(KEY_NETWORK_SPEED_DISABLE_CHIP_BACKGROUND, false)
+    }
+
+    fun setNetworkSpeedChipBackgroundDisabled(value: Boolean) {
+        prefs.edit().putBoolean(KEY_NETWORK_SPEED_DISABLE_CHIP_BACKGROUND, value).apply()
+    }
+
+    fun getNetworkSpeedUnit(): String {
+        val raw = prefs.getString(KEY_NETWORK_SPEED_UNIT, NetworkSpeedUnit.AUTO.id)
+        return NetworkSpeedUnit.normalizeSelection(raw)
+    }
+
+    fun setNetworkSpeedUnit(value: String?) {
+        val normalized = NetworkSpeedUnit.normalizeSelection(value)
+        prefs.edit().putString(KEY_NETWORK_SPEED_UNIT, normalized).apply()
+    }
+
+    fun getNetworkSpeedSettings(): NetworkSpeedSettings {
+        return NetworkSpeedSettings(
+            enabled = getNetworkSpeedEnabled(),
+            displayMode = getNetworkSpeedDisplayMode(),
+            uploadPrefix = getNetworkSpeedUploadPrefix(),
+            downloadPrefix = getNetworkSpeedDownloadPrefix(),
+            prioritizeUploadSpeed = getNetworkSpeedPrioritizeUploadSpeed(),
+            chipBackgroundDisabled = getNetworkSpeedChipBackgroundDisabled(),
+            unitSelection = getNetworkSpeedUnit(),
+        )
+    }
+
     fun getOtpDetectionEnabled(): Boolean {
         return prefs.getBoolean(KEY_OTP_DETECTION_ENABLED, true)
     }
@@ -394,6 +487,15 @@ class ConverterPrefs(context: Context) {
         private const val KEY_SMART_WEATHER_ENABLED = "smart_weather_enabled"
         private const val KEY_SMART_EXTERNAL_DEVICES_ENABLED = "smart_external_devices_enabled"
         private const val KEY_SMART_VPN_ENABLED = "smart_vpn_enabled"
+        private const val KEY_NETWORK_SPEED_ENABLED = "network_speed_enabled"
+        private const val KEY_NETWORK_SPEED_DISPLAY_MODE = "network_speed_display_mode"
+        private const val KEY_NETWORK_SPEED_UPLOAD_PREFIX = "network_speed_upload_prefix"
+        private const val KEY_NETWORK_SPEED_DOWNLOAD_PREFIX = "network_speed_download_prefix"
+        private const val KEY_NETWORK_SPEED_PRIORITIZE_UPLOAD =
+            "network_speed_prioritize_upload"
+        private const val KEY_NETWORK_SPEED_DISABLE_CHIP_BACKGROUND =
+            "network_speed_disable_chip_background"
+        private const val KEY_NETWORK_SPEED_UNIT = "network_speed_unit"
         private const val KEY_OTP_DETECTION_ENABLED = "otp_detection_enabled"
         private const val KEY_OTP_AUTO_COPY_ENABLED = "otp_auto_copy_enabled"
         private const val KEY_OTP_PACKAGE_RULES = "otp_package_rules"

@@ -279,6 +279,58 @@ class AppStrings {
   String get smartVpnSubtitle => isRu
       ? 'Показывает входящий/исходящий трафик в формате *b/s.'
       : 'Shows incoming/outgoing traffic speed in *b/s format.';
+
+  String get networkSpeedTitle => isRu ? 'Скорость интернета' : 'Network speed';
+  String get networkSpeedSubtitle => isRu
+      ? 'Показывает скорость сети отдельным Live Update в статус баре.'
+      : 'Shows network speed as a separate Live Update in the status bar.';
+  String get networkSpeedEnabledTitle => isRu
+      ? 'Показывать скорость сети в статус баре'
+      : 'Show network speed in status bar';
+  String get networkSpeedEnabledSubtitle => isRu
+      ? 'Запускает отдельное уведомление с текущей скоростью сети и выводит его в статус бар.'
+      : 'Runs a dedicated ongoing notification with current network speed and surfaces it in the status bar.';
+  String get networkSpeedEnabledMasterOffSubtitle => isRu
+      ? 'Включится после активации общего тумблера LiveBridge.'
+      : 'Will activate after the main LiveBridge toggle is enabled.';
+  String get networkSpeedDisplayContentLabel =>
+      isRu ? 'Отображаемый контент' : 'Display content';
+  String get networkSpeedDisplayContentTitle =>
+      isRu ? 'Отображаемый контент' : 'Display content';
+  String get networkSpeedDisplayModeTotal =>
+      isRu ? 'Общая скорость' : 'Total speed';
+  String get networkSpeedDisplayModeUploadOnly =>
+      isRu ? 'Только upload' : 'Upload only';
+  String get networkSpeedDisplayModeDownloadOnly =>
+      isRu ? 'Только download' : 'Download only';
+  String get networkSpeedUploadPrefixLabel =>
+      isRu ? 'Префикс upload' : 'Upload prefix';
+  String get networkSpeedDownloadPrefixLabel =>
+      isRu ? 'Префикс download' : 'Download prefix';
+  String get networkSpeedPrefixEditorHint => isRu
+      ? 'Введите префикс или оставьте пустым.'
+      : 'Enter a prefix or leave it empty.';
+  String get networkSpeedPrefixPreviewLabel =>
+      isRu ? 'Текущее значение' : 'Current value';
+  String networkSpeedCurrentValue(String value) =>
+      isRu ? 'Сейчас: "$value"' : 'Current: "$value"';
+  String get networkSpeedPrioritizeUploadTitle =>
+      isRu ? 'Сначала показывать upload' : 'Prioritize upload speed';
+  String get networkSpeedPrioritizeUploadSubtitle => isRu
+      ? 'В режиме общей скорости строка upload будет показана первой.'
+      : 'In total mode, upload speed is shown first.';
+  String get networkSpeedUnitLabel => isRu ? 'Единица скорости' : 'Speed unit';
+  String get networkSpeedUnitTitle => isRu ? 'Единица скорости' : 'Speed unit';
+  String get networkSpeedUnitSubtitle => isRu
+      ? 'Выберите автоматический режим или зафиксируйте несколько единиц.'
+      : 'Choose automatic mode or pin multiple units.';
+  String get networkSpeedUnitAuto => isRu ? 'Авто' : 'Auto';
+  String get networkSpeedDisableChipBackgroundTitle =>
+      isRu ? 'Отключить фон chips' : 'Disable chip background';
+  String get networkSpeedDisableChipBackgroundSubtitle => isRu
+      ? 'Убирает фон у chips скорости в статус баре, но оставляет акцент у иконки в развернутом уведомлении.'
+      : 'Removes the background from network speed chips in the status bar while keeping the icon accent in the expanded notification.';
+
   String get smartNavigationDisabledSubtitle => isRu
       ? 'Сначала включите умное распознавание.'
       : 'Enable smart status detection first.';
@@ -306,7 +358,7 @@ class AppStrings {
       ? 'LiveBridge плохо работает на устройствах с AOSP. Можете продолжить, но за последствия я не отвечаю.'
       : 'LiveBridge is not designed for AOSP. You can continue, but i am not responsible for any bugs.';
   String get blockedBypassAction =>
-      isRu ? 'Все равно родолжить' : 'Continue anyway';
+      isRu ? 'Все равно продолжить' : 'Continue anyway';
   String get blockedBypassSaveFailed =>
       isRu ? 'Не удалось сохранить выбор.' : 'Unable to save your choice.';
 

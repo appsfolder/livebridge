@@ -1,14 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission
+        android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"
+    />
     <uses-permission
         android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"
     />
     <uses-permission
         android:name="android.permission.POST_PROMOTED_NOTIFICATIONS"
     />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:label="LiveBridge"
@@ -56,6 +61,18 @@
         />
 
         <service
+            android:name=".liveupdate.networkspeed.NetworkSpeedForegroundService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse|dataSync"
+        >
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="network_speed_monitor"
+            />
+        </service>
+
+        <service
             android:name=".liveupdate.LiveBridgeTileService"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             android:exported="true"
@@ -73,6 +90,17 @@
             android:name=".liveupdate.OtpCopyReceiver"
             android:exported="false"
         />
+
+        <receiver
+            android:name=".liveupdate.networkspeed.NetworkSpeedBootReceiver"
+            android:enabled="true"
+            android:exported="true"
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
 
         <meta-data android:name="flutterEmbedding" android:value="2" />
     </application>

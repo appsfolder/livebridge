@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import '../models/app_models.dart';
+import '../models/network_speed_models.dart';
 
 class LiveBridgePlatform {
   static const MethodChannel _channel = MethodChannel('livebridge/platform');
@@ -59,6 +60,30 @@ class LiveBridgePlatform {
       _askBool('getTextProgressEnabled');
   static Future<bool> setTextProgressEnabled(bool value) =>
       _askBool('setTextProgressEnabled', {'value': value});
+  static Future<NetworkSpeedSettings> getNetworkSpeedSettings() async {
+    final Map<dynamic, dynamic>? res = await _channel
+        .invokeMethod<Map<dynamic, dynamic>>('getNetworkSpeedSettings');
+    final Map<String, dynamic> data = res == null
+        ? const <String, dynamic>{}
+        : Map<String, dynamic>.from(res);
+    return NetworkSpeedSettings.fromMap(data);
+  }
+
+  static Future<bool> setNetworkSpeedEnabled(bool value) =>
+      _askBool('setNetworkSpeedEnabled', {'value': value});
+  static Future<bool> setNetworkSpeedDisplayMode(String value) =>
+      _askBool('setNetworkSpeedDisplayMode', {'value': value});
+  static Future<bool> setNetworkSpeedUploadPrefix(String value) =>
+      _askBool('setNetworkSpeedUploadPrefix', {'value': value});
+  static Future<bool> setNetworkSpeedDownloadPrefix(String value) =>
+      _askBool('setNetworkSpeedDownloadPrefix', {'value': value});
+  static Future<bool> setNetworkSpeedPrioritizeUploadSpeed(bool value) =>
+      _askBool('setNetworkSpeedPrioritizeUploadSpeed', {'value': value});
+  static Future<bool> setNetworkSpeedChipBackgroundDisabled(bool value) =>
+      _askBool('setNetworkSpeedChipBackgroundDisabled', {'value': value});
+  static Future<bool> setNetworkSpeedUnit(String value) =>
+      _askBool('setNetworkSpeedUnit', {'value': value});
+
   static Future<bool> getConverterEnabled() => _askBool('getConverterEnabled');
   static Future<bool> setConverterEnabled(bool value) =>
       _askBool('setConverterEnabled', {'value': value});

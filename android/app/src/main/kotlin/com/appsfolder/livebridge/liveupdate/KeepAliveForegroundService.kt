@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.appsfolder.livebridge.MainActivity
 import com.appsfolder.livebridge.R
+import java.util.Locale
 
 class KeepAliveForegroundService : Service() {
     override fun onCreate() {
@@ -43,6 +44,7 @@ class KeepAliveForegroundService : Service() {
     }
 
     private fun buildNotification(): Notification {
+        val text = localizedText(this)
         val contentIntent = PendingIntent.getActivity(
             this,
             0,
@@ -54,8 +56,8 @@ class KeepAliveForegroundService : Service() {
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_liveupdate)
-            .setContentTitle("background mode")
-            .setContentText("Keep this notification here for LiveBridge stability")
+            .setContentTitle(text.title)
+            .setContentText(text.body)
             .setContentIntent(contentIntent)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
@@ -85,17 +87,54 @@ class KeepAliveForegroundService : Service() {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                 return
             }
+            val text = localizedText(context)
             val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val existing = manager.getNotificationChannel(CHANNEL_ID)
             if (existing != null) {
                 return
             }
             manager.createNotificationChannel(
-                NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW).apply {
-                    description = "Keep this notification here to use LiveBridge"
+                NotificationChannel(
+                    CHANNEL_ID,
+                    text.channelName,
+                    NotificationManager.IMPORTANCE_LOW
+                ).apply {
+                    description = text.channelDescription
                     lockscreenVisibility = Notification.VISIBILITY_SECRET
                 }
             )
         }
+
+        private fun localizedText(context: Context): LocalizedText {
+            val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                context.resources.configuration.locales.get(0)
+            } else {
+                @Suppress("DEPRECATION")
+                context.resources.configuration.locale
+            }
+            val isRu = locale?.language?.lowercase(Locale.ROOT)?.startsWith("ru") == true
+            return if (isRu) {
+                LocalizedText(
+                    title = "Фоновый режим",
+                    body = "Оставьте это уведомление для стабильной работы LiveBridge",
+                    channelName = "Фоновый режим LiveBridge",
+                    channelDescription = "Оставьте это уведомление, чтобы LiveBridge работал стабильно"
+                )
+            } else {
+                LocalizedText(
+                    title = "Background mode",
+                    body = "Keep this notification for LiveBridge stability",
+                    channelName = CHANNEL_NAME,
+                    channelDescription = "Keep this notification to use LiveBridge"
+                )
+            }
+        }
     }
+
+    private data class LocalizedText(
+        val title: String,
+        val body: String,
+        val channelName: String,
+        val channelDescription: String,
+    )
 }

@@ -9,8 +9,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../l10n/app_strings.dart';
 import '../models/app_models.dart';
+import '../models/network_speed_models.dart';
 import '../platform/livebridge_platform.dart';
 import '../utils/livebridge_haptics.dart';
+import '../widgets/network_speed_section.dart';
 import '../widgets/shared_widgets.dart';
 import 'app_presentation_settings_page.dart';
 
@@ -89,6 +91,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
   bool _previewAppsLoading = false;
   PackageMode _packageMode = PackageMode.all;
   PackageMode _otpPackageMode = PackageMode.all;
+  NetworkSpeedSettings _networkSpeedSettings = const NetworkSpeedSettings();
   late final AnimationController _masterBlockedShakeController;
   late final Animation<double> _masterBlockedShakeOffset;
   bool _masterBlockedHapticInProgress = false;
@@ -222,6 +225,8 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
           await LiveBridgePlatform.getSmartExternalDevicesEnabled();
       final bool smartVpnEnabled =
           await LiveBridgePlatform.getSmartVpnEnabled();
+      final NetworkSpeedSettings networkSpeedSettings =
+          await LiveBridgePlatform.getNetworkSpeedSettings();
       final bool otpDetectionEnabled =
           await LiveBridgePlatform.getOtpDetectionEnabled();
       final bool otpAutoCopyEnabled =
@@ -310,6 +315,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
         _smartWeatherEnabled = smartWeatherEnabled;
         _smartExternalDevicesEnabled = smartExternalDevicesEnabled;
         _smartVpnEnabled = smartVpnEnabled;
+        _networkSpeedSettings = networkSpeedSettings;
         _otpDetectionEnabled = otpDetectionEnabled;
         _otpAutoCopyEnabled = otpAutoCopyEnabled;
         _updateChecksEnabled = updateChecksEnabled;
@@ -785,6 +791,49 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
     await LiveBridgePlatform.setSmartVpnEnabled(value);
   }
 
+  Future<void> _setNetworkSpeedSettings(NetworkSpeedSettings next) async {
+    final NetworkSpeedSettings previous = _networkSpeedSettings;
+    setState(() => _networkSpeedSettings = next);
+
+    try {
+      if (previous.enabled != next.enabled) {
+        await LiveBridgePlatform.setNetworkSpeedEnabled(next.enabled);
+      }
+      if (previous.displayMode != next.displayMode) {
+        await LiveBridgePlatform.setNetworkSpeedDisplayMode(
+          next.displayMode.id,
+        );
+      }
+      if (previous.uploadPrefix != next.uploadPrefix) {
+        await LiveBridgePlatform.setNetworkSpeedUploadPrefix(next.uploadPrefix);
+      }
+      if (previous.downloadPrefix != next.downloadPrefix) {
+        await LiveBridgePlatform.setNetworkSpeedDownloadPrefix(
+          next.downloadPrefix,
+        );
+      }
+      if (previous.prioritizeUploadSpeed != next.prioritizeUploadSpeed) {
+        await LiveBridgePlatform.setNetworkSpeedPrioritizeUploadSpeed(
+          next.prioritizeUploadSpeed,
+        );
+      }
+      if (previous.chipBackgroundDisabled != next.chipBackgroundDisabled) {
+        await LiveBridgePlatform.setNetworkSpeedChipBackgroundDisabled(
+          next.chipBackgroundDisabled,
+        );
+      }
+      if (!NetworkSpeedUnitSelection.equals(previous.units, next.units)) {
+        await LiveBridgePlatform.setNetworkSpeedUnit(
+          NetworkSpeedUnitSelection.encode(next.units),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        _snack(AppStrings.of(context).saveFailed);
+      }
+    }
+  }
+
   Future<void> _setOtpDetection(bool value) async {
     LiveBridgeHaptics.toggle(value);
     setState(() => _otpDetectionEnabled = value);
@@ -1248,6 +1297,7 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
         'smart_weather_enabled': _smartWeatherEnabled,
         'smart_external_devices_enabled': _smartExternalDevicesEnabled,
         'smart_vpn_enabled': _smartVpnEnabled,
+        'network_speed': _networkSpeedSettings.toJson(),
         'otp_detection_enabled': _otpDetectionEnabled,
         'otp_auto_copy_enabled': _otpAutoCopyEnabled,
         'aosp_cutting_enabled': _aospCuttingEnabled,
@@ -1415,6 +1465,8 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
                     _buildRulesCard(s),
                     const SizedBox(height: 24),
                     _buildSmartCard(s),
+                    const SizedBox(height: 24),
+                    _buildNetworkSpeedCard(s),
                     const SizedBox(height: 24),
                     _buildOtpCard(s),
                     const SizedBox(height: 24),
@@ -2385,6 +2437,21 @@ class _LiveBridgeHomePageState extends State<LiveBridgeHomePage>
             activeThumbColor: Theme.of(context).colorScheme.primary,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildNetworkSpeedCard(AppStrings s) {
+    return _sectionPanel(
+      sectionId: 'network_speed',
+      title: s.networkSpeedTitle,
+      icon: Icons.speed_rounded,
+      child: NetworkSpeedSection(
+        settings: _networkSpeedSettings,
+        masterEnabled: _masterSwitchValue,
+        onChanged: (NetworkSpeedSettings next) {
+          unawaited(_setNetworkSpeedSettings(next));
+        },
       ),
     );
   }

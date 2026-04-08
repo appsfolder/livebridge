@@ -40,6 +40,7 @@ import com.appsfolder.livebridge.liveupdate.LiveParserDictionary
 import com.appsfolder.livebridge.liveupdate.LiveParserDictionaryLoader
 import com.appsfolder.livebridge.liveupdate.LiveUpdateNotifier
 import com.appsfolder.livebridge.liveupdate.LiveUpdateNotificationListenerService
+import com.appsfolder.livebridge.liveupdate.networkspeed.NetworkSpeedController
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -69,6 +70,7 @@ class MainActivity : FlutterActivity() {
         val prefs = ConverterPrefs(applicationContext)
         initializeKeepAliveDefaultIfNeeded(prefs)
         syncKeepAliveForegroundService(prefs)
+        NetworkSpeedController.sync(applicationContext, prefs)
         clearDynamicLauncherShortcuts()
         LiveBridgeTileService.requestStateSync(applicationContext)
     }
@@ -81,6 +83,9 @@ class MainActivity : FlutterActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_POST_NOTIFICATIONS) {
             val granted = grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+            if (granted) {
+                NetworkSpeedController.sync(applicationContext, ConverterPrefs(applicationContext))
+            }
             notificationPermissionResult?.success(granted)
             notificationPermissionResult = null
         }
@@ -97,6 +102,7 @@ class MainActivity : FlutterActivity() {
             "getPixelJokeBypassEnabled" -> res.success(prefs.getPixelJokeBypassEnabled())
             "setPixelJokeBypassEnabled" -> {
                 prefs.setPixelJokeBypassEnabled(call.argument<Boolean>("value") ?: false)
+                NetworkSpeedController.sync(applicationContext, prefs)
                 res.success(true)
             }
 
@@ -239,6 +245,43 @@ class MainActivity : FlutterActivity() {
             "getTextProgressEnabled" -> res.success(prefs.getTextProgressEnabled())
             "setTextProgressEnabled" -> {
                 prefs.setTextProgressEnabled(call.argument<Boolean>("value") ?: true)
+                res.success(true)
+            }
+
+            "getNetworkSpeedSettings" -> res.success(prefs.getNetworkSpeedSettings().toMap())
+            "setNetworkSpeedEnabled" -> {
+                prefs.setNetworkSpeedEnabled(call.argument<Boolean>("value") ?: false)
+                NetworkSpeedController.sync(applicationContext, prefs)
+                res.success(true)
+            }
+            "setNetworkSpeedDisplayMode" -> {
+                prefs.setNetworkSpeedDisplayMode(call.argument<String>("value"))
+                NetworkSpeedController.sync(applicationContext, prefs)
+                res.success(true)
+            }
+            "setNetworkSpeedUploadPrefix" -> {
+                prefs.setNetworkSpeedUploadPrefix(call.argument<String>("value"))
+                NetworkSpeedController.sync(applicationContext, prefs)
+                res.success(true)
+            }
+            "setNetworkSpeedDownloadPrefix" -> {
+                prefs.setNetworkSpeedDownloadPrefix(call.argument<String>("value"))
+                NetworkSpeedController.sync(applicationContext, prefs)
+                res.success(true)
+            }
+            "setNetworkSpeedPrioritizeUploadSpeed" -> {
+                prefs.setNetworkSpeedPrioritizeUploadSpeed(call.argument<Boolean>("value") ?: true)
+                NetworkSpeedController.sync(applicationContext, prefs)
+                res.success(true)
+            }
+            "setNetworkSpeedChipBackgroundDisabled" -> {
+                prefs.setNetworkSpeedChipBackgroundDisabled(call.argument<Boolean>("value") ?: false)
+                NetworkSpeedController.sync(applicationContext, prefs)
+                res.success(true)
+            }
+            "setNetworkSpeedUnit" -> {
+                prefs.setNetworkSpeedUnit(call.argument<String>("value"))
+                NetworkSpeedController.sync(applicationContext, prefs)
                 res.success(true)
             }
 
@@ -462,6 +505,7 @@ class MainActivity : FlutterActivity() {
 
     private fun applyConverterEnabled(prefs: ConverterPrefs, value: Boolean) {
         prefs.setConverterEnabled(value)
+        NetworkSpeedController.sync(applicationContext, prefs)
         if (!value) {
             LiveUpdateNotifier.clearRuntimeState()
             NotificationManagerCompat.from(applicationContext).cancelAll()
