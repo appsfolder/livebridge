@@ -10,7 +10,12 @@
         "grubhub",
         "delivery",
         "еда",
-        "food"
+        "food",
+        "外賣",
+        "外卖",
+        "meituan",
+        "eleme",
+        "foodpanda"
       ],
       "text_triggers": [
         "заказ",
@@ -20,70 +25,111 @@
         "еда",
         "food",
         "ресторан",
-        "restaurant"
+        "restaurant",
+        "订单",
+        "訂單",
+        "外卖",
+        "外賣",
+        "餐厅",
+        "餐廳",
+        "骑手",
+        "騎手",
+        "外送員",
+        "外送",
+        "送餐员",
+        "送餐員",
+        "餐点",
+        "餐點",
+        "配送"
       ],
       "exclude_patterns": [
-        "(с дн[её]м рождения|happy birthday|birthday)",
-        "(дарим\\s+скидк|скидк[\\p{L}]*\\s*\\d+%|\\d+%\\s*(скидк|off)|акци[яи]|промокод|promo\\s*code|coupon|cash\\s*back|кэшб[еэ]к)",
-        "(payment\\s*(?:failure|failed|declined|unsuccessful)|оплат[аы][^\\n]*(?:не\\s*прошл|ошибк|отклон|не\\s*успеш)|неудачн[а-я\\s]*оплат)",
-        "(при\\s+заказе\\s+от\\s*\\d|order\\s+from\\s*\\d)",
-        "(почт[аы]\\s+росси|посыл(?:к|ок)|маркетплейс|отделени[ея]|трек-?номер|tracking|shipment|parcel|пункт\\s*выдачи)"
+        "(с дн[её]м рождения|happy birthday|birthday|生日快乐|生日快樂)",
+        "(дарим\\s+скидк|скидк[\\p{L}]*\\s*\\d+%|\\d+%\\s*(скидк|off)|акци[яи]|промокод|promo\\s*code|coupon|cash\\s*back|кэшб[еэ]к|红包|紅包|优惠|優惠|折扣|满减|滿減|返现|返現|促销|促銷|券|免運|免运费)",
+        "(payment\\s*(?:failure|failed|declined|unsuccessful)|оплат[аы][^\\n]*(?:не\\s*прошл|ошибк|отклон|не\\s*успеш)|неудачн[а-я\\s]*оплат|支付失败|支付失敗|扣款失败|扣款失敗|订单取消|訂單取消|已退款)",
+        "(при\\s+заказе\\s+от\\s*\\d|order\\s+from\\s*\\d|满\\d+减|滿\\d+減)",
+        "(почт[аы]\\s+росси|посыл(?:к|ок)|маркетплейс|отделени[ея]|трек-?номер|tracking|shipment|parcel|пункт\\s*выдачи|取件码|取件碼|快递|快遞|驿站|驛站|包裹|收发室|收發室)"
       ],
       "signals": [
         {
           "stage": 4,
-          "pattern": "(доставлен(?:а|о|ы)?|получен(?:а|о|ы)?|вручен(?:а|о|ы)?|delivery completed|order delivered|delivered|completed|приятного аппетита|enjoy(?: your meal)?)"
+          "pattern": "(доставлен(?:а|о|ы)?|получен(?:а|о|ы)?|вручен(?:а|о|ы)?|delivery completed|order delivered|delivered|completed|приятного аппетита|enjoy(?: your meal)?|已送达|已送達|订单已完成|訂單已完成|祝您用餐愉快|取餐成功|餐点已送达|餐點已送達|您的外卖已送达|您的外賣已送達)"
         },
         {
           "stage": 3,
-          "pattern": "(курьер[^\\n]*(в пути|едет|уже рядом|подъезжа(?:ет|л)|забрал(?: заказ)?)|out for delivery|on the way|heading to you|едет к вам|доставля(?:ется|ем|ют)|передан[^\\n]*курьеру|courier[^\\n]*(picked up|heading|on the way|nearby))"
+          "pattern": "(курьер[^\\n]*(в пути|едет|уже рядом|подъезжа(?:ет|л)|забрал(?: заказ)?)|out for delivery|on the way|heading to you|едет к вам|доставля(?:ется|ем|ют)|передан[^\\n]*курьеру|courier[^\\n]*(picked up|heading|on the way|nearby)|配送中|正在送出|骑手已取餐|騎手已取餐|外送員已取餐|正在前往|即将送达|即將送達|骑手正在前往|外送員正在前往|距离您|距離您)"
         },
         {
           "stage": 2,
-          "pattern": "((?:заказ|order)[^\\n]{0,40}(готов(?:\\b|\\s)|собран|упакован|готов к выдаче|готов для выдачи|готов к самовывозу|ready(?:\\s+for\\s+(?:pickup|delivery))?)|собран(?:о|ы)?\\b|упакован(?:о|ы)?\\b|готов к выдаче|готов для выдачи|готов к самовывозу|ready for pickup|ready for delivery|packed|almost ready)"
+          "pattern": "((?:заказ|order)[^\\n]{0,40}(готов(?:\\b|\\s)|собран|упакован|готов к выдаче|готов для выдачи|готов к самовывозу|ready(?:\\s+for\\s+(?:pickup|delivery))?)|собран(?:о|ы)?\\b|упакован(?:о|ы)?\\b|готов к выдаче|готов для выдачи|готов к самовывозу|ready for pickup|ready for delivery|packed|almost ready|已出餐|待取餐|打包完成|准备就绪|準備就緒|等待骑手|等待騎手|可取餐|餐点已备妥|餐點已備妥|配送员已接单|配送員已接單)"
         },
         {
           "stage": 1,
-          "pattern": "((?:заказ|order)[^\\n]{0,40}(собира(?:ем|ют|ется)|готов(?:ится|им|ят)|начали готовить|в работе|в процессе)|собира(?:ем|ют|ется)[^\\n]{0,30}(?:заказ|order)|preparing|in kitchen|is being prepared|is being cooked|being cooked|cooking|assembling)"
+          "pattern": "((?:заказ|order)[^\\n]{0,40}(собира(?:ем|ют|ется)|готов(?:ится|им|ят)|начали готовить|в работе|в процессе)|собира(?:ем|ют|ется)[^\\n]{0,30}(?:заказ|order)|preparing|in kitchen|is being prepared|is being cooked|being cooked|cooking|assembling|准备中|準備中|制作中|製作中|商家已接单|商家已接單|开始制作|開始製作|烹饪中|烹飪中)"
         },
         {
           "stage": 0,
-          "pattern": "(заказ[^\\n]*(принят|создан|оформлен|подтвержд[её]н|оплачен)|order[^\\n]*(received|accepted|confirmed|created|placed|paid)|оплат[аы][^\\n]*(прошла|подтверждена|успешна|принята)|payment[^\\n]*(successful|confirmed|received|accepted))"
+          "pattern": "(заказ[^\\n]*(принят|создан|оформлен|подтвержд[её]н|оплачен)|order[^\\n]*(received|accepted|confirmed|created|placed|paid)|оплат[аы][^\\n]*(прошла|подтверждена|успешна|принята)|payment[^\\n]*(successful|confirmed|received|accepted)|订单已接|訂單已接|已付款|支付成功|订单已确认|訂單已確認|下单成功|下單成功|已建立)"
         }
       ]
     },
     {
       "id": "taxi",
       "max_stage": 4,
-      "package_hints": ["taxi", "uber", "lyft", "bolt", "yango", "yandex"],
+      "package_hints": [
+        "taxi",
+        "uber",
+        "lyft",
+        "bolt",
+        "yango",
+        "yandex",
+        "didi",
+        "grab"
+      ],
       "text_triggers": [
         "такси",
         "taxi",
         "ride",
         "поездка",
         "водитель",
-        "driver"
+        "driver",
+        "打车",
+        "打車",
+        "计程车",
+        "計程車",
+        "出租车",
+        "出租車",
+        "的士",
+        "司机",
+        "司機",
+        "车牌",
+        "車牌",
+        "行程",
+        "乘车",
+        "乘車",
+        "网约车",
+        "網約車",
+        "乘客"
       ],
       "signals": [
         {
           "stage": 4,
-          "pattern": "(поездка завершена|trip completed|arrived at destination|you'?ve arrived)"
+          "pattern": "(поездка завершена|trip completed|arrived at destination|you'?ve arrived|已到达|已到達|行程结束|行程結束|支付车费|支付車費|到达目的地|到達目的地|欢迎下次乘坐|歡迎下次乘坐)"
         },
         {
           "stage": 3,
-          "pattern": "(поездка началась|trip started|ride started|enjoy your ride)"
+          "pattern": "(поездка началась|trip started|ride started|enjoy your ride|行程中|行程已开始|行程已開始|前往目的地|请系好安全带|請繫好安全帶)"
         },
         {
           "stage": 2,
-          "pattern": "(едет к вам|подъезжает|driver[^\\n]*arriving|arriving in|on the way)"
+          "pattern": "(едет к вам|подъезжает|driver[^\\n]*arriving|arriving in|on the way|司机正在赶来|司機正在趕來|即将到达|即將到達|距离您|距離您|正在接驾|正在接駕|司机已到达|司機已到達|请前往上车点|請前往上車點)"
         },
         {
           "stage": 1,
-          "pattern": "(водитель найден|driver found|driver assigned|matched with driver)"
+          "pattern": "(водитель найден|driver found|driver assigned|matched with driver|已接单|已接單|司机已接单|司機已接單|司机已出发|司機已出發|为您派车|為您派車)"
         },
         {
           "stage": 0,
-          "pattern": "(поиск[^\\n]*водител|ищем[^\\n]*водител|searching for (a )?driver|finding driver)"
+          "pattern": "(поиск[^\\n]*водител|ищем[^\\n]*водител|searching for (a )?driver|finding driver|正在寻找司机|正在尋找司機|呼叫中|等待应答|等待應答|正在派单|正在派單|等待接驾|等待接駕)"
         }
       ]
     },
@@ -102,7 +148,10 @@
         "map",
         "navigator",
         "navigation",
-        "navi"
+        "navi",
+        "amap",
+        "baidu.BaiduMap",
+        "citymapper"
       ],
       "text_triggers": [
         "маршрут",
@@ -121,29 +170,67 @@
         "take exit",
         "u-turn",
         "roundabout",
-        "destination"
+        "destination",
+        "导航",
+        "導航",
+        "路线",
+        "路線",
+        "目的地",
+        "转弯",
+        "轉彎",
+        "向左转",
+        "向左轉",
+        "向右转",
+        "向右轉",
+        "匝道",
+        "交流道",
+        "高架",
+        "测速",
+        "測速",
+        "圆环",
+        "圓環",
+        "向东",
+        "向東",
+        "向南",
+        "向西",
+        "向北",
+        "往东",
+        "往東",
+        "往南",
+        "往西",
+        "往北",
+        "向前",
+        "往前",
+        "向后",
+        "向後",
+        "往后",
+        "往後",
+        "向左",
+        "往左",
+        "向右",
+        "往右"
       ],
       "exclude_patterns": [
-        "(с дн[её]м рождения|happy birthday|birthday)",
-        "(дарим\\s+скидк|скидк[\\p{L}]*\\s*\\d+%|\\d+%\\s*(скидк|off)|акци[яи]|промокод|promo\\s*code|coupon|cash\\s*back|кэшб[еэ]к)",
+        "(с дн[её]м рождения|happy birthday|birthday|生日快乐|生日快樂)",
+        "(дарим\\s+скидк|скидк[\\p{L}]*\\s*\\d+%|\\d+%\\s*(скидк|off)|акци[яи]|промокод|promo\\s*code|coupon|cash\\s*back|кэшб[еэ]к|红包|紅包|优惠|優惠|折扣|满减|滿減|返现|返現|促销|促銷|券|免運|免运费)",
         "(вы получили это письмо|отписаться от рассыл|unsubscribe|newsletter|follow us|скачать приложение|download app)"
       ],
       "signals": [
         {
           "stage": 4,
-          "pattern": "(вы прибыли|пункт назначения достигнут|маршрут заверш[её]н|завершить маршрут|finish the route|arrived|destination reached|you'?ve arrived)"
+          "pattern": "(вы прибыли|пункт назначения достигнут|маршрут заверш[её]н|завершить маршрут|finish the route|arrived|destination reached|you'?ve arrived|已到达目的地|已到達目的地|导航结束|導航結束|本次导航结束|本次導航結束)"
         },
         {
           "stage": 3,
-          "pattern": "(пункт назначения[^\\n]*(справа|слева)|destination (is )?on (your )?(right|left)|almost there|почти на месте|до пункта назначения)"
+          "pattern": "(пункт назначения[^\\n]*(справа|слева)|destination (is )?on (your )?(right|left)|almost there|почти на месте|до пункта назначения|即将到达|即將到達|接近目的地|目的地在|就在前方)"
         },
         {
           "stage": 2,
-          "pattern": "(через\\s*\\d+[\\d\\s.,]*(м|км|m|km|ft|mi)|\\b\\d+\\s*(m|km|ft|mi)\\b|поверните|сверните|держитесь|развернитесь|пройдите|двигайтесь|продолжайте движение|возьмите съезд|выйдите|turn (left|right)|keep (left|right)|continue|head\\s|take\\s+the|exit|merge|roundabout|u-?turn)"
+          "pattern": "(через\\s*\\d+[\\d\\s.,]*(м|км|m|km|ft|mi)|\\b\\d+\\s*(m|km|ft|mi)\\b|поверните|сверните|держитесь|развернитесь|пройдите|двигайтесь|продолжайте движение|возьмите съезд|выйдите|turn (left|right)|keep (left|right)|continue|head\\s|take\\s+the|exit|merge|roundabout|u-?turn|向左转|向左轉|向右转|向右轉|前方|公里|米|公尺|保持|进入环岛|進入環島|进入圆环|進入圓環|继续直行|繼續直行|靠左行驶|靠左行駛|靠右行驶|靠右行駛|下匝道|下交流道|测速照相|測速照相)"
         },
         {
           "stage": 1,
-          "pattern": "(маршрут построен|маршрут начат|navigation started|starting route|follow the route|route started)"
+          "pattern": "(маршрут построен|маршрут начат|navigation started|starting route|follow the route|route started|开始导航|開始導航|路线已规划|路線已規劃|准备出发|準備出發)"
         }
       ]
     },
@@ -156,7 +243,10 @@
         "accessory",
         "usb",
         "gopro",
-        "dji"
+        "dji",
+        "wearable",
+        "galaxywearable",
+        "miui"
       ],
       "text_triggers": [
         "camera",
@@ -170,21 +260,35 @@
         "connecting",
         "is connected",
         "подключ",
-        "соедин"
+        "соедин",
+        "连接",
+        "連接",
+        "连线",
+        "連線",
+        "配对",
+        "配對",
+        "设备",
+        "設備",
+        "蓝牙",
+        "藍牙",
+        "耳机",
+        "耳機",
+        "手表",
+        "手錶"
       ],
       "exclude_patterns": [
-        "(с дн[её]м рождения|happy birthday|birthday)",
-        "(дарим\\s+скидк|скидк[\\p{L}]*\\s*\\d+%|\\d+%\\s*(скидк|off)|акци[яи]|промокод|promo\\s*code|coupon|cash\\s*back|кэшб[еэ]к)",
+        "(с дн[её]м рождения|happy birthday|birthday|生日快乐|生日快樂)",
+        "(дарим\\s+скидк|скидк[\\p{L}]*\\s*\\d+%|\\d+%\\s*(скидк|off)|акци[яи]|промокод|promo\\s*code|coupon|cash\\s*back|кэшб[еэ]к|红包|紅包|优惠|優惠|折扣|满减|滿減|返现|返現|促销|促銷|券|免運|免运费)",
         "(hotspot|personal\\s+hotspot|tether(?:ing)?|wifi\\s+hotspot|точк[аеи]\\s+доступа|раздач[аи]\\s+интернета|клиент(?:ов|ы)?\\s+подключ(?:ен|ено|ены)?|\\b\\d+\\s+devices?\\b)"
       ],
       "signals": [
         {
           "stage": 2,
-          "pattern": "(connected\\b|pair(?:ed)?\\b|подключ(?:ен(?:а|о|ы)?|ено)\\b|соедин(?:ен(?:а|о|ы)?|ено)\\b)"
+          "pattern": "(connected\\b|pair(?:ed)?\\b|подключ(?:ен(?:а|о|ы)?|ено)\\b|соедин(?:ен(?:а|о|ы)?|ено)\\b|已连接|已連接|配对成功|配對成功|已连线|已連線)"
         },
         {
           "stage": 1,
-          "pattern": "(connecting\\b|pair(?:ing)?\\b|подключ(?:ается|ение)\\b|соедин(?:яется|ение)\\b)"
+          "pattern": "(connecting\\b|pair(?:ing)?\\b|подключ(?:ается|ение)\\b|соедин(?:яется|ение)\\b|正在连接|正在連接|配对中|配對中|连线中|連線中)"
         }
       ]
     },
@@ -205,7 +309,8 @@
         "v2ray",
         "hiddify",
         "tailscale",
-        "zerotier"
+        "zerotier",
+        "shadowsocks"
       ],
       "text_triggers": [
         "vpn",
@@ -215,26 +320,39 @@
         "туннел",
         "secure connection",
         "защищенн",
-        "виртуальн"
+        "виртуальн",
+        "节点",
+        "節點",
+        "代理",
+        "虚拟私人网络",
+        "虛擬私人網路",
+        "连线安全",
+        "連線安全",
+        "已连线",
+        "已連線",
+        "已连接",
+        "已連接"
       ],
       "signals": [
         {
           "stage": 1,
-          "pattern": "(?<!\\d)\\d{1,4}(?:[.,]\\d{1,2})?\\s*(?:[kmgт]?i?[bб])\\s*(?:(?:/\\s*[sс])|(?:/\\s*sec)|ps)\\b"
+          "pattern": "(?<!\\d)\\d{1,4}(?:[.,]\\d{1,2})?\\s*(?:[kmgт]?i?[bб])\\s*(?:(?:/\\s*[sс])|(?:/\\s*sec)|ps)\\b|(已连接|已連接|已连线|已連線|connected|подключено)"
         }
       ]
     }
   ],
-  "blocked_source_packages": ["ru.dublgis.dgismobile"],
+  "blocked_source_packages": [],
   "known_navigation_packages": [
     "ru.dublgis.dgismobile",
     "ru.yandex.yandexmaps",
     "com.google.android.apps.maps",
-    "com.waze"
+    "com.waze",
+    "com.autonavi.minimap",
+    "com.baidu.BaiduMap"
   ],
-  "navigation_package_markers": ["navigation", "navigator", ".maps"],
-  "navigation_distance_pattern": "(?<!\\d)\\d{1,4}(?:[\\s.,]\\d{1,2})?\\s*(?:км|km|м|m|mi|ft|миль|фут)\\b",
-  "navigation_instruction_pattern": "(поверните[^\\n,.;:!]*|сверните[^\\n,.;:!]*|держитесь[^\\n,.;:!]*|развернитесь|turn\\s+(?:left|right)|keep\\s+(?:left|right)|take\\s+exit|u-?turn|roundabout)",
+  "navigation_package_markers": ["navigation", "navigator", ".maps", "navi"],
+  "navigation_distance_pattern": "(?<!\\d)\\d{1,4}(?:[\\s.,]\\d{1,2})?\\s*(?:км|km|м|m|mi|ft|миль|фут|公里|公尺|米)\\b",
+  "navigation_instruction_pattern": "(поверните[^\\n,.;:!]*|сверните[^\\n,.;:!]*|держитесь[^\\n,.;:!]*|развернитесь|turn\\s+(?:left|right)|keep\\s+(?:left|right)|take\\s+exit|u-?turn|roundabout|(?:向|往|朝)(?:东|南|西|北|前|后|左|右|東|後)(?:转|轉|方|行驶|行駛|走|直行)?|靠左行|靠右行|前方转弯|前方轉彎|进入环岛|進入圓環|驶出|駛出|步行|乘坐|等待)",
   "otp_strong_triggers": [
     "otp",
     "one-time password",
@@ -276,14 +394,34 @@
     "код оплаты",
     "код аккаунта",
     "одноразовый",
-    "код из смс"
+    "код из смс",
+    "验证码",
+    "驗證碼",
+    "动态密码",
+    "動態密碼",
+    "安全码",
+    "安全碼",
+    "登录密码",
+    "登入密碼",
+    "授权码",
+    "授權碼",
+    "确认码",
+    "確認碼",
+    "一次性密碼",
+    "一次性密码",
+    "认证码",
+    "認證碼",
+    "校验码",
+    "校驗碼",
+    "交易码",
+    "交易碼"
   ],
-  "otp_loose_trigger_pattern": "(?:(?:\\bcode\\b|\\bкод\\b)\\s*[:#-]?\\s*\\d{4,8})",
-  "money_context_pattern": "(₽|руб\\.?|rub|usd|eur|kzt|тенге|р\\.|\\$|€|price|total|amount|sum|сумм|цена|стоимост|итого)",
+  "otp_loose_trigger_pattern": "(?:(?:\\bcode\\b|\\bкод\\b|验证码|驗證碼|密码|密碼|校验码|校驗碼)\\s*[:#-]?[\\s]*\\d{4,8})",
+  "money_context_pattern": "(₽|руб\\.?|rub|usd|eur|kzt|тенге|р\\.|\\$|€|price|total|amount|sum|сумм|цена|стоимост|итого|￥|¥|twd|nt\\$|rmb|cny|hkd|金额|金額|总价|總價|合计|合計|消费|消費|付款|收款|扣款|转账|轉帳)",
   "text_progress_percent_pattern": "(?<!\\d)(\\d{1,3})\\s*%",
   "text_progress_context_window": 80,
-  "text_progress_include_context_pattern": "(прогресс|выполн(?:ен|ено|яется|ение)|загруз(?:к|жается|жено)|скач(?:ив|ивает|ивание)|обновл(?:ен|ение|яется)|синхрон(?:изац|изируется)|обработ(?:к|ан|ает)|установ(?:к|лен)|remaining|progress|completed|completing|downloading|uploading|updating|installing|sync(?:ing)?|processing|processed|render(?:ing)?|encoding|decoding)",
-  "text_progress_exclude_context_pattern": "(скид|акци|промокод|промо|купон|распрод|кэшб[еэ]к|кешб[еэ]к|discount|promo|coupon|sale|cashback|off\\b|выгод|bonus|бонус|save|deal|special\\s+offer|limited\\s+time|дарим|подар|при\\s+заказ|при\\s+покуп|minimum\\s+order|order\\s+from|в\\s+приложени\\S*\\s+акци|\\d{2,7}\\s*(?:₽|руб\\.?|рубл(?:ей|я|ь)?|rur|usd|eur|\\$|€|kzt|тенге)|влажност|humidity|погод|weather|температур|temperature|давлен|pressure|осадк|precip|комисси|commission|fee\\b|налог|tax\\b|apr\\b|\\bставк(?:а|и|у|е|ой|ах|ам|ами)?\\b|годов(?:ых|ая)?\\s*процент|процентн(?:ая|ые|ых)\\s+ставк|ипотек|кредит|депозит|вклад|сбор\\b|маркетплейс|посыл(?:к|ок)|почт[аы])",
+  "text_progress_include_context_pattern": "(прогресс|выполн(?:ен|ено|яется|ение)|загруз(?:к|жается|жено)|скач(?:ив|ивает|ивание)|обновл(?:ен|ение|яется)|синхрон(?:изац|изируется)|обработ(?:к|ан|ает)|установ(?:к|лен)|remaining|progress|completed|completing|downloading|uploading|updating|installing|sync(?:ing)?|processing|processed|render(?:ing)?|encoding|decoding|进度|進度|完成|下载|下載|安装|安裝|更新|同步|处理|處理|加载|加載|备份|備份|解压缩|解壓縮|导出|匯出|导入|匯入)",
+  "text_progress_exclude_context_pattern": "(скид|акци|промокод|промо|купон|распрод|кэшб[еэ]к|кешб[еэ]к|discount|promo|coupon|sale|cashback|off\\b|выгод|bonus|бонус|save|deal|special\\s+offer|limited\\s+time|дарим|подар|при\\s+заказ|при\\s+покуп|minimum\\s+order|order\\s+from|в\\s+приложени\\S*\\s+акци|\\d{2,7}\\s*(?:₽|руб\\.?|рубл(?:ей|я|ь)?|rur|usd|eur|\\$|€|kzt|тенге)|влажност|humidity|погод|weather|температур|temperature|давлен|pressure|осадк|precip|комисси|commission|fee\\b|налог|tax\\b|apr\\b|\\bставк(?:а|и|у|е|ой|ах|ам|ами)?\\b|годов(?:ых|ая)?\\s*процент|процентн(?:ая|ые|ых)\\s+ставк|ипотек|кредит|депозит|вклад|сбор\\b|маркетплейс|посыл(?:к|ок)|почт[аы]|优惠|優惠|折扣|满减|滿減|红包|紅包|促销|促銷|免運|免运费|天气|天氣|温度|溫度|湿度|濕度|气压|氣壓|降水|利息|利率|电量|電量)",
   "weather_package_hints": [
     "weather",
     "sec.android.daemonapp",
@@ -297,20 +435,21 @@
     "1weather",
     "todayweather"
   ],
-  "weather_context_pattern": "(погод|weather|температур|temperature|ощущаетс|feels like|влажност|humidity|ветер|wind|осадк|precip|давлен|pressure|прогноз|forecast|uv|aqi|today|tomorrow|highs?|lows?|sunny|clear|cloudy|overcast|rain(?:y)?|snow(?:y)?|fog(?:gy)?|mist|haze|wind(?:y)?|gust(?:y)?|thunder(?:storm)?|storm(?:y)?)",
+  "weather_context_pattern": "(погод|weather|температур|temperature|ощущаетс|feels like|влажност|humidity|ветер|wind|осадк|precip|давлен|pressure|прогноз|forecast|uv|aqi|today|tomorrow|highs?|lows?|sunny|clear|cloudy|overcast|rain(?:y)?|snow(?:y)?|fog(?:gy)?|mist|haze|wind(?:y)?|gust(?:y)?|thunder(?:storm)?|storm(?:y)?|天气|天氣|温度|溫度|体感|體感|湿度|濕度|风|風|降水|气压|氣壓|预报|預報|晴天|雨天|多云|多雲|雷阵雨|雷陣雨|台风|颱風|暴雨|豪雨|雷暴|雨)",
   "weather_temperature_pattern": "(?<!\\d)([+\\-−]?\\d{1,3})\\s*(?:°\\s*(?:c|f|с|ф)?|℃|℉)",
-  "weather_day_pattern": "(сегодня|завтра|утром|днем|вечером|ночью|today|tomorrow|morning|afternoon|evening|night)",
-  "weather_condition_pattern": "(ясно|пасмурно|облачно|дожд|снег|туман|ветрено|солнечно|sunny|cloudy|overcast|rain|snow|fog|windy|clear)",
-  "weather_condition_thunder_pattern": "(гроз|thunder|storm)",
-  "weather_condition_rain_pattern": "(дожд|rain|shower)",
-  "weather_condition_snow_pattern": "(снег|snow|sleet|blizzard)",
-  "weather_condition_fog_pattern": "(туман|mist|fog|haze)",
-  "weather_condition_wind_pattern": "(ветер|ветрено|wind|windy|gust)",
-  "weather_condition_sun_pattern": "(солнечно|ясно|sunny|clear)",
-  "weather_condition_cloud_pattern": "(пасмурно|облачно|cloud|overcast)",
+  "weather_day_pattern": "(сегодня|завтра|утром|днем|вечером|ночью|today|tomorrow|morning|afternoon|evening|night|今天|明天|早上|上午|下午|晚上|夜间|夜間)",
+  "weather_condition_pattern": "(ясно|пасмурно|облачно|дожд|снег|туман|ветрено|солнечно|sunny|cloudy|overcast|rain|snow|fog|windy|clear|晴|阴|陰|多云|多雲|阵雨|陣雨|雷阵雨|雷陣雨|暴雨|台风|颱風|下雪|大雪|雾|霧|晴天|雨天|多云|多雲|雷阵雨|雷陣雨|台风|颱風|暴雨|豪雨|雷暴|雨)",
+  "weather_condition_thunder_pattern": "(гроз|thunder|storm|雷|风暴|風暴)",
+  "weather_condition_rain_pattern": "(дожд|rain|shower|雨|降水)",
+  "weather_condition_snow_pattern": "(снег|snow|sleet|blizzard|雪|冰雹)",
+  "weather_condition_fog_pattern": "(туман|mist|fog|haze|雾|霧|霾)",
+  "weather_condition_wind_pattern": "(ветер|ветрено|wind|windy|gust|风|風)",
+  "weather_condition_sun_pattern": "(солнечно|ясно|sunny|clear|晴|阳光|陽光)",
+  "weather_condition_cloud_pattern": "(пасмурно|облачно|cloud|overcast|阴|陰|云|雲)",
   "external_device_name_patterns": [
     "(?:connected|connecting|pair(?:ed|ing)|подключ(?:ен(?:а|о|ы)?|ается|ение)|соедин(?:ен(?:а|о|ы)?|яется))\\s*(?:to|к)?\\s*[\"«]?([\\p{L}\\p{N}][\\p{L}\\p{N} ._#\\-]{1,40})[\"»]?(?=\\s|$|[,.!])",
-    "[\"«]?([\\p{L}\\p{N}][\\p{L}\\p{N} ._#\\-]{1,40})[\"»]?\\s*(?:is\\s+)?(?:connected|connecting|pair(?:ed|ing)|подключ(?:ен(?:а|о|ы)?|ается|ение)|соедин(?:ен(?:а|о|ы)?|яется))\\b"
+    "[\"«]?([\\p{L}\\p{N}][\\p{L}\\p{N} ._#\\-]{1,40})[\"»]?\\s*(?:is\\s+)?(?:connected|connecting|pair(?:ed|ing)|подключ(?:ен(?:а|о|ы)?|ается|ение)|соедин(?:ен(?:а|о|ы)?|яется))\\b",
+    "[\"«]?([\\p{L}\\p{N}][\\p{L}\\p{N} ._#\\-]{1,40})[\"»]?\\s*(?:已连接|已連接|配对成功|配對成功|已连线|已連線|正在连接|正在連接)"
   ],
   "external_device_generic_names": [
     "device",
@@ -333,10 +472,25 @@
     "устройства",
     "точка доступа",
     "камера",
-    "аксессуар"
+    "аксессуар",
+    "设备",
+    "設備",
+    "相机",
+    "相機",
+    "配件",
+    "蓝牙",
+    "藍牙",
+    "热点",
+    "熱點",
+    "耳机",
+    "耳機",
+    "手表",
+    "手錶",
+    "手环",
+    "手環"
   ],
   "vpn_speed_pattern": "(?<!\\d)\\d{1,4}(?:[.,]\\d{1,2})?\\s*(?:[kmgт]?i?[bб])\\s*(?:(?:/\\s*[sс])|(?:/\\s*sec)|ps)\\b",
-  "vpn_context_pattern": "(\\bvpn\\b|wireguard|openvpn|hiddify|clash|v2ray|singbox|outline|amnezia|tailscale|zerotier|туннел|прокси|proxy)",
+  "vpn_context_pattern": "(\\bvpn\\b|wireguard|openvpn|hiddify|clash|v2ray|singbox|outline|amnezia|tailscale|zerotier|туннел|прокси|proxy|代理|节点|節點)",
   "vpn_package_markers": [
     "hiddify",
     "wireguard",
@@ -353,6 +507,7 @@
     "singbox",
     "tailscale",
     "zerotier",
+    "shadowsocks",
     "vpn"
   ],
   "vpn_download_markers": [
@@ -369,7 +524,10 @@
     "ingress",
     "вход",
     "прием",
-    "приём"
+    "приём",
+    "下载",
+    "下載",
+    "接收"
   ],
   "vpn_upload_markers": [
     "↑",
@@ -383,17 +541,30 @@
     "outbound",
     "egress",
     "исход",
-    "отправ"
+    "отправ",
+    "上传",
+    "上傳",
+    "发送",
+    "發送"
   ],
   "otp_code_patterns": [
     "(?<!\\S)(\\d{4,8})(?!\\d)",
-    "(?<!\\S)(\\d(?:[\\s-]?\\d){3,7})(?!\\d)"
+    "(?<!\\S)(\\d(?:[\\s-]?\\d){3,7})(?!\\d)",
+    "(?<!\\S)([A-Z0-9]{4,8})(?!\\w)"
   ],
-  "order_context_hints": ["заказ", "order", "delivery", "достав"],
+  "order_context_hints": [
+    "заказ",
+    "order",
+    "delivery",
+    "достав",
+    "订单",
+    "訂單",
+    "配送"
+  ],
   "entity_token_patterns": [
-    "(?:заказ|order|trip|ride|поездк[аы])\\s*(?:#|№)?\\s*([a-z0-9-]{2,16})",
-    "(?:#|№)\\s*([a-z0-9-]{2,16})",
-    "\\b(\\d{4,10})\\b"
+    "(?:заказ|order|trip|ride|поездк[аы]|订单|訂單|行程)\\s*(?:#|№)?\\s*([a-zA-Z0-9-]{2,16})",
+    "(?:#|№)\\s*([a-zA-Z0-9-]{2,16})",
+    "\\b(\\d{4,12})\\b"
   ],
   "status_labels": {
     "food": {
@@ -410,6 +581,20 @@
         "2": "Ready",
         "3": "On the way",
         "4": "Delivered"
+      },
+      "zh-CN": {
+        "0": "已付款",
+        "1": "准备中",
+        "2": "待取餐",
+        "3": "配送中",
+        "4": "已送达"
+      },
+      "zh-TW": {
+        "0": "已付款",
+        "1": "準備中",
+        "2": "待取餐",
+        "3": "外送中",
+        "4": "已送達"
       }
     },
     "taxi": {
@@ -426,6 +611,20 @@
         "2": "Arriving",
         "3": "On trip",
         "4": "Done"
+      },
+      "zh-CN": {
+        "0": "寻找中",
+        "1": "已接单",
+        "2": "即将到达",
+        "3": "行程中",
+        "4": "已到达"
+      },
+      "zh-TW": {
+        "0": "尋找中",
+        "1": "已接單",
+        "2": "即將抵達",
+        "3": "行程中",
+        "4": "已到達"
       }
     },
     "navigation": {
@@ -440,6 +639,18 @@
         "2": "Navigation",
         "3": "Almost there",
         "4": "Arrived"
+      },
+      "zh-CN": {
+        "1": "路线规划",
+        "2": "导航中",
+        "3": "即将到达",
+        "4": "已到达"
+      },
+      "zh-TW": {
+        "1": "路線規劃",
+        "2": "導航中",
+        "3": "即將到達",
+        "4": "已到達"
       }
     },
     "external_device": {
@@ -450,6 +661,14 @@
       "en": {
         "1": "Connecting",
         "2": "Connected"
+      },
+      "zh-CN": {
+        "1": "连接中",
+        "2": "已连接"
+      },
+      "zh-TW": {
+        "1": "連接中",
+        "2": "已連接"
       }
     },
     "vpn": {
@@ -457,6 +676,12 @@
         "1": "VPN"
       },
       "en": {
+        "1": "VPN"
+      },
+      "zh-CN": {
+        "1": "VPN"
+      },
+      "zh-TW": {
         "1": "VPN"
       }
     }
