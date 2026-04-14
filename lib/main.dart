@@ -127,7 +127,12 @@ class LiveBridgeApp extends StatelessWidget {
     return MaterialApp(
       title: 'LiveBridge',
       debugShowCheckedModeBanner: false,
-      supportedLocales: const <Locale>[Locale('en'), Locale('ru')],
+      supportedLocales: const <Locale>[
+        Locale('en'),
+        Locale('ru'),
+        Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
+        Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
+      ],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
