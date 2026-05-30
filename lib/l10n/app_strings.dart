@@ -344,7 +344,7 @@ class AppStrings {
     ptBr: 'Backup e restauração',
     zhHans: '备份与恢复',
     zhHant: '備份與還原',
-    ko: '백업 & 복구',
+    ko: '백업 및 복구',
   );
 
   String get exportLiveBridgeSettingsTitle => tr(
@@ -374,7 +374,7 @@ class AppStrings {
     ptBr: 'Importar do debug JSON',
     zhHans: '从 debug JSON 导入',
     zhHant: '從 debug JSON 匯入',
-    ko: 'debug JSON에서 불러오기',
+    ko: 'Debug JSON에서 불러오기',
   );
 
   String get liveBridgeSettingsExported => tr(
@@ -394,7 +394,7 @@ class AppStrings {
     ptBr: 'Falha ao exportar configurações do LiveBridge.',
     zhHans: '导出 LiveBridge 设置失败。',
     zhHant: '匯出 LiveBridge 設定失敗。',
-    ko: 'LiveBridge 설정을 내보낼 수 없습니다.',
+    ko: 'LiveBridge 설정을 내보내지 못했습니다.',
   );
 
   String get liveBridgeSettingsImported => tr(
@@ -414,7 +414,7 @@ class AppStrings {
     ptBr: 'Falha ao importar configurações do LiveBridge.',
     zhHans: '导入 LiveBridge 设置失败。',
     zhHant: '匯入 LiveBridge 設定失敗。',
-    ko: 'LiveBridge 설정을 불러올 수 없습니다.',
+    ko: 'LiveBridge 설정을 불러오지 못했습니다.',
   );
 
   String get copyOldDebugJsonFirst => tr(
@@ -734,7 +734,7 @@ class AppStrings {
     ptBr: '(exp)',
     zhHans: '（实验）',
     zhHant: '（實驗）',
-    ko: '(불안정)',
+    ko: '(실험실)',
   );
 
   String get allAppsTitle => tr(
@@ -1074,7 +1074,7 @@ class AppStrings {
     ptBr: 'Tudo pronto',
     zhHans: '已是最新',
     zhHant: '已是最新',
-    ko: '준비 완료',
+    ko: '최신 버전입니다',
   );
 
   String get appUpdateDownloadsSubtitle => tr(
@@ -1214,7 +1214,7 @@ class AppStrings {
     ptBr: 'Tamanho do log',
     zhHans: '日志大小',
     zhHant: '記錄大小',
-    ko: '로그 크가',
+    ko: '로그 크기',
   );
 
   String get xiaomiHyperIslandTitle => tr(
@@ -1284,7 +1284,7 @@ class AppStrings {
     ptBr: 'Copiar JSON de debug',
     zhHans: '复制调试 JSON',
     zhHant: '複製偵錯 JSON',
-    ko: 'debug JSON 복사',
+    ko: 'Debug JSON 복사하기',
   );
 
   String get copyDebugJsonDescription => tr(
@@ -1325,7 +1325,7 @@ class AppStrings {
     ptBr: 'Copiar JSON de debug automaticamente',
     zhHans: '自动复制调试 JSON',
     zhHant: '自動複製偵錯 JSON',
-    ko: 'debug JSON 자동 복사',
+    ko: 'Debug JSON 자동 복사',
   );
 
   String get autoCopyDebugJsonDescription => tr(
@@ -1345,7 +1345,7 @@ class AppStrings {
     ptBr: 'de $appLabel',
     zhHans: '来自 $appLabel',
     zhHant: '來自 $appLabel',
-    ko: '출처: ',
+    ko: '출처: $appLabel',
   );
 
   String conversionLogAt(String time) => tr(
@@ -1355,7 +1355,7 @@ class AppStrings {
     ptBr: 'às $time',
     zhHans: time,
     zhHant: time,
-    ko: '시간: ',
+    ko: '$time 에 변환됨',
   );
 
   String get conversionLogEntryTitleLabel => tr(
@@ -1407,7 +1407,7 @@ class AppStrings {
     ptBr: 'Reportar um bug',
     zhHans: '报告问题',
     zhHant: '回報問題',
-    ko: '버그 제보',
+    ko: '버그 제보하기',
   );
 
   String get supportLiveBridgeTitle => tr(
@@ -1427,7 +1427,7 @@ class AppStrings {
     ptBr: 'Mantenha o LiveBridge gratuito',
     zhHans: '让 LiveBridge 保持免费',
     zhHant: '讓 LiveBridge 保持免費',
-    ko: 'LiveBridge를 무료로 유지하기',
+    ko: 'LiveBridge를 무료로 유지해요',
   );
 
   String get supportIntroBody => tr(
@@ -1438,7 +1438,7 @@ class AppStrings {
         'Doações são opcionais e não desbloqueiam recursos. Elas ajudam com aparelhos de teste e tempo de desenvolvimento.',
     zhHans: '捐赠是自愿的，不会解锁功能。它们用于测试设备和开发时间。',
     zhHant: '捐贈是自願的，不會解鎖功能。它們用於測試裝置和開發時間。',
-    ko: '기부는 선택이며 별도의 기능을 해금하지 않으며 개발자의 기기 테스트 및 개발에 사용됩니다.',
+    ko: '기부는 선택이며 별도의 기능을 해금하지 않치만 개발자의 기기 테스트 및 개발하는데 많은 도움이 됩니다.',
   );
 
   String get supportBoostyTitle => tr(
