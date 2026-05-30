@@ -9,7 +9,6 @@
         "doordash",
         "grubhub",
         "delivery",
-        "exampleapp",
         "eats",
         "food",
         "meituan",
@@ -20,38 +19,54 @@
         "swiggy",
         "blinkit",
         "instamart",
-        "bigbasket"
+        "bigbasket",
+        "배달의민족",
+        "쿠팡이츠",
+        "요기요",
+        "음식"
       ],
       "text_triggers": [
         "주문",
         "배달",
         "오더",
-        "음식"
+        "음식",
+        "음식점",
+        "레스토랑",
+        "식당",
+        "포장",
+        "픽업",
+        "라이더",
+        "배달원",
+        "배달대행",
+        "야식",
+        "간식"
       ],
       "exclude_patterns": [
-        "(생일)",
-        "(할인|쿠폰)"
+        "(생일|생일 축하)",
+        "(할인|쿠폰|세일|캐시백|혜택)",
+        "신규 가입",
+        "결제 실패"
       ],
       "signals": [
         {
           "stage": 4,
-          "pattern": "(배달이 완료되었습니다.|만에 완료됐습니다.)"
+          "pattern": "(배달이 완료되었습니다.|만에 완료됐습니다.|배달이 도착했습니다|문 앞에 두었습니다|배송이 완료|픽업해 주세요|수령 완료)"
         },
         {
           "stage": 3,
-          "pattern": "(라이더님이 곧 도착해요!|주문이 거의 도착했습니다.)"
+          "pattern": "(라이더님이 곧 도착해요!|주문이 거의 도착했습니다.|잠시 후 도착|도착 예정입니다|근처에 도착)"
         },
         {
           "stage": 2,
-          "pattern": "(라이더님이 배달을 시작했어요|배달원이 고객님의 음식을 픽업했습니다.)"
+          "pattern": "(라이더님이 배달을 시작했어요|배달원이 고객님의 음식을 픽업했습니다.|배달을 출발|픽업 완료|배송 시작)"
         },
         {
           "stage": 1,
-          "pattern": "(주문이[^\\n](접수됐어요|수락되었습니다.))"
+          "pattern": "(주문이[^\\n](접수됐어요|수락되었습니다.)|조리가 시작|메뉴를 준비 중|주문 확인중)"
         },
         {
           "stage": 0,
-          "pattern": "(주문 완료)"
+          "pattern": "(주문 완료|결제 완료|주문이 접수 대기|결제가 승인)"
         }
       ]
     },
@@ -66,12 +81,20 @@
         "yango",
         "yandex",
         "didi",
-        "grab"
+        "grab",
+        "kakaot",
+        "카카오T",
+        "타다"
       ],
       "text_triggers": [
         "taxi",
         "ride",
-        "driver"
+        "driver",
+        "택시 기사",
+        "택시",
+        "기사",
+        "탑승",
+        "운행"
       ],
       "signals": [
         {
@@ -115,7 +138,17 @@
         "nmap",
         "amap",
         "baidu.BaiduMap",
-        "citymapper"
+        "citymapper",
+        "TMAP",
+        "Kakao Navi",
+        "Kakao Map",
+        "Naver Map",
+        "카카오내비",
+        "카카오맵",
+        "네이버 지도",
+        "구글 지도",
+        "지도",
+        "맵"
       ],
       "text_triggers": [
         "좌회전",
@@ -175,11 +208,11 @@
       "signals": [
         {
           "stage": 2,
-          "pattern": "(연결됨\\b|pair(?:ed)?\\b)"
+          "pattern": "(연결됨\\b|페어링됨\\b|pair(?:ed)?\\b|connected\\b)"
         },
         {
           "stage": 1,
-          "pattern": "(연결 중\\b|pair(?:ing)?\\b)"
+          "pattern": "(연결 중\\b|페어링 중\\b|pair(?:ing)?\\b|connecting\\b)"
         }
       ]
     },
@@ -204,12 +237,19 @@
         "shadowsocks"
       ],
       "text_triggers": [
-        "보안 연결"
+        "보안 연결",
+        "네트워크 암호화",
+        "프록시",
+        "프록시 서버",
+        "가상 사설망",
+        "IP 우회",
+        "아이피 변경",
+        "우회 연결"
       ],
       "signals": [
         {
           "stage": 1,
-          "pattern": "연결됨"
+          "pattern": "(연결됨|connected)"
         }
       ]
     }
@@ -221,7 +261,9 @@
     "hidden content",
     "notification content hidden",
     "unlock to view",
-    "민감한 알림 콘텐츠 숨김"
+    "민감한 알림 콘텐츠 숨김",
+    "내용 숨김",
+    "잠금을 해제하여 확인"
   ],
   "known_navigation_packages": [
     "ru.dublgis.dgismobile",
@@ -238,16 +280,17 @@
     ".maps",
     "navi"
   ],
-  "navigation_distance_pattern": "(?<!\\d)\\d{1,4}(?:[\\s.,]\\d{1,2})?\\s*(?:km|m|mi|ft)\\b",
-  "navigation_instruction_pattern": "(좌회전|우회전)",
+  "navigation_distance_pattern": "(?<!\\d)\\d{1,4}(?:[\\s.,]\\d{1,2})?\\s*(?:km|m|mi|ft|킬로미터|미터)\\b",
+  "navigation_instruction_pattern": "(좌회전|우회전|직진|유턴|출구|left|right|straight|u-turn|exit)",
   "otp_strong_triggers": [
     "인증번호",
     "인증 번호",
     "확인코드",
-    "확인 코드"
+    "확인 코드",
+    "otp"
   ],
   "otp_loose_trigger_pattern": "(?:(?:\\b코드\\b|\\botp\\b|\\b번호\\b|\\b코드\\b)\\s*[:#-]?[\\s]*\\d(?:[\\s-]?\\d){3,7})",
-  "money_context_pattern": "(₽|\\$|€|￥|¥|₩|루블|달러|유로)",
+  "money_context_pattern": "(₽|\\$|€|￥|¥|₩|루블|달러|유로|원)",
   "text_progress_percent_pattern": "(?<!\\d)(\\d{1,3})\\s*%",
   "text_progress_context_window": 80,
   "text_progress_include_context_pattern": "(남음|완료|다운로드|업로드|업데이트|설치|처리)",
@@ -263,30 +306,35 @@
     "pogoda",
     "clime",
     "1weather",
-    "todayweather"
+    "todayweather",
+    "날씨",
+    "기상청"
   ],
   "weather_context_pattern": "(날씨|온도|습도|바람|강수|기압|기상|내일|구름|비|천둥)",
   "weather_temperature_pattern": "(?<!\\d)([+\\-−]?\\d{1,3})\\s*(?:°(?:\\s*(?:c|f)(?!\\p{L}))?|℃|℉)",
-  "weather_day_pattern": "(오늘|내일|오전|오후|아침|저녁)",
-  "weather_condition_pattern": "(맑음|흐림|비|눈|안개)",
-  "weather_condition_thunder_pattern": "(천둥|번개)",
-  "weather_condition_rain_pattern": "(비)",
-  "weather_condition_snow_pattern": "(눈)",
-  "weather_condition_fog_pattern": "(안개)",
-  "weather_condition_wind_pattern": "(바람)",
-  "weather_condition_sun_pattern": "(맑음)",
-  "weather_condition_cloud_pattern": "(흐림)",
+  "weather_day_pattern": "(오늘|내일|오전|오후|아침|저녁|today|tomorrow|morning|evening)",
+  "weather_condition_pattern": "(맑음|흐림|비|눈|안개|clear|cloudy|rain|snow|fog)",
+  "weather_condition_thunder_pattern": "(천둥|번개|thunder|lightning)",
+  "weather_condition_rain_pattern": "(비|rain)",
+  "weather_condition_snow_pattern": "(눈|snow)",
+  "weather_condition_fog_pattern": "(안개|fog)",
+  "weather_condition_wind_pattern": "(바람|wind)",
+  "weather_condition_sun_pattern": "(맑음|sun|clear)",
+  "weather_condition_cloud_pattern": "(흐림|cloud)",
   "external_device_name_patterns": [
-    "(?:connected|connecting|pair(?:ed|ing))\\s*(?:to)?\\s*[\"«]?([\\p{L}\\p{N}][\\p{L}\\p{N} ._#\\-]{1,40})[\"»]?(?=\\s|$|[,.!])",
-    "[\"«]?([\\p{L}\\p{N}][\\p{L}\\p{N} ._#\\-]{1,40})[\"»]?\\s*(?:is\\s+)?(?:연결\\b"
+    "(?:connected|connecting|pair(?:ed|ing)|연결됨|연결 중|페어링됨|페어링 중)\\s*(?:to)?(?:과|와)?\\s*[\"«]?([\\p{L}\\p{N}][\\p{L}\\p{N} ._#\\-]{1,40})[\"»]?(?=\\s|$|[,.!])",
+    "[\"«]?([\\p{L}\\p{N}][\\p{L}\\p{N} ._#\\-]{1,40})[\"»]?\\s*(?:is\\s+)?(?:과|와)?\\s*(?:연결\\b|연결됨|연결 중|connected\\b|connecting\\b)"
   ],
   "external_device_generic_names": [
     "기기",
     "카메라",
-    "핫스팟"
+    "핫스팟",
+    "device",
+    "camera",
+    "hotspot"
   ],
   "vpn_speed_pattern": "(?<!\\d)\\d{1,4}(?:[.,]\\d{1,2})?\\s*(?:[kmg]?i?b)\\s*(?:(?:/\\s*s)|(?:/\\s*sec)|ps)\\b",
-  "vpn_context_pattern": "(프록시)",
+  "vpn_context_pattern": "(프록시|proxy)",
   "vpn_package_markers": [
     "hiddify",
     "wireguard",
@@ -317,7 +365,10 @@
     "receive",
     "incoming",
     "inbound",
-    "ingress"
+    "ingress",
+    "다운로드",
+    "수신",
+    "받기"
   ],
   "vpn_upload_markers": [
     "↑",
@@ -329,7 +380,10 @@
     "send",
     "outgoing",
     "outbound",
-    "egress"
+    "egress",
+    "업로드",
+    "송신",
+    "보내기"
   ],
   "otp_code_patterns": [
     "(?:\\b코드\\b|\\b번호\\b)[^\\d\\n]{0,80}(\\d(?:[\\s-]?\\d){3,7})(?!\\d)",
@@ -339,7 +393,14 @@
   ],
   "order_context_hints": [
     "주문",
-    "배달"
+    "배달",
+    "배송",
+    "포장",
+    "픽업",
+    "결제",
+    "order",
+    "delivery",
+    "pickup"
   ],
   "entity_token_patterns": [
     "(?:#|№)\\s*([a-zA-Z0-9-]{2,16})"
@@ -347,6 +408,13 @@
   "status_labels": {
     "food": {
       "en": {
+        "0": "Paid",
+        "1": "Cooking",
+        "2": "Delivering",
+        "3": "Arriving soon",
+        "4": "Delivered"
+      },
+      "ko": {
         "0": "결제 완료",
         "1": "조리 중",
         "2": "배달 시작",
@@ -356,6 +424,13 @@
     },
     "taxi": {
       "en": {
+        "0": "Finding ride",
+        "1": "Driver found",
+        "2": "Approaching",
+        "3": "On trip",
+        "4": "Arrived"
+      },
+      "ko": {
         "0": "탐색 중",
         "1": "탐색 완료",
         "2": "접근 중",
@@ -365,6 +440,12 @@
     },
     "navigation": {
       "en": {
+        "1": "Started",
+        "2": "Navigating",
+        "3": "Arriving soon",
+        "4": "Arrived"
+      },
+      "ko": {
         "1": "길안내 시작",
         "2": "이동 중",
         "3": "곧 하차",
@@ -373,12 +454,19 @@
     },
     "external_device": {
       "en": {
+        "1": "Connecting",
+        "2": "Connected"
+      },
+      "ko": {
         "1": "연결 중",
         "2": "연결됨"
       }
     },
     "vpn": {
       "en": {
+        "1": "VPN"
+      },
+      "ko": {
         "1": "VPN"
       }
     }
