@@ -1,1976 +1,2786 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LiveBridge | Live Updates for Android</title>
-    <meta
-      name="description"
-      content="LiveBridge turns regular notifications into Live Updates-style surfaces on Android 16+."
-    />
-    <link rel="icon" type="image/png" href="./icon-master.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=ProductSans:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveBridge | Live Updates for Android</title>
+  <meta name="description"
+    content="LiveBridge turns regular notifications into Live Updates-style surfaces on Android 16+." />
+  <link rel="icon" type="image/png" href="./icon-master.png" />
+
+  <!-- OpenGraph SEO Tags -->
+  <meta property="og:title" content="LiveBridge | Live Updates for Android" />
+  <meta property="og:description"
+    content="LiveBridge turns regular notifications into Live Updates-style surfaces on Android 16+." />
+  <meta property="og:image" content="./icon-master.png" />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter SEO Tags -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="LiveBridge | Live Updates for Android" />
+  <meta name="twitter:description"
+    content="LiveBridge turns regular notifications into Live Updates-style surfaces on Android 16+." />
+  <meta name="twitter:image" content="./icon-master.png" />
+
+  <!-- Google Fonts: Plus Jakarta Sans for headings, Inter for body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F4F7F6;
+      --surface: #FFFFFF;
+      --surface-container: #E8ECEB;
+      --surface-container-highest: #DFE4E0;
+      --text: #1A2120;
+      --text-muted: #53605E;
+      --primary: #0D9488;
+      --on-primary: #FFFFFF;
+      --primary-container: #99F6E4;
+      --on-primary-container: #00201D;
+      --outline: rgba(13, 148, 136, 0.3);
+      --border: rgba(26, 33, 32, 0.1);
+      --hero-glow-core: rgba(13, 148, 136, 0.18);
+      --hero-glow-soft: rgba(13, 148, 136, 0.08);
+      --hero-glow-secondary: rgba(153, 246, 228, 0.15);
+      --radius: 16px;
+      --max: 1100px;
+      --header-bg: rgba(244, 247, 246, 0.85);
+      --card-shadow: 0 4px 20px -2px rgba(26, 33, 32, 0.05), 0 2px 8px -1px rgba(26, 33, 32, 0.02);
+      --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #F4F7F6;
-        --surface: #FFFFFF;
-        --surface-container: #E8ECEB;
-        --surface-container-highest: #DFE4E0;
-        --text: #1A2120;
-        --text-muted: #53605E;
-        --primary: #0D9488;
-        --on-primary: #FFFFFF;
-        --primary-container: #99F6E4;
-        --on-primary-container: #00201D;
-        --outline: rgba(13, 148, 136, 0.3);
-        --border: rgba(26, 33, 32, 0.1);
-        --hero-glow-core: rgba(13, 148, 136, 0.2);
-        --hero-glow-soft: rgba(13, 148, 136, 0.1);
-        --hero-glow-secondary: rgba(153, 246, 228, 0.2);
-        --radius: 16px;
-        --max: 1100px;
+        --bg: #060A0A;
+        --surface: #0A0F0F;
+        --surface-container: #101919;
+        --surface-container-highest: #1B2929;
+        --text: #F1F3F2;
+        --text-muted: #808B89;
+        --primary: #3DD1C4;
+        --on-primary: #012421;
+        --primary-container: #084942;
+        --on-primary-container: #C2FFF7;
+        --outline: rgba(61, 209, 196, 0.4);
+        --border: #162424;
+        --hero-glow-core: rgba(61, 209, 196, 0.2);
+        --hero-glow-soft: rgba(61, 209, 196, 0.1);
+        --hero-glow-secondary: rgba(8, 73, 66, 0.3);
+        --header-bg: rgba(6, 10, 10, 0.85);
+        --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
       }
+    }
 
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --bg: #0A1010;
-          --surface: #0C1414;
-          --surface-container: #142121;
-          --surface-container-highest: #223636;
-          --text: #E1E3E2;
-          --text-muted: #8A9391;
-          --primary: #67E7D9;
-          --on-primary: #003731;
-          --primary-container: #0C5E55;
-          --on-primary-container: #A8FFF4;
-          --outline: rgba(103, 231, 217, 0.45);
-          --border: #223636;
-          --hero-glow-core: rgba(103, 231, 217, 0.24);
-          --hero-glow-soft: rgba(103, 231, 217, 0.12);
-          --hero-glow-secondary: rgba(12, 94, 85, 0.34);
-        }
-      }
+    * {
+      box-sizing: border-box;
+    }
 
-      * {
-        box-sizing: border-box;
-      }
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg);
+      scroll-padding-top: 88px;
+      overflow-x: clip;
+    }
 
-      html {
-        scroll-behavior: smooth;
-        background-color: var(--bg);
-      }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      background-image: radial-gradient(circle at 1px 1px, var(--border) 1px, transparent 0);
+      background-size: 32px 32px;
+      overflow-x: clip;
+      overflow-anchor: none;
+    }
 
-      body {
-        margin: 0;
-        min-height: 100vh;
-        color: var(--text);
-        font-family: "Roboto", system-ui, sans-serif;
-        line-height: 1.5;
-        -webkit-font-smoothing: antialiased;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+    }
 
-      h1, h2, h3 {
-        margin: 0;
-        font-weight: 700;
-        color: var(--text);
-        letter-spacing: -0.01em;
-      }
+    .container {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+      padding: 0 16px;
+    }
 
-      .container {
-        width: min(calc(100% - 32px), var(--max));
-        margin: 0 auto;
-        padding: 0 16px;
-      }
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background-color: var(--header-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
 
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 14px 20px;
-        border-radius: var(--radius);
-        font-weight: 500;
-        font-size: 0.95rem;
-        white-space: nowrap;
-        transition: background-color 0.2s, opacity 0.2s;
-        cursor: pointer;
-        border: none;
-      }
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 16px;
+    }
 
-      .btn-filled {
-        background-color: var(--primary);
-        color: var(--on-primary);
-      }
+    .header-spacer {
+      height: 88px;
+    }
 
-      .btn-filled:hover {
-        opacity: 0.9;
-      }
+    .logo-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--text);
+    }
 
-      .btn-outlined {
-        background-color: transparent;
-        color: var(--primary);
-        border: 1.5px solid var(--outline);
-      }
+    .header-logo {
+      display: block;
+      border-radius: 8px;
+    }
 
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      position: relative;
+      color: var(--text-muted);
+      transition: color 0.2s;
+      padding: 6px 0;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--primary);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    .nav-github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--surface-container);
+      padding: 8px 16px !important;
+      border-radius: 20px;
+      color: var(--text) !important;
+      border: 1px solid var(--border);
+      transition: var(--transition-smooth);
+    }
+
+    .nav-github-link::after {
+      display: none !important;
+    }
+
+    .nav-github-link:hover {
+      background-color: var(--surface-container-highest);
+      border-color: var(--outline);
+      transform: translateY(-1px);
+    }
+
+    .mobile-menu-toggle {
+      display: none;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .hamburger {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background-color: var(--text);
+      position: relative;
+      transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .hamburger::before,
+    .hamburger::after {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 2px;
+      background-color: var(--text);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), top 0.3s cubic-bezier(0.16, 1, 0.3, 1), bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .hamburger::before {
+      top: -6px;
+    }
+
+    .hamburger::after {
+      bottom: -6px;
+    }
+
+    .mobile-menu-toggle.is-active .hamburger {
+      background-color: transparent !important;
+    }
+
+    .mobile-menu-toggle.is-active .hamburger::before {
+      transform: rotate(45deg);
+      top: 0;
+    }
+
+    .mobile-menu-toggle.is-active .hamburger::after {
+      transform: rotate(-45deg);
+      bottom: 0;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 24px;
+      border-radius: var(--radius);
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      transition: var(--transition-smooth);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .btn-filled {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border: 1px solid transparent;
+    }
+
+    .btn-filled:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px -6px var(--primary);
+      opacity: 0.95;
+    }
+
+    .btn-filled:active {
+      transform: translateY(0);
+    }
+
+    .btn-outlined {
+      background-color: transparent;
+      color: var(--primary);
+      border: 1.5px solid var(--outline);
+    }
+
+    .btn-outlined:hover {
+      background-color: rgba(13, 148, 136, 0.05);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .btn-outlined:active {
+      transform: translateY(0);
+    }
+
+    @media (prefers-color-scheme: dark) {
       .btn-outlined:hover {
+        background-color: rgba(103, 231, 217, 0.05);
+      }
+    }
+
+    .hero-badge-wrapper {
+      margin-bottom: 24px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px 6px 8px;
+      background-color: var(--surface-container);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: var(--transition-smooth);
+    }
+
+    .hero-badge:hover {
+      background-color: var(--surface-container-highest);
+      border-color: var(--outline);
+      transform: translateY(-1px);
+    }
+
+    .badge-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-text {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .badge-arrow {
+      color: var(--primary);
+      transition: transform 0.2s ease;
+    }
+
+    .hero-badge:hover .badge-arrow {
+      transform: translateX(3px);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero {
+      padding: 80px 0 96px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 3.8rem);
+      line-height: 1.15;
+      max-width: 680px;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .text-highlight {
+      color: var(--primary);
+    }
+
+    .hero p {
+      margin: 24px 0 32px;
+      max-width: 620px;
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      line-height: 1.65;
+    }
+
+    .hero .hero-support {
+      margin: -12px 0 32px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .hero-support a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-color: var(--outline);
+      text-underline-offset: 3px;
+      transition: var(--transition-smooth);
+    }
+
+    .hero-support a:hover {
+      text-decoration-color: var(--primary);
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .btn-hero-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .btn-hero-primary:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
+
+    .btn-hero-secondary {
+      border-color: var(--border);
+      color: var(--text);
+      background: var(--surface);
+    }
+
+    .btn-hero-secondary:hover {
+      background: var(--surface-container);
+      border-color: var(--outline);
+      transform: translateY(-1px);
+    }
+
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: flex-end;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+    }
+
+    .hero-scroll-wrap {
+      display: flex;
+      justify-content: center;
+      margin: -40px 0 40px;
+    }
+
+    .hero-scroll {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      opacity: 0.78;
+      padding: 8px;
+      border-radius: 50%;
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow);
+      animation: hero-bounce 1.8s ease-in-out infinite;
+      transition: var(--transition-smooth);
+    }
+
+    .hero-scroll:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(2px);
+    }
+
+    .hero-scroll svg {
+      display: block;
+      width: 24px;
+      height: 24px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 48px;
+      width: 100%;
+      max-width: 760px;
+      margin-top: 40px;
+    }
+
+    .stat-card {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-card:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: transparent;
+    }
+
+    .stat-value {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.1;
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .showcase {
+      padding: 48px 0 80px;
+    }
+
+    .section-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      border-radius: 30px;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.025em;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .showcase-row {
+      background-color: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 24px;
+      padding: 48px 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      margin-bottom: 40px;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition-smooth);
+    }
+
+    .showcase-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .showcase-row:hover {
+      border-color: var(--outline);
+      box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.04);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .showcase-row:hover {
+        box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.4);
+      }
+    }
+
+    .showcase-row:nth-child(even) {
+      direction: rtl;
+    }
+
+    .showcase-row:nth-child(even)>* {
+      direction: ltr;
+    }
+
+    .showcase-text h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .showcase-text p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .feature-list li::before {
+      content: "✓";
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background-color: rgba(61, 209, 196, 0.12);
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+      border-radius: 50%;
+      font-size: 0.85rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    @media (prefers-color-scheme: light) {
+      .feature-list li::before {
         background-color: rgba(13, 148, 136, 0.08);
-      }
-
-      @media (prefers-color-scheme: dark) {
-        .btn-outlined:hover {
-          background-color: rgba(103, 231, 217, 0.08);
-        }
-      }
-
-      .hero {
-        padding: 48px 0 64px;
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(320px, 460px);
-        gap: 48px;
-        align-items: center;
-      }
-
-      .hero-copy {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .hero h1 {
-        font-size: clamp(2.5rem, 5vw, 4rem);
-        line-height: 1.1;
-        max-width: 680px;
-      }
-
-      .hero p {
-        margin: 24px 0 32px;
-        max-width: 620px;
-        color: var(--text-muted);
-        font-size: 1.15rem;
-      }
-
-      .hero .hero-support {
-        margin: -12px 0 24px;
-        font-size: 0.95rem;
-      }
-
-      .hero-support a {
+        border-color: var(--primary);
         color: var(--primary);
-        font-weight: 600;
+      }
+    }
+
+    .showcase-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .showcase-picture,
+    .hero-picture {
+      display: block;
+      width: 100%;
+    }
+
+    .showcase-picture {
+      max-width: 380px;
+    }
+
+    .hero-picture {
+      max-width: 352px;
+      position: relative;
+      isolation: isolate;
+      overflow: visible;
+      margin: 0 auto;
+    }
+
+    .hero-picture img {
+      margin: 0 auto;
+    }
+
+    .hero-picture::before,
+    .hero-picture::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+    }
+
+    .hero-picture::before {
+      width: 122%;
+      aspect-ratio: 1;
+      background: radial-gradient(circle, var(--hero-glow-core) 0%, var(--hero-glow-soft) 42%, transparent 74%);
+      filter: blur(18px);
+    }
+
+    .hero-picture::after {
+      width: 94%;
+      aspect-ratio: 1;
+      background: radial-gradient(circle, var(--hero-glow-secondary) 0%, transparent 72%);
+      filter: blur(32px);
+    }
+
+    .showcase-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      position: relative;
+      z-index: 1;
+      transition: var(--transition-smooth);
+    }
+
+    .showcase-row .showcase-img {
+      border-radius: 24px;
+    }
+
+    .downloads {
+      padding: 80px 0;
+    }
+
+    .download-banner {
+      background-color: var(--surface);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 20px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 48px;
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow);
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .banner-release-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1 1 300px;
+    }
+
+    .banner-status-icon-wrapper {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: rgba(61, 209, 196, 0.1);
+      border: 1.5px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    @media (prefers-color-scheme: light) {
+      .banner-status-icon-wrapper {
+        background-color: rgba(13, 148, 136, 0.08);
+        border-color: var(--primary);
+      }
+    }
+
+    .banner-check-icon {
+      color: var(--primary);
+    }
+
+    .download-banner.banner-error .banner-dot {
+      display: none;
+    }
+
+    .banner-text-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .banner-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+    }
+
+    .banner-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: #22C55E;
+      border-radius: 50%;
+    }
+
+    .banner-title-row strong {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .banner-text-wrapper span {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    .banner-divider {
+      width: 1px;
+      height: 40px;
+      background-color: var(--border);
+      align-self: center;
+    }
+
+    @media (max-width: 900px) {
+      .banner-divider {
+        display: none;
+      }
+    }
+
+    .banner-stat-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .banner-stat-label {
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .banner-stat-value {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .download-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .download-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .build-card {
+      background-color: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition-smooth);
+    }
+
+    .build-card:hover {
+      border-color: var(--outline);
+      box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.05);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .build-card:hover {
+        box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.4);
+      }
+    }
+
+    .build-card.recommended {
+      border-color: var(--primary);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(61, 209, 196, 0.08);
+    }
+
+    .card-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .card-category {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .category-icon {
+      color: var(--text-muted);
+      opacity: 0.8;
+    }
+
+    .card-badge-recommended {
+      display: none;
+      background-color: var(--primary);
+      color: var(--on-primary);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    @media (max-width: 480px) {
+      .card-badge-recommended {
+        font-size: 0.6rem;
+        margin-left: 2px;
+      }
+    }
+
+    .build-card.recommended .card-badge-recommended {
+      display: inline-block;
+    }
+
+    .card-title {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin: 0 0 4px 0;
+      color: var(--text);
+    }
+
+    .card-subtitle {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin: 0 0 24px 0;
+    }
+
+    .card-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .meta-box {
+      background-color: var(--surface-container);
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .meta-box-label {
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .meta-box-value {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .meta-box-value.code-font {
+      font-family: monospace;
+      color: var(--text);
+    }
+
+    .build-card.recommended .meta-box-value.code-font {
+      color: var(--primary);
+    }
+
+    .verification-checked {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .verification-checked svg {
+      flex-shrink: 0;
+      color: var(--primary);
+    }
+
+    .card-divider {
+      display: none;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: auto;
+    }
+
+    @media (max-width: 480px) {
+      .card-footer {
+        flex-direction: column;
+        align-items: stretch;
       }
 
-      .hero-cta {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        margin-bottom: 24px;
+      .card-footer .download-count {
+        text-align: center;
       }
+    }
 
-      .hero-visual {
-        position: relative;
-        display: flex;
-        justify-content: flex-end;
-        overflow: visible;
+    .download-count {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    .btn-download-icon {
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+
+    .build-card .btn {
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      box-shadow: none;
+      transform: none !important;
+    }
+
+    .build-card .btn:hover {
+      transform: none !important;
+    }
+
+    .build-card.recommended .btn-filled {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border: 1.5px solid transparent;
+    }
+
+    .build-card.recommended .btn-filled:hover {
+      opacity: 0.9;
+      box-shadow: 0 4px 16px rgba(61, 209, 196, 0.25);
+    }
+
+    .build-card .btn-outlined {
+      background-color: transparent;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+
+    .build-card .btn-outlined:hover {
+      border-color: var(--outline);
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    @media (prefers-color-scheme: light) {
+      .build-card .btn-outlined:hover {
+        background-color: rgba(0, 0, 0, 0.02);
       }
+    }
 
-      .hero-scroll-wrap {
-        display: flex;
-        justify-content: center;
-        margin: -52px 0 10px;
+    .live-counter {
+      display: inline-flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0;
+      white-space: pre-wrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .live-counter-segment {
+      display: inline-flex;
+      align-items: baseline;
+      white-space: pre;
+    }
+
+    .live-counter-segment--number {
+      display: inline-flex;
+      white-space: nowrap;
+    }
+
+    .live-counter-segment--text {
+      display: inline;
+      white-space: pre-wrap;
+    }
+
+    .live-counter-char {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 1.06em;
+      overflow: hidden;
+      line-height: 1;
+    }
+
+    .live-counter-char.is-digit {
+      min-width: 0.62em;
+    }
+
+    .live-counter-glyph,
+    .live-counter-face {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 100%;
+    }
+
+    .live-counter-stack {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .live-counter-face {
+      position: absolute;
+      inset: 0;
+    }
+
+    .live-counter-face--new {
+      transform: translateY(112%);
+    }
+
+    .live-counter-char.is-flipping .live-counter-face--old {
+      animation: live-counter-old-up 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .live-counter-char.is-flipping .live-counter-face--new {
+      animation: live-counter-new-up 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .btn-disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .faq {
+      padding: 80px 0;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      transition: var(--transition-smooth);
+    }
+
+    .faq-item:hover {
+      border-color: var(--outline);
+      box-shadow: var(--card-shadow);
+    }
+
+    .faq-item.is-open {
+      border-color: var(--primary);
+      box-shadow: 0 8px 24px -6px rgba(13, 148, 136, 0.08);
+    }
+
+    .faq-trigger {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      padding: 24px;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      color: var(--text);
+      text-align: left;
+    }
+
+    .faq-trigger:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: -4px;
+      border-radius: var(--radius);
+    }
+
+    .faq-chevron {
+      width: 10px;
+      height: 10px;
+      flex: 0 0 auto;
+      border-right: 2px solid var(--primary);
+      border-bottom: 2px solid var(--primary);
+      transform: rotate(45deg);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .faq-item.is-open .faq-chevron {
+      transform: rotate(225deg);
+    }
+
+    .faq-panel {
+      height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: height 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+    }
+
+    .faq-panel-inner {
+      padding: 0 24px 24px;
+    }
+
+    .faq-panel-inner p {
+      margin: 0;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .faq-panel-inner a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-color: var(--outline);
+      text-underline-offset: 3px;
+    }
+
+    .faq-panel-inner a:hover {
+      text-decoration-color: var(--primary);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .faq-item,
+      .faq-chevron,
+      .faq-panel,
+      .btn,
+      .stat-card,
+      .build-card,
+      .showcase-img,
+      .site-header {
+        transition: none !important;
       }
 
       .hero-scroll {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--text-muted);
-        opacity: 0.78;
-        padding: 4px;
-        animation: hero-bounce 1.8s ease-in-out infinite;
+        animation: none !important;
       }
 
-      .hero-scroll:hover {
+      .live-counter-char.is-flipping .live-counter-face--old,
+      .live-counter-char.is-flipping .live-counter-face--new {
+        animation: none !important;
+      }
+    }
+
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .footer a {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    @keyframes hero-bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(6px);
+      }
+    }
+
+    @keyframes live-counter-old-up {
+      from {
+        transform: translateY(0);
         opacity: 1;
       }
 
-      .hero-scroll svg {
-        display: block;
-        width: 28px;
-        height: 28px;
+      to {
+        transform: translateY(-115%);
+        opacity: 0.28;
+      }
+    }
+
+    @keyframes live-counter-new-up {
+      from {
+        transform: translateY(112%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 40px 0 64px;
+      }
+
+      .hero-copy {
+        align-items: center;
+        text-align: center;
+      }
+
+      .hero p {
+        margin: 18px 0 28px;
+        font-size: 1.08rem;
+      }
+
+      .hero-cta {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .hero-visual {
+        justify-content: center;
+        order: -1;
+      }
+
+      .hero-scroll-wrap {
+        margin: -20px 0 24px;
       }
 
       .stats {
         display: grid;
+        max-width: 100%;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 16px;
-        width: 100%;
-        max-width: 760px;
-        margin: 0;
       }
 
       .stat-card {
-        background-color: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 24px;
-        text-align: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-      }
-
-      @media (prefers-color-scheme: dark) {
-        .stat-card { box-shadow: none; }
+        padding: 18px 14px;
       }
 
       .stat-value {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: var(--primary);
-        margin-bottom: 8px;
+        font-size: 1.45rem;
       }
 
       .stat-label {
-        color: var(--text-muted);
-        font-size: 0.9rem;
+        font-size: 0.82rem;
+      }
+
+      .showcase-row,
+      .showcase-row:nth-child(even) {
+        grid-template-columns: 1fr;
+        direction: ltr;
+        gap: 24px;
+        margin-bottom: 24px;
+        padding: 32px 24px;
+        background-color: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: 24px;
+        box-shadow: var(--card-shadow);
       }
 
       .showcase {
-        padding: 28px 0 64px;
-      }
-
-      .showcase-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 48px;
-        align-items: center;
-        margin-bottom: 80px;
-      }
-
-      .showcase-row:last-child {
-        margin-bottom: 0;
-      }
-
-      .showcase-row:nth-child(even) {
-        direction: rtl;
-      }
-
-      .showcase-row:nth-child(even) > * {
-        direction: ltr;
-      }
-
-      .showcase-text h2 {
-        font-size: 2rem;
-        margin-bottom: 16px;
-      }
-
-      .showcase-text p {
-        color: var(--text-muted);
-        font-size: 1.1rem;
-        margin-bottom: 24px;
-      }
-
-      .feature-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      .feature-list li {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 12px;
-        color: var(--text);
-        font-weight: 500;
-      }
-
-      .feature-list li::before {
-        content: "✓";
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 24px;
-        height: 24px;
-        background-color: var(--primary-container);
-        color: var(--on-primary-container);
-        border-radius: 50%;
-        font-size: 0.8rem;
-      }
-
-      .showcase-visual {
-        position: relative;
-        display: flex;
-        justify-content: center;
-      }
-
-      .showcase-picture,
-      .hero-picture {
-        display: block;
-        width: 100%;
-      }
-
-      .showcase-picture {
-        max-width: 380px;
-      }
-
-      .hero-picture {
-        max-width: 352px;
-        position: relative;
-        isolation: isolate;
-        overflow: visible;
-      }
-
-      .hero-picture::before,
-      .hero-picture::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 52%;
-        border-radius: 50%;
-        pointer-events: none;
-        transform: translate(-50%, -50%);
-        z-index: -1;
-      }
-
-      .hero-picture::before {
-        width: 122%;
-        aspect-ratio: 1;
-        background: radial-gradient(circle, var(--hero-glow-core) 0%, var(--hero-glow-soft) 42%, transparent 74%);
-        filter: blur(18px);
-      }
-
-      .hero-picture::after {
-        width: 94%;
-        aspect-ratio: 1;
-        background: radial-gradient(circle, var(--hero-glow-secondary) 0%, transparent 72%);
-        filter: blur(32px);
-      }
-
-      .showcase-img {
-        width: 100%;
-        max-width: 380px;
-        height: auto;
-        display: block;
-        border-radius: 24px;
-        position: relative;
-        z-index: 1;
-      }
-
-      .downloads {
-        padding: 64px 0;
+        padding: 24px 0 64px;
       }
 
       .section-header {
-        text-align: center;
-        margin-bottom: 48px;
+        margin-bottom: 40px;
       }
 
-      .section-header h2 {
-        font-size: 2.25rem;
-        margin-bottom: 16px;
+      .showcase-visual {
+        order: -1;
       }
 
-      .section-header p {
-        color: var(--text-muted);
-        font-size: 1.1rem;
-        max-width: 600px;
+      .showcase-text,
+      .showcase-visual,
+      .showcase-picture {
+        max-width: 100%;
         margin: 0 auto;
       }
 
-      .download-banner {
-        background-color: var(--primary-container);
-        color: var(--on-primary-container);
-        border-radius: var(--radius);
-        padding: 20px 24px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 32px;
-      }
-
-      .banner-info strong {
-        display: block;
-        font-size: 1.1rem;
-        margin-bottom: 4px;
-      }
-
-      .banner-info span {
-        font-size: 0.95rem;
-        opacity: 0.8;
-      }
-
-      .download-banner .btn-outlined {
-        border-color: var(--on-primary-container);
-        color: var(--on-primary-container);
+      .showcase-picture,
+      .showcase-img {
+        max-width: min(66vw, 280px);
       }
 
       .download-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .downloads,
+      .faq {
+        padding: 64px 0;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .mobile-menu-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        position: fixed;
+        top: 72px;
+        left: 0;
+        right: 0;
+        height: calc(100svh - 72px);
+        background-color: var(--bg);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+        font-size: 1.25rem;
+        transform: translateY(-100%);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        z-index: 99;
+        border-top: 1px solid var(--border);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-links.is-active {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .nav-github-link {
+        padding: 12px 28px !important;
+        border-radius: 30px;
+      }
+
+      .hero {
+        min-height: calc(100svh - 72px);
+        align-content: center;
+        padding: 48px 0 32px;
+      }
+
+      .hero h1 {
+        font-size: clamp(2rem, 8vw, 2.8rem);
+      }
+
+      .hero-cta {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+
+      .stats {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 100%;
         gap: 16px;
+        margin: 32px auto 0;
+      }
+
+      .stat-card {
+        padding: 0;
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 1.35rem;
+      }
+
+      .stat-label {
+        font-size: 0.8rem;
+      }
+
+      .hero-cta .btn,
+      .download-banner .btn,
+      .build-footer .btn {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .download-banner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+        padding: 24px;
+        margin-bottom: 24px;
       }
 
       .build-card {
-        background-color: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
         padding: 24px;
-        display: flex;
+      }
+
+      .build-footer {
         flex-direction: column;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        align-items: stretch;
+        text-align: center;
+        gap: 16px;
       }
 
-      @media (prefers-color-scheme: dark) {
-        .build-card { box-shadow: none; }
+      .download-count {
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero {
+        gap: 24px;
+        min-height: calc(100svh - 72px);
+        padding: 32px 0 24px;
       }
 
-      .build-card.recommended {
-        border: 2px solid var(--primary);
+      .hero h1 {
+        font-size: clamp(1.8rem, 10vw, 2.4rem);
+      }
+
+      .hero p {
+        margin: 14px 0 20px;
+        font-size: 1rem;
+      }
+
+      .hero-scroll-wrap {
+        margin: -10px 0 16px;
+      }
+
+      .section-header h2 {
+        font-size: 1.85rem;
+      }
+
+      .section-header p {
+        font-size: 1rem;
+      }
+
+      .showcase {
+        padding: 16px 0 48px;
+      }
+
+      .showcase-row,
+      .showcase-row:nth-child(even) {
+        gap: 20px;
+        padding: 24px 20px;
+        border-radius: 20px;
+      }
+
+      .showcase-text h2 {
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+      }
+
+      .showcase-text p {
+        font-size: 0.98rem;
+        margin-bottom: 16px;
+      }
+
+      .feature-list li {
+        align-items: flex-start;
+        font-size: 0.95rem;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .feature-list li::before {
+        width: 22px;
+        height: 22px;
+        font-size: 0.75rem;
+      }
+
+      .build-card {
+        padding: 20px;
       }
 
       .build-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
         margin-bottom: 16px;
       }
 
       .build-title-row {
-        display: flex;
         align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
+        gap: 10px;
       }
 
-      .build-head h3 {
-        line-height: 1.12;
+      .download-banner {
+        padding: 20px;
       }
 
-      .samsung-logo-img {
-        display: block;
-        width: auto;
-        height: 16px;
-        opacity: 0.8;
-        transform: translateY(1px);
+      .banner-info strong {
+        font-size: 1.1rem;
       }
 
-      .build-tag {
-        background-color: var(--surface-container-highest);
-        color: var(--text);
-        padding: 4px 10px;
-        border-radius: 8px;
-        font-size: 0.8rem;
-        font-weight: 500;
-      }
-
-      .build-card.recommended .build-tag {
-        background-color: var(--primary);
-        color: var(--on-primary);
-      }
-
-      .build-meta {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        margin-bottom: 24px;
-        flex-grow: 1;
-      }
-
-      .meta-box {
-        background-color: var(--surface-container);
-        padding: 12px;
-        border-radius: 12px;
-      }
-
-      .meta-label {
-        color: var(--text-muted);
-        font-size: 0.8rem;
-        margin-bottom: 2px;
-      }
-
-      .meta-value {
-        font-weight: 500;
-        font-size: 0.95rem;
-      }
-
-      .build-footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        margin-top: auto;
-      }
-
-      .download-count {
-        color: var(--text-muted);
-        font-size: 0.85rem;
-      }
-
-      .live-counter {
-        display: inline-flex;
-        align-items: baseline;
-        flex-wrap: wrap;
-        gap: 0;
-        white-space: pre-wrap;
-        font-variant-numeric: tabular-nums;
-      }
-
-      .live-counter-segment {
-        display: inline-flex;
-        align-items: baseline;
-        white-space: pre;
-      }
-
-      .live-counter-char {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        height: 1.06em;
-        overflow: hidden;
-        line-height: 1;
-      }
-
-      .live-counter-char.is-digit {
-        min-width: 0.62em;
-      }
-
-      .live-counter-glyph,
-      .live-counter-face {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 100%;
-      }
-
-      .live-counter-stack {
-        position: relative;
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-
-      .live-counter-face {
-        position: absolute;
-        inset: 0;
-      }
-
-      .live-counter-face--new {
-        transform: translateY(112%);
-      }
-
-      .live-counter-char.is-flipping .live-counter-face--old {
-        animation: live-counter-old-up 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-      }
-
-      .live-counter-char.is-flipping .live-counter-face--new {
-        animation: live-counter-new-up 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-      }
-
-      .btn-disabled {
-        opacity: 0.5;
-        pointer-events: none;
-      }
-
-      .faq {
-        padding: 64px 0;
-        max-width: 800px;
-        margin: 0 auto;
-      }
-
-      .faq-item {
-        background-color: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        margin-bottom: 12px;
-        transition: border-color 180ms ease, background-color 180ms ease, transform 180ms ease;
-      }
-
-      .faq-item.is-open {
-        border-color: color-mix(in srgb, var(--primary) 24%, var(--border));
-      }
-
-      .faq-trigger {
-        width: 100%;
-        background: transparent;
-        border: 0;
-        padding: 20px 24px;
-        font-weight: 500;
-        font-size: 1.05rem;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 16px;
-        color: var(--text);
-        text-align: left;
-        font-family: inherit;
-      }
-
-      .faq-trigger:focus-visible {
-        outline: 2px solid color-mix(in srgb, var(--primary) 55%, white);
-        outline-offset: -2px;
-        border-radius: var(--radius);
-      }
-
-      .faq-chevron {
-        width: 10px;
-        height: 10px;
-        flex: 0 0 auto;
-        border-right: 2px solid var(--primary);
-        border-bottom: 2px solid var(--primary);
-        transform: rotate(45deg);
-        transition: transform 220ms ease;
-      }
-
-      .faq-item.is-open .faq-chevron {
-        transform: rotate(225deg);
-      }
-
-      .faq-panel {
-        height: 0;
-        overflow: hidden;
-        opacity: 0;
-        transition: height 220ms ease, opacity 180ms ease;
-      }
-
-      .faq-panel-inner {
-        padding: 0 24px 24px;
-      }
-
-      .faq-panel-inner p {
-        margin: 0;
-        color: var(--text-muted);
-      }
-
-      .faq-panel-inner a {
-        color: var(--primary);
-        font-weight: 500;
-        text-decoration: underline;
-        text-decoration-color: color-mix(in srgb, var(--primary) 55%, transparent);
-        text-underline-offset: 0.18em;
-      }
-
-      .faq-panel-inner a:hover {
-        text-decoration-color: var(--primary);
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .faq-item,
-        .faq-chevron,
-        .faq-panel {
-          transition: none;
-        }
-
-        .live-counter-char.is-flipping .live-counter-face--old,
-        .live-counter-char.is-flipping .live-counter-face--new {
-          animation: none;
-        }
-      }
-
-      .footer {
-        border-top: 1px solid var(--border);
-        padding: 32px 0;
-        text-align: center;
-        color: var(--text-muted);
+      .banner-info span {
         font-size: 0.9rem;
       }
 
-      .footer a {
-        color: var(--primary);
+      .faq {
+        padding: 48px 0;
       }
 
-      @keyframes hero-bounce {
-        0%, 100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(5px);
-        }
+      .faq-trigger {
+        padding: 20px;
+        font-size: 1rem;
       }
 
-      @keyframes live-counter-old-up {
-        from {
-          transform: translateY(0);
-          opacity: 1;
-        }
-        to {
-          transform: translateY(-115%);
-          opacity: 0.28;
-        }
+      .faq-panel-inner {
+        padding: 0 20px 20px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .hero-scroll svg {
+        width: 20px;
+        height: 20px;
       }
 
-      @keyframes live-counter-new-up {
-        from {
-          transform: translateY(112%);
-        }
-        to {
-          transform: translateY(0);
-        }
+      .build-meta {
+        grid-template-columns: 1fr;
       }
 
-      @media (max-width: 900px) {
-        .hero {
-          grid-template-columns: 1fr;
-          gap: 24px;
-          padding: 24px 0 44px;
-        }
-
-        .hero-copy {
-          align-items: center;
-          text-align: center;
-        }
-
-        .hero p {
-          margin: 18px 0 28px;
-          font-size: 1.05rem;
-        }
-
-        .hero-cta {
-          justify-content: center;
-          width: 100%;
-        }
-
-        .hero-visual {
-          justify-content: center;
-        }
-
-        .hero-scroll-wrap {
-          margin: -12px 0 12px;
-        }
-
-        .stats {
-          max-width: 100%;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 10px;
-        }
-
-        .stat-card {
-          padding: 14px 10px;
-          border-radius: 14px;
-        }
-
-        .stat-value {
-          font-size: 1.25rem;
-          margin-bottom: 4px;
-        }
-
-        .stat-label {
-          font-size: 0.78rem;
-        }
-
-        .showcase-row, .showcase-row:nth-child(even) {
-          grid-template-columns: 1fr;
-          direction: ltr;
-          gap: 18px;
-          margin-bottom: 18px;
-          padding: 22px 18px;
-          background-color: var(--surface);
-          border: 1px solid var(--border);
-          border-radius: 22px;
-        }
-
-        .showcase {
-          padding: 10px 0 52px;
-        }
-
-        .section-header {
-          margin-bottom: 24px;
-        }
-
-        .showcase-visual {
-          order: -1;
-        }
-
-        .showcase-text,
-        .showcase-visual,
-        .showcase-picture {
-          max-width: 100%;
-          margin: 0 auto;
-        }
-
-        .showcase-picture,
-        .showcase-img {
-          max-width: min(66vw, 252px);
-        }
-
-        .download-grid { grid-template-columns: 1fr; }
-
-        .downloads,
-        .faq {
-          padding: 56px 0;
-        }
+      .meta-box {
+        padding: 12px;
       }
+    }
+  </style>
+</head>
 
-      @media (max-width: 760px) {
-        .container {
-          width: min(calc(100% - 20px), var(--max));
-          padding: 0 10px;
-        }
+<body>
+  <header class="site-header">
+    <div class="header-container">
+      <a href="#" class="logo-link">
+        <img src="./icon-master.png" alt="LiveBridge Logo" class="header-logo" width="32" height="32" />
+        <span class="logo-text">LiveBridge</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#why-livebridge">Features</a>
+        <a href="#download">Download</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://github.com/appsfolder/livebridge" target="_blank" rel="noreferrer" class="nav-github-link">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor">
+            <path
+              d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+          </svg>
+          <span>GitHub</span>
+        </a>
+      </nav>
+      <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="hamburger"></span>
+      </button>
+    </div>
+  </header>
+  <div class="header-spacer"></div>
 
-        .hero-visual {
-          display: none;
-        }
-
-        .hero {
-          min-height: calc(100svh - 40px);
-          align-content: center;
-          padding: 48px 0 28px;
-        }
-
-        .hero h1 {
-          font-size: clamp(2rem, 8vw, 2.55rem);
-          max-width: 10ch;
-        }
-
-        .hero-cta {
-          flex-direction: column;
-          align-items: stretch;
-          gap: 10px;
-        }
-
-        .stats {
-          grid-template-columns: 1fr;
-          max-width: min(100%, 312px);
-          gap: 10px;
-          margin: 0 auto;
-        }
-
-        .stat-card {
-          padding: 14px 16px;
-        }
-
-        .stat-value {
-          font-size: 1.12rem;
-        }
-
-        .stat-label {
-          font-size: 0.82rem;
-        }
-
-        .hero-cta .btn,
-        .download-banner .btn,
-        .build-footer .btn {
-          width: 100%;
-          max-width: 100%;
-        }
-
-        .download-banner {
-          flex-direction: column;
-          align-items: stretch;
-          gap: 16px;
-          padding: 16px 18px;
-          margin-bottom: 20px;
-        }
-
-        .build-card {
-          padding: 18px;
-        }
-
-        .build-footer {
-          flex-direction: column;
-          align-items: stretch;
-          text-align: center;
-          gap: 12px;
-        }
-
-        .download-count {
-          text-align: center;
-        }
-      }
-
-      @media (max-width: 600px) {
-        .container {
-          width: min(calc(100% - 16px), var(--max));
-          padding: 0 8px;
-        }
-
-        .hero {
-          gap: 18px;
-          min-height: calc(100svh - 28px);
-          padding: 52px 0 28px;
-        }
-
-        .hero h1 {
-          font-size: clamp(1.82rem, 10vw, 2.2rem);
-          max-width: 11ch;
-        }
-
-        .hero p {
-          margin: 12px 0 18px;
-          font-size: 0.98rem;
-          line-height: 1.45;
-        }
-
-        .hero-scroll-wrap {
-          margin: -2px 0 12px;
-        }
-
-        .stat-card {
-          padding: 13px 15px;
-        }
-
-        .stat-value {
-          font-size: 1.1rem;
-        }
-
-        .section-header h2 {
-          font-size: 1.7rem;
-          margin-bottom: 12px;
-        }
-
-        .section-header p {
-          font-size: 1rem;
-        }
-
-        .showcase {
-          padding: 8px 0 44px;
-        }
-
-        .showcase-row,
-        .showcase-row:nth-child(even) {
-          gap: 16px;
-          margin-bottom: 16px;
-          padding: 18px 16px;
-          border-radius: 20px;
-        }
-
-        .showcase-text h2 {
-          font-size: 1.42rem;
-          margin-bottom: 10px;
-        }
-
-        .showcase-text p {
-          font-size: 0.96rem;
-          margin-bottom: 14px;
-        }
-
-        .feature-list li {
-          align-items: flex-start;
-          font-size: 0.93rem;
-          gap: 10px;
-          margin-bottom: 10px;
-        }
-
-        .feature-list li::before {
-          flex-shrink: 0;
-          width: 20px;
-          height: 20px;
-          font-size: 0.7rem;
-        }
-
-        .build-card {
-          padding: 16px;
-        }
-
-        .build-head {
-          flex-direction: column;
-          gap: 8px;
-          margin-bottom: 12px;
-        }
-
-        .build-title-row {
-          align-items: center;
-          gap: 8px;
-        }
-
-        .samsung-logo-img {
-          height: 14px;
-          transform: translateY(1px);
-        }
-
-        .download-banner {
-          padding: 14px 16px;
-          text-align: left;
-        }
-
-        .banner-info strong {
-          font-size: 0.98rem;
-        }
-
-        .banner-info span {
-          font-size: 0.86rem;
-        }
-
-        .faq {
-          padding: 42px 0 34px;
-        }
-
-        .faq-trigger {
-          padding: 18px 20px;
-          font-size: 1rem;
-        }
-
-        .faq-panel-inner {
-          padding: 0 20px 20px;
-        }
-
-        .faq-panel-inner p {
-          padding: 0;
-        }
-
-        .footer {
-          padding: 28px 0;
-          font-size: 0.85rem;
-        }
-      }
-
-      @media (max-width: 420px) {
-        .hero-scroll svg {
-          width: 22px;
-          height: 22px;
-        }
-
-        .build-meta {
-          grid-template-columns: 1fr;
-        }
-
-        .meta-box {
-          padding: 11px 12px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <main>
-        <section class="hero">
-          <div class="hero-copy">
-            <h1>Bring Live Updates to your Android phone</h1>
-            <p>
-              LiveBridge turns your regular notifications into glanceable Live Updates surfaces for delivery progress, timers, media, network speed, and more. Built around native Android APIs and tuned for modern devices.
-            </p>
-            <div class="hero-cta">
-              <a class="btn btn-filled" href="#download">Get the Latest Version</a>
-              <a class="btn btn-outlined" href="https://github.com/appsfolder/livebridge" target="_blank" rel="noreferrer">Star on GitHub</a>
-              <a class="btn btn-outlined" href="https://t.me/livebridge_dev" target="_blank" rel="noreferrer">Discuss</a>
+  <div class="container">
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <h1>Bring Live Updates <span class="text-highlight">to your Android phone</span></h1>
+          <p>
+            LiveBridge turns regular notifications into glanceable Live Updates surfaces for delivery progress, timers,
+            media, network speed, and more. Built around native Android APIs and tuned for modern devices.
+          </p>
+          <div class="hero-cta">
+            <a class="btn btn-filled btn-hero-primary" href="#download">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; flex-shrink: 0;">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+              </svg>
+              <span>Download APK</span>
+            </a>
+            <a class="btn btn-outlined btn-hero-secondary" href="https://github.com/appsfolder/livebridge"
+              target="_blank" rel="noreferrer">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"
+                style="margin-right: 8px; flex-shrink: 0;">
+                <path
+                  d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+              </svg>
+              <span>Star on GitHub</span>
+            </a>
+            <a class="btn btn-outlined btn-hero-secondary" href="https://t.me/livebridge_dev" target="_blank"
+              rel="noreferrer">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; flex-shrink: 0;">
+                <path
+                  d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+              </svg>
+              <span>Discuss</span>
+            </a>
+          </div>
+          <p class="hero-support">
+            Want to support development? <a href="https://boosty.to/appsfolder" target="_blank" rel="noreferrer">Donate
+              on Boosty</a>.
+          </p>
+          <section class="stats">
+            <div class="stat-card">
+              <div class="stat-value" id="stat-version">--</div>
+              <div class="stat-label">Latest Release</div>
             </div>
-            <p class="hero-support">
-              Want to support development? <a href="https://boosty.to/appsfolder" target="_blank" rel="noreferrer">Donate on Boosty</a>.
-            </p>
-            <section class="stats">
-              <div class="stat-card">
-                <div class="stat-value" id="stat-version">--</div>
-                <div class="stat-label">Latest Release</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value" id="stat-total-downloads">--</div>
-                <div class="stat-label">Total Downloads</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value">16+</div>
-                <div class="stat-label">Android version</div>
-              </div>
-            </section>
-          </div>
-          <div class="hero-visual">
-            <picture class="hero-picture" data-shot="0">
-              <source media="(prefers-color-scheme: dark)" data-variant="dark" />
-              <img class="showcase-img" data-variant="light" alt="LiveBridge app preview" />
-            </picture>
-          </div>
-        </section>
+            <div class="stat-card">
+              <div class="stat-value" id="stat-total-downloads">--</div>
+              <div class="stat-label">Total Downloads</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">16+</div>
+              <div class="stat-label">Android version</div>
+            </div>
+          </section>
+        </div>
+        <div class="hero-visual">
+          <picture class="hero-picture" data-shot="0">
+            <source media="(prefers-color-scheme: dark)" data-variant="dark" />
+            <img class="showcase-img" data-variant="light" alt="LiveBridge app preview" width="653" height="1280" />
+          </picture>
+        </div>
+      </section>
 
-        <div class="hero-scroll-wrap">
-          <a class="hero-scroll" href="#why-livebridge" aria-label="Scroll down to Why LiveBridge">
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </a>
+      <div class="hero-scroll-wrap">
+        <a class="hero-scroll" href="#why-livebridge" aria-label="Scroll down to Why LiveBridge">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </a>
+      </div>
+
+      <section class="showcase" id="why-livebridge">
+        <div class="section-header">
+          <span class="section-badge">Features</span>
+          <h2>Why LiveBridge?</h2>
+          <p>Designed to make important status updates visible without opening apps.</p>
         </div>
 
-        <section class="showcase" id="why-livebridge">
-          <div class="section-header">
-            <h2>Why LiveBridge?</h2>
-            <p>Designed to make important status updates visible without opening apps.</p>
+        <div class="showcase-row">
+          <div class="showcase-text">
+            <h2>Compact status at a glance</h2>
+            <p>Convert messy progress notifications and text-only updates into one clean, unified surface that stays
+              visible while the task is ongoing.</p>
+            <ul class="feature-list">
+              <li>Text progress conversion</li>
+              <li>Media integrations for AOSP</li>
+              <li>Real-time network speed tracking</li>
+            </ul>
           </div>
-
-          <div class="showcase-row">
-            <div class="showcase-text">
-              <h2>Compact status at a glance</h2>
-              <p>Convert messy progress notifications and text-only updates into one clean, unified surface that stays visible while the task is ongoing.</p>
-              <ul class="feature-list">
-                <li>Text progress conversion</li>
-                <li>Media integrations for AOSP</li>
-                <li>Real-time network speed tracking</li>
-              </ul>
-            </div>
-            <div class="showcase-visual">
-              <picture class="showcase-picture" data-shot="1">
-                <source media="(prefers-color-scheme: dark)" data-variant="dark" />
-                <img class="showcase-img" data-variant="light" alt="Notification preview" />
-              </picture>
-            </div>
+          <div class="showcase-visual">
+            <picture class="showcase-picture" data-shot="1">
+              <source media="(prefers-color-scheme: dark)" data-variant="dark" />
+              <img class="showcase-img" data-variant="light" alt="Notification preview" width="1280" height="1200" />
+            </picture>
           </div>
+        </div>
 
-          <div class="showcase-row">
-            <div class="showcase-text">
-              <h2>Smart & practical daily extras</h2>
-              <p>LiveBridge was built with attention to details. VPNs/Networking, devices, OTP codes, taxi, delivery - everything you need just in one app.</p>
-              <ul class="feature-list">
-                <li>Smart OTP code extraction & copying</li>
-                <li>All things that you need</li>
-                <li>Always visible - It's native Live Activity!</li>
-              </ul>
-            </div>
-            <div class="showcase-visual">
-              <picture class="showcase-picture" data-shot="2">
-                <source media="(prefers-color-scheme: dark)" data-variant="dark" />
-                <img class="showcase-img" data-variant="light" alt="Smart features preview" />
-              </picture>
-            </div>
+        <div class="showcase-row">
+          <div class="showcase-text">
+            <h2>Smart & practical daily extras</h2>
+            <p>LiveBridge is built with meticulous attention to detail. VPN configurations, network speeds, connected
+              devices, OTP codes, taxi arrivals, and delivery tracking—all unified in a single app.</p>
+            <ul class="feature-list">
+              <li>Smart OTP code extraction & quick copy</li>
+              <li>Tailored widgets for essential daily tasks</li>
+              <li>Always visible with native Live Updates</li>
+            </ul>
           </div>
-
-          <div class="showcase-row">
-            <div class="showcase-text">
-              <h2>Vendor-aware & customizable</h2>
-              <p>Android UIs IS different. LiveBridge can be adapted to OEM differences, including exclusive ROM features for Xiaomi and Samsung (for now).</p>
-              <ul class="feature-list">
-                <li>Samsung Now Bar specific builds</li>
-                <li>Xiaomi Hyper Island compatibility</li>
-                <li>Per-app behavior customization</li>
-              </ul>
-            </div>
-            <div class="showcase-visual">
-              <picture class="showcase-picture" data-shot="3">
-                <source media="(prefers-color-scheme: dark)" data-variant="dark" />
-                <img class="showcase-img" data-variant="light" alt="Settings preview" />
-              </picture>
-            </div>
+          <div class="showcase-visual">
+            <picture class="showcase-picture" data-shot="2">
+              <source media="(prefers-color-scheme: dark)" data-variant="dark" />
+              <img class="showcase-img" data-variant="light" alt="Smart features preview" width="1215" height="1280" />
+            </picture>
           </div>
-        </section>
+        </div>
 
-        <section class="downloads" id="download">
-          <div class="section-header">
-            <h2>Choose your download</h2>
-            <p>Pick the build that matches your device architecture.</p>
+        <div class="showcase-row">
+          <div class="showcase-text">
+            <h2>Vendor-aware & customizable</h2>
+            <p>Android UIs are highly diverse. LiveBridge adapts gracefully to OEM differences, supporting exclusive ROM
+              features for Xiaomi HyperOS and Samsung One UI.</p>
+            <ul class="feature-list">
+              <li>Samsung Now Bar specific integrations</li>
+              <li>Xiaomi HyperOS capsule compatibility</li>
+              <li>Granular, per-app customization rules</li>
+            </ul>
           </div>
+          <div class="showcase-visual">
+            <picture class="showcase-picture" data-shot="3">
+              <source media="(prefers-color-scheme: dark)" data-variant="dark" />
+              <img class="showcase-img" data-variant="light" alt="Settings preview" width="1280" height="1200" />
+            </picture>
+          </div>
+        </div>
+      </section>
 
-          <div class="download-banner">
-            <div class="banner-info">
-              <strong id="release-banner-title">Latest release: loading…</strong>
+      <section class="downloads" id="download">
+        <div class="section-header">
+          <span class="section-badge">Downloads</span>
+          <h2>Choose your download</h2>
+          <p>Pick the build that matches your device architecture.</p>
+        </div>
+
+        <div class="download-banner">
+          <div class="banner-release-info">
+            <div class="banner-status-icon-wrapper">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.2"
+                class="banner-check-icon">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div class="banner-text-wrapper">
+              <div class="banner-title-row">
+                <strong id="release-banner-title">Latest Release: loading…</strong>
+              </div>
               <span id="release-banner-copy">Fetching release files from GitHub.</span>
             </div>
-            <a class="btn btn-outlined" href="https://github.com/appsfolder/livebridge/releases/latest" target="_blank">Browse all assets</a>
+          </div>
+          <div class="banner-divider"></div>
+          <div class="banner-stat-col">
+            <span class="banner-stat-label">Cumulative Download Metrics</span>
+            <span class="banner-stat-value" id="stat-total-downloads">--</span>
+          </div>
+          <div class="banner-divider"></div>
+          <div class="banner-stat-col">
+            <span class="banner-stat-label">Deployment Platform</span>
+            <span class="banner-stat-value">Android 16+</span>
+          </div>
+        </div>
+
+        <div class="download-grid">
+          <div class="build-card recommended" data-build-key="armv8a">
+            <div class="card-top-row">
+              <div class="card-category">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+                  class="category-icon">
+                  <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                  <rect x="9" y="9" width="6" height="6"></rect>
+                  <line x1="9" y1="1" x2="9" y2="4"></line>
+                  <line x1="15" y1="1" x2="15" y2="4"></line>
+                  <line x1="9" y1="20" x2="9" y2="23"></line>
+                  <line x1="15" y1="20" x2="15" y2="23"></line>
+                  <line x1="20" y1="9" x2="23" y2="9"></line>
+                  <line x1="20" y1="15" x2="23" y2="15"></line>
+                  <line x1="1" y1="9" x2="4" y2="9"></line>
+                  <line x1="1" y1="15" x2="4" y2="15"></line>
+                </svg>
+                <span>Modern 64-bit Device</span>
+              </div>
+              <span class="card-badge-recommended">Recommended</span>
+            </div>
+            <h3 class="card-title">ARMv8-A</h3>
+            <p class="card-subtitle">Best for modern devices</p>
+
+            <div class="card-meta-grid">
+              <div class="meta-box">
+                <span class="meta-box-label">Architecture Code</span>
+                <span class="meta-box-value code-font">arm64-v8a</span>
+              </div>
+            </div>
+
+            <div class="card-divider"></div>
+
+            <div class="card-footer">
+              <span class="download-count" id="count-armv8a">Waiting...</span>
+              <a class="btn btn-filled" id="button-armv8a" href="#">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+                  class="btn-download-icon">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                </svg>
+                <span class="btn-text">Download APK</span>
+              </a>
+            </div>
           </div>
 
-          <div class="download-grid">
-            <div class="build-card recommended" data-build-key="armv8a">
-              <div class="build-head">
-                <h3>Modern Android</h3>
-                <span
-                  class="build-tag"
-                  data-build-tag="armv8a"
-                  data-default-tag="Most devices"
-                  data-recommended-tag="Recommended"
-                >Recommended</span>
+          <div class="build-card" data-build-key="samsung">
+            <div class="card-top-row">
+              <div class="card-category">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+                  class="category-icon">
+                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                  <line x1="12" y1="18" x2="12" y2="18"></line>
+                </svg>
+                <span>Samsung Now Bar</span>
               </div>
-              <div class="build-meta">
-                <div class="meta-box">
-                  <div class="meta-label">Architecture</div>
-                  <div class="meta-value">ARMv8-A</div>
-                </div>
-                <div class="meta-box">
-                  <div class="meta-label">Best for</div>
-                  <div class="meta-value">Modern devices</div>
-                </div>
-              </div>
-              <div class="build-footer">
-                <a class="btn btn-filled" id="button-armv8a" href="#">Download APK</a>
-                <span class="download-count" id="count-armv8a">Waiting...</span>
+              <span class="card-badge-recommended">Recommended</span>
+            </div>
+            <h3 class="card-title">Samsung One UI</h3>
+            <p class="card-subtitle">Custom variant for Now Bar support</p>
+
+            <div class="card-meta-grid">
+              <div class="meta-box">
+                <span class="meta-box-label">Architecture Code</span>
+                <span class="meta-box-value code-font">arm64-v8a</span>
               </div>
             </div>
 
-            <div class="build-card" data-build-key="samsung">
-              <div class="build-head">
-                <div class="build-title-row">
-                  <h3>Now Bar version for</h3>
-                  <img class="samsung-logo-img" data-icon="samsung-logo" alt="Samsung logo" />
-                </div>
-                <span
-                  class="build-tag"
-                  data-build-tag="samsung"
-                  data-default-tag="Samsung-only"
-                  data-recommended-tag="Recommended"
-                >Samsung-only</span>
-              </div>
-              <div class="build-meta">
-                <div class="meta-box">
-                  <div class="meta-label">Architecture</div>
-                  <div class="meta-value">ARMv8-A</div>
-                </div>
-                <div class="meta-box">
-                  <div class="meta-label">Best for</div>
-                  <div class="meta-value">Samsung One UI</div>
-                </div>
-              </div>
-              <div class="build-footer">
-                <a class="btn btn-outlined" id="button-samsung" href="#">Download APK</a>
-                <span class="download-count" id="count-samsung">Waiting...</span>
-              </div>
-            </div>
+            <div class="card-divider"></div>
 
-            <div class="build-card" data-build-key="universal">
-              <div class="build-head">
-                <h3>Not Sure?</h3>
-                <span
-                  class="build-tag"
-                  data-build-tag="universal"
-                  data-default-tag="For everyone"
-                  data-recommended-tag="Recommended"
-                >For everyone</span>
-              </div>
-              <div class="build-meta">
-                <div class="meta-box">
-                  <div class="meta-label">Architecture</div>
-                  <div class="meta-value">Universal</div>
-                </div>
-                <div class="meta-box">
-                  <div class="meta-label">Best for</div>
-                  <div class="meta-value">Maximum compatibility</div>
-                </div>
-              </div>
-              <div class="build-footer">
-                <a class="btn btn-outlined" id="button-universal" href="#">Download APK</a>
-                <span class="download-count" id="count-universal">Waiting...</span>
-              </div>
-            </div>
-
-            <div class="build-card" data-build-key="armv7a">
-              <div class="build-head">
-                <h3>Older Phone</h3>
-                <span
-                  class="build-tag"
-                  data-build-tag="armv7a"
-                  data-default-tag="Legacy CPU"
-                  data-recommended-tag="Recommended"
-                >Legacy CPU</span>
-              </div>
-              <div class="build-meta">
-                <div class="meta-box">
-                  <div class="meta-label">Architecture</div>
-                  <div class="meta-value">ARMv7-A</div>
-                </div>
-                <div class="meta-box">
-                  <div class="meta-label">Best for</div>
-                  <div class="meta-value">Older 32-bit devices</div>
-                </div>
-              </div>
-              <div class="build-footer">
-                <a class="btn btn-outlined" id="button-armv7a" href="#">Download APK</a>
-                <span class="download-count" id="count-armv7a">Waiting...</span>
-              </div>
+            <div class="card-footer">
+              <span class="download-count" id="count-samsung">Waiting...</span>
+              <a class="btn btn-outlined" id="button-samsung" href="#">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+                  class="btn-download-icon">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                </svg>
+                <span class="btn-text">Download APK</span>
+              </a>
             </div>
           </div>
-        </section>
 
-        <section class="faq">
-          <div class="section-header">
-            <h2>FAQ</h2>
-          </div>
+          <div class="build-card" data-build-key="universal">
+            <div class="card-top-row">
+              <div class="card-category">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+                  class="category-icon">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+                <span>Universal Package</span>
+              </div>
+              <span class="card-badge-recommended">Recommended</span>
+            </div>
+            <h3 class="card-title">Not Sure?</h3>
+            <p class="card-subtitle">Maximum installer compatibility</p>
 
-          <div class="faq-item is-open" data-faq-item>
-            <button class="faq-trigger" type="button" aria-expanded="true" aria-controls="faq-most-people">
-              <span>Which APK should most people download?</span>
-              <span class="faq-chevron" aria-hidden="true"></span>
-            </button>
-            <div class="faq-panel" id="faq-most-people" data-faq-panel>
-              <div class="faq-panel-inner">
-                <p>The ARMv8-A build is the default choice for nearly every recent Android phone. If your device is from the last several years, start there.</p>
+            <div class="card-meta-grid">
+              <div class="meta-box">
+                <span class="meta-box-label">Architecture Code</span>
+                <span class="meta-box-value code-font">universal</span>
               </div>
             </div>
-          </div>
-          <div class="faq-item" data-faq-item>
-            <button class="faq-trigger" type="button" aria-expanded="false" aria-controls="faq-samsung-build">
-              <span>Why is there a separate Samsung build?</span>
-              <span class="faq-chevron" aria-hidden="true"></span>
-            </button>
-            <div class="faq-panel" id="faq-samsung-build" data-faq-panel>
-              <div class="faq-panel-inner">
-                <p>The Samsung build is meant for the Samsung-specific package-name replacement flow, which helps with the vendor-specific Now Bar setup.</p>
-              </div>
+
+            <div class="card-divider"></div>
+
+            <div class="card-footer">
+              <span class="download-count" id="count-universal">Waiting...</span>
+              <a class="btn btn-outlined" id="button-universal" href="#">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+                  class="btn-download-icon">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                </svg>
+                <span class="btn-text">Download APK</span>
+              </a>
             </div>
           </div>
-          <div class="faq-item" data-faq-item>
-            <button class="faq-trigger" type="button" aria-expanded="false" aria-controls="faq-internet-access">
-              <span>Why does the app need internet access?</span>
-              <span class="faq-chevron" aria-hidden="true"></span>
-            </button>
-            <div class="faq-panel" id="faq-internet-access" data-faq-panel>
-              <div class="faq-panel-inner">
-                <p>LiveBridge uses internet access for things like checking for new releases and dictionary updates. Its core job of turning notifications into Live Updates happens locally on your device.</p>
+
+          <div class="build-card" data-build-key="armv7a">
+            <div class="card-top-row">
+              <div class="card-category">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+                  class="category-icon">
+                  <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                  <rect x="9" y="9" width="6" height="6"></rect>
+                  <line x1="9" y1="1" x2="9" y2="4"></line>
+                  <line x1="15" y1="1" x2="15" y2="4"></line>
+                  <line x1="9" y1="20" x2="9" y2="23"></line>
+                  <line x1="15" y1="20" x2="15" y2="23"></line>
+                  <line x1="20" y1="9" x2="23" y2="9"></line>
+                  <line x1="20" y1="15" x2="23" y2="15"></line>
+                  <line x1="1" y1="9" x2="4" y2="9"></line>
+                  <line x1="1" y1="15" x2="4" y2="15"></line>
+                </svg>
+                <span>Legacy Device</span>
+              </div>
+              <span class="card-badge-recommended">Recommended</span>
+            </div>
+            <h3 class="card-title">ARMv7-A</h3>
+            <p class="card-subtitle">Older 32-bit devices</p>
+
+            <div class="card-meta-grid">
+              <div class="meta-box">
+                <span class="meta-box-label">Architecture Code</span>
+                <span class="meta-box-value code-font">armeabi-v7a</span>
               </div>
             </div>
-          </div>
-          <div class="faq-item" data-faq-item>
-            <button class="faq-trigger" type="button" aria-expanded="false" aria-controls="faq-safety">
-              <span>Is the app safe?</span>
-              <span class="faq-chevron" aria-hidden="true"></span>
-            </button>
-            <div class="faq-panel" id="faq-safety" data-faq-panel>
-              <div class="faq-panel-inner">
-                <p>LiveBridge is open source and does not require an account. You can inspect the code, review the permissions it asks for, and verify what it does before installing it. Notification processing stays on-device.</p>
-              </div>
+
+            <div class="card-divider"></div>
+
+            <div class="card-footer">
+              <span class="download-count" id="count-armv7a">Waiting...</span>
+              <a class="btn btn-outlined" id="button-armv7a" href="#">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+                  class="btn-download-icon">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                </svg>
+                <span class="btn-text">Download APK</span>
+              </a>
             </div>
           </div>
-          <div class="faq-item" data-faq-item>
-            <button class="faq-trigger" type="button" aria-expanded="false" aria-controls="faq-contact">
-              <span>How can I contact the developer?</span>
-              <span class="faq-chevron" aria-hidden="true"></span>
-            </button>
-            <div class="faq-panel" id="faq-contact" data-faq-panel>
-              <div class="faq-panel-inner">
-                <p>You can reach the developer on Telegram: <a href="https://t.me/appsfolder" target="_blank" rel="noreferrer">@appsfolder</a>. For feature discussions, testing notes, and development topics, use the LiveBridge topics: <a href="https://t.me/livebridge_dev" target="_blank" rel="noreferrer">@livebridge_dev</a>.</p>
-              </div>
+        </div>
+      </section>
+
+      <section class="faq" id="faq">
+        <div class="section-header">
+          <span class="section-badge">FAQ</span>
+          <h2>Frequently Asked Questions</h2>
+        </div>
+
+        <div class="faq-item is-open" data-faq-item>
+          <button class="faq-trigger" type="button" aria-expanded="true" aria-controls="faq-most-people">
+            <span>Which APK should most people download?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" id="faq-most-people" data-faq-panel>
+            <div class="faq-panel-inner">
+              <p>The ARMv8-A build is the default choice for nearly every recent Android phone. If your device is from
+                the last several years, start there.</p>
             </div>
           </div>
-          <div class="faq-item" data-faq-item>
-            <button class="faq-trigger" type="button" aria-expanded="false" aria-controls="faq-support">
-              <span>How can I support the project?</span>
-              <span class="faq-chevron" aria-hidden="true"></span>
-            </button>
-            <div class="faq-panel" id="faq-support" data-faq-panel>
-              <div class="faq-panel-inner">
-                <p>LiveBridge stays open source and stable releases remain public. If you want to support development, early beta builds, and future apps from appsfolder, you can donate on <a href="https://boosty.to/appsfolder" target="_blank" rel="noreferrer">Boosty</a>.</p>
-              </div>
+        </div>
+        <div class="faq-item" data-faq-item>
+          <button class="faq-trigger" type="button" aria-expanded="false" aria-controls="faq-samsung-build">
+            <span>Why is there a separate Samsung build?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" id="faq-samsung-build" data-faq-panel>
+            <div class="faq-panel-inner">
+              <p>The Samsung build is meant for the Samsung-specific package-name replacement flow, which helps with the
+                vendor-specific Now Bar setup.</p>
             </div>
           </div>
-          <div class="faq-item" data-faq-item>
-            <button class="faq-trigger" type="button" aria-expanded="false" aria-controls="faq-older-android">
-              <span>Will this work on older Android versions?</span>
-              <span class="faq-chevron" aria-hidden="true"></span>
-            </button>
-            <div class="faq-panel" id="faq-older-android" data-faq-panel>
-              <div class="faq-panel-inner">
-                <p>No. LiveBridge targets Android 16 and newer because the app is built around native Android Live Updates support.</p>
-              </div>
+        </div>
+        <div class="faq-item" data-faq-item>
+          <button class="faq-trigger" type="button" aria-expanded="false" aria-controls="faq-internet-access">
+            <span>Why does the app need internet access?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" id="faq-internet-access" data-faq-panel>
+            <div class="faq-panel-inner">
+              <p>LiveBridge uses internet access for things like checking for new releases and dictionary updates. Its
+                core job of turning notifications into Live Updates happens locally on your device.</p>
             </div>
           </div>
-        </section>
-      </main>
+        </div>
+        <div class="faq-item" data-faq-item>
+          <button class="faq-trigger" type="button" aria-expanded="false" aria-controls="faq-safety">
+            <span>Is the app safe?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" id="faq-safety" data-faq-panel>
+            <div class="faq-panel-inner">
+              <p>LiveBridge is open source and does not require an account. You can inspect the code, review the
+                permissions it asks for, and verify what it does before installing it. Notification processing stays
+                on-device.</p>
+            </div>
+          </div>
+        </div>
+        <div class="faq-item" data-faq-item>
+          <button class="faq-trigger" type="button" aria-expanded="false" aria-controls="faq-contact">
+            <span>How can I contact the developer?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" id="faq-contact" data-faq-panel>
+            <div class="faq-panel-inner">
+              <p>You can reach the developer on Telegram: <a href="https://t.me/appsfolder" target="_blank"
+                  rel="noreferrer">@appsfolder</a>. For feature discussions, testing notes, and development topics, use
+                the LiveBridge topics: <a href="https://t.me/livebridge_dev" target="_blank"
+                  rel="noreferrer">@livebridge_dev</a>.</p>
+            </div>
+          </div>
+        </div>
+        <div class="faq-item" data-faq-item>
+          <button class="faq-trigger" type="button" aria-expanded="false" aria-controls="faq-support">
+            <span>How can I support the project?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" id="faq-support" data-faq-panel>
+            <div class="faq-panel-inner">
+              <p>LiveBridge stays open source and stable releases remain public. If you want to support development,
+                early beta builds, and future apps from appsfolder, you can donate on <a
+                  href="https://boosty.to/appsfolder" target="_blank" rel="noreferrer">Boosty</a>.</p>
+            </div>
+          </div>
+        </div>
+        <div class="faq-item" data-faq-item>
+          <button class="faq-trigger" type="button" aria-expanded="false" aria-controls="faq-older-android">
+            <span>Will this work on older Android versions?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" id="faq-older-android" data-faq-panel>
+            <div class="faq-panel-inner">
+              <p>No. LiveBridge targets Android 16 and newer because the app is built around native Android Live Updates
+                support.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
 
-      <footer class="footer">
-        <p>Built around the latest GitHub release data for <a href="https://github.com/appsfolder/livebridge" target="_blank">appsfolder/livebridge</a>.</p>
-      </footer>
-    </div>
+    <footer class="footer">
+      <p>Built around the latest GitHub release data for <a href="https://github.com/appsfolder/livebridge"
+          target="_blank">appsfolder/livebridge</a>.</p>
+    </footer>
+  </div>
 
-    <script>
-      const owner = "appsfolder";
-      const repo = "livebridge";
-      const releasesApi = `https://api.github.com/repos/${owner}/${repo}/releases?per_page=20`;
-      const latestReleasePage = `https://github.com/${owner}/${repo}/releases/latest`;
-      const rawAssetBase = `https://raw.githubusercontent.com/${owner}/${repo}/main/assets`;
-      const numberFormat = new Intl.NumberFormat("en-US");
-      const defaultRecommendedBuild = "armv8a";
-      const liveRefreshMinMs = 5200;
-      const liveRefreshJitterMs = 900;
-      const liveRefreshHiddenMs = 15000;
-      const liveRefreshErrorMs = 30000;
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-      const counterNumberPattern = /\d[\d,]*/g;
-      let releaseDataPollTimer = null;
-      let releaseDataRequestInFlight = false;
-      let releaseDataEtag = "";
-      let samsungDeviceDetectionPromise = null;
+  <script>
+    const owner = "appsfolder";
+    const repo = "livebridge";
+    const releasesApi = `https://api.github.com/repos/${owner}/${repo}/releases?per_page=20`;
+    const latestReleasePage = `https://github.com/${owner}/${repo}/releases/latest`;
+    const rawAssetBase = `https://raw.githubusercontent.com/${owner}/${repo}/main/assets`;
+    const numberFormat = new Intl.NumberFormat("en-US");
+    const defaultRecommendedBuild = "armv8a";
+    const liveRefreshMinMs = 5200;
+    const liveRefreshJitterMs = 900;
+    const liveRefreshHiddenMs = 15000;
+    const liveRefreshErrorMs = 30000;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const counterNumberPattern = /\d[\d,]*/g;
+    let releaseDataPollTimer = null;
+    let releaseDataRequestInFlight = false;
+    let releaseDataEtag = "";
+    let samsungDeviceDetectionPromise = null;
 
-      const builds = [
-        {
-          key: "armv8a",
-          matchers: ["-armv8a.apk", "arm64-v8a"],
-          fallbackText: "Best choice for most modern phones.",
-        },
-        {
-          key: "armv7a",
-          matchers: ["-armv7a.apk", "armeabi-v7a"],
-          fallbackText: "Use only if your device really needs 32-bit builds.",
-        },
-        {
-          key: "universal",
-          matchers: ["-universal.apk"],
-          fallbackText: "No universal APK yet.",
-        },
-        {
-          key: "samsung",
-          matchers: ["-samsung.apk"],
-          fallbackText: "No Samsung APK yet.",
-        },
-      ];
+    const builds = [
+      {
+        key: "armv8a",
+        matchers: ["-armv8a.apk", "arm64-v8a"],
+        fallbackText: "Best choice for most modern phones.",
+      },
+      {
+        key: "armv7a",
+        matchers: ["-armv7a.apk", "armeabi-v7a"],
+        fallbackText: "Use only if your device really needs 32-bit builds.",
+      },
+      {
+        key: "universal",
+        matchers: ["-universal.apk"],
+        fallbackText: "No universal APK yet.",
+      },
+      {
+        key: "samsung",
+        matchers: ["-samsung.apk"],
+        fallbackText: "No Samsung APK yet.",
+      },
+    ];
 
-      const sumDownloads = (assets) =>
-        assets.reduce((total, asset) => total + (asset.download_count || 0), 0);
+    const sumDownloads = (assets) =>
+      assets.reduce((total, asset) => total + (asset.download_count || 0), 0);
 
-      const getNextLiveRefreshDelay = () =>
-        liveRefreshMinMs + Math.floor(Math.random() * liveRefreshJitterMs);
+    const getNextLiveRefreshDelay = () =>
+      liveRefreshMinMs + Math.floor(Math.random() * liveRefreshJitterMs);
 
-      function clearReleaseDataRefreshTimer() {
-        if (releaseDataPollTimer !== null) {
-          window.clearTimeout(releaseDataPollTimer);
-          releaseDataPollTimer = null;
-        }
+    function clearReleaseDataRefreshTimer() {
+      if (releaseDataPollTimer !== null) {
+        window.clearTimeout(releaseDataPollTimer);
+        releaseDataPollTimer = null;
       }
+    }
 
-      function scheduleReleaseDataRefresh(delayMs = getNextLiveRefreshDelay()) {
-        clearReleaseDataRefreshTimer();
-        releaseDataPollTimer = window.setTimeout(() => {
-          if (document.hidden) {
-            scheduleReleaseDataRefresh(liveRefreshHiddenMs);
-            return;
-          }
-          loadReleaseData({ preserveOnError: true });
-        }, Math.max(delayMs, 1500));
-      }
-
-      function splitCounterSegments(value) {
-        const text = String(value ?? "");
-        const segments = [];
-        let cursor = 0;
-        let match;
-
-        counterNumberPattern.lastIndex = 0;
-        while ((match = counterNumberPattern.exec(text)) !== null) {
-          if (match.index > cursor) {
-            segments.push({ type: "text", value: text.slice(cursor, match.index) });
-          }
-          segments.push({ type: "number", value: match[0] });
-          cursor = match.index + match[0].length;
-        }
-
-        if (cursor < text.length) {
-          segments.push({ type: "text", value: text.slice(cursor) });
-        }
-
-        return segments.length ? segments : [{ type: "text", value: text }];
-      }
-
-      function createCounterTextSegment(text) {
-        const node = document.createElement("span");
-        node.className = "live-counter-segment live-counter-segment--text";
-        node.textContent = text;
-        node.setAttribute("aria-hidden", "true");
-        return node;
-      }
-
-      function createCounterChar(char, { previousChar = "", animate = false } = {}) {
-        const node = document.createElement("span");
-        const safeChar = char === " " ? "\u00A0" : char;
-        const safePreviousChar = previousChar === " " ? "\u00A0" : previousChar;
-        const isDigit = /\d/.test(char);
-
-        node.className = `live-counter-char${isDigit ? " is-digit" : ""}${animate ? " is-flipping" : ""}`;
-        node.setAttribute("aria-hidden", "true");
-
-        if (animate && isDigit && /\d/.test(previousChar)) {
-          const stack = document.createElement("span");
-          stack.className = "live-counter-stack";
-
-          const oldFace = document.createElement("span");
-          oldFace.className = "live-counter-face live-counter-face--old";
-          oldFace.textContent = safePreviousChar;
-
-          const newFace = document.createElement("span");
-          newFace.className = "live-counter-face live-counter-face--new";
-          newFace.textContent = safeChar;
-
-          stack.append(oldFace, newFace);
-          node.append(stack);
-          return node;
-        }
-
-        const glyph = document.createElement("span");
-        glyph.className = "live-counter-glyph";
-        glyph.textContent = safeChar;
-        node.append(glyph);
-        return node;
-      }
-
-      function createCounterNumberSegment(nextValue, previousValue, animateDigits) {
-        const node = document.createElement("span");
-        node.className = "live-counter-segment live-counter-segment--number";
-
-        const nextChars = Array.from(nextValue);
-        const previousChars = Array.from(previousValue);
-
-        for (let reverseIndex = 0; reverseIndex < nextChars.length; reverseIndex += 1) {
-          const nextChar = nextChars[nextChars.length - 1 - reverseIndex];
-          const previousChar = previousChars[previousChars.length - 1 - reverseIndex] || "";
-          const shouldAnimate =
-            animateDigits &&
-            /\d/.test(nextChar) &&
-            /\d/.test(previousChar) &&
-            nextChar !== previousChar;
-
-          node.prepend(
-            createCounterChar(nextChar, {
-              previousChar: /\d/.test(previousChar) ? previousChar : nextChar,
-              animate: shouldAnimate,
-            })
-          );
-        }
-
-        return node;
-      }
-
-      function renderCounterText(element, nextText, { animate = true } = {}) {
-        if (!element) return;
-
-        const nextValue = String(nextText ?? "");
-        const previousValue = element.dataset.counterValue || "";
-        if (previousValue === nextValue) return;
-
-        if (!/\d/.test(nextValue)) {
-          element.classList.remove("live-counter");
-          element.removeAttribute("aria-label");
-          element.textContent = nextValue;
-          element.dataset.counterValue = nextValue;
+    function scheduleReleaseDataRefresh(delayMs = getNextLiveRefreshDelay()) {
+      clearReleaseDataRefreshTimer();
+      releaseDataPollTimer = window.setTimeout(() => {
+        if (document.hidden) {
+          scheduleReleaseDataRefresh(liveRefreshHiddenMs);
           return;
         }
+        loadReleaseData({ preserveOnError: true });
+      }, Math.max(delayMs, 1500));
+    }
 
-        const nextSegments = splitCounterSegments(nextValue);
-        const previousNumberSegments = splitCounterSegments(previousValue)
-          .filter((segment) => segment.type === "number")
-          .map((segment) => segment.value);
-        const fragment = document.createDocumentFragment();
-        const shouldAnimate = Boolean(
-          animate &&
-          previousValue &&
-          !prefersReducedMotion.matches
+    function splitCounterSegments(value) {
+      const text = String(value ?? "");
+      const segments = [];
+      let cursor = 0;
+      let match;
+
+      counterNumberPattern.lastIndex = 0;
+      while ((match = counterNumberPattern.exec(text)) !== null) {
+        if (match.index > cursor) {
+          segments.push({ type: "text", value: text.slice(cursor, match.index) });
+        }
+        segments.push({ type: "number", value: match[0] });
+        cursor = match.index + match[0].length;
+      }
+
+      if (cursor < text.length) {
+        segments.push({ type: "text", value: text.slice(cursor) });
+      }
+
+      return segments.length ? segments : [{ type: "text", value: text }];
+    }
+
+    function createCounterTextSegment(text) {
+      const node = document.createElement("span");
+      node.className = "live-counter-segment live-counter-segment--text";
+      node.textContent = text;
+      node.setAttribute("aria-hidden", "true");
+      return node;
+    }
+
+    function createCounterChar(char, { previousChar = "", animate = false } = {}) {
+      const node = document.createElement("span");
+      const safeChar = char === " " ? "\u00A0" : char;
+      const safePreviousChar = previousChar === " " ? "\u00A0" : previousChar;
+      const isDigit = /\d/.test(char);
+
+      node.className = `live-counter-char${isDigit ? " is-digit" : ""}${animate ? " is-flipping" : ""}`;
+      node.setAttribute("aria-hidden", "true");
+
+      if (animate && isDigit && /\d/.test(previousChar)) {
+        const stack = document.createElement("span");
+        stack.className = "live-counter-stack";
+
+        const oldFace = document.createElement("span");
+        oldFace.className = "live-counter-face live-counter-face--old";
+        oldFace.textContent = safePreviousChar;
+
+        const newFace = document.createElement("span");
+        newFace.className = "live-counter-face live-counter-face--new";
+        newFace.textContent = safeChar;
+
+        stack.append(oldFace, newFace);
+        node.append(stack);
+        return node;
+      }
+
+      const glyph = document.createElement("span");
+      glyph.className = "live-counter-glyph";
+      glyph.textContent = safeChar;
+      node.append(glyph);
+      return node;
+    }
+
+    function createCounterNumberSegment(nextValue, previousValue, animateDigits) {
+      const node = document.createElement("span");
+      node.className = "live-counter-segment live-counter-segment--number";
+
+      const nextChars = Array.from(nextValue);
+      const previousChars = Array.from(previousValue);
+
+      for (let reverseIndex = 0; reverseIndex < nextChars.length; reverseIndex += 1) {
+        const nextChar = nextChars[nextChars.length - 1 - reverseIndex];
+        const previousChar = previousChars[previousChars.length - 1 - reverseIndex] || "";
+        const shouldAnimate =
+          animateDigits &&
+          /\d/.test(nextChar) &&
+          /\d/.test(previousChar) &&
+          nextChar !== previousChar;
+
+        node.prepend(
+          createCounterChar(nextChar, {
+            previousChar: /\d/.test(previousChar) ? previousChar : nextChar,
+            animate: shouldAnimate,
+          })
         );
-        let numberSegmentIndex = 0;
+      }
 
-        nextSegments.forEach((segment) => {
-          if (segment.type === "text") {
-            fragment.append(createCounterTextSegment(segment.value));
-            return;
-          }
+      return node;
+    }
 
-          fragment.append(
-            createCounterNumberSegment(
-              segment.value,
-              previousNumberSegments[numberSegmentIndex] || "",
-              shouldAnimate
-            )
-          );
-          numberSegmentIndex += 1;
-        });
+    function renderCounterText(element, nextText, { animate = true } = {}) {
+      if (!element) return;
 
-        element.classList.add("live-counter");
-        element.setAttribute("aria-label", nextValue);
-        element.replaceChildren(fragment);
+      const nextValue = String(nextText ?? "");
+      const previousValue = element.dataset.counterValue || "";
+      if (previousValue === nextValue) return;
+
+      if (!/\d/.test(nextValue)) {
+        element.classList.remove("live-counter");
+        element.removeAttribute("aria-label");
+        element.textContent = nextValue;
         element.dataset.counterValue = nextValue;
+        return;
       }
 
-      function getRateLimitBackoffMs(response) {
-        const remaining = Number(response.headers.get("x-ratelimit-remaining"));
-        const resetAt = Number(response.headers.get("x-ratelimit-reset"));
+      const nextSegments = splitCounterSegments(nextValue);
+      const previousNumberSegments = splitCounterSegments(previousValue)
+        .filter((segment) => segment.type === "number")
+        .map((segment) => segment.value);
+      const fragment = document.createDocumentFragment();
+      const shouldAnimate = Boolean(
+        animate &&
+        previousValue &&
+        !prefersReducedMotion.matches
+      );
+      let numberSegmentIndex = 0;
 
-        if (
-          Number.isFinite(resetAt) &&
-          resetAt > 0 &&
-          (
-            response.status === 403 ||
-            response.status === 429 ||
-            (Number.isFinite(remaining) && remaining <= 5)
-          )
-        ) {
-          return Math.max((resetAt * 1000) - Date.now() + 1000, liveRefreshErrorMs);
-        }
-
-        return null;
-      }
-
-      function assetMatches(assetName, matchers) {
-        const name = assetName.toLowerCase();
-        return matchers.some((matcher) => name.endsWith(matcher) || name.includes(matcher));
-      }
-
-      function findBuildAsset(assets, matchers) {
-        return assets.find((asset) => assetMatches(asset.name, matchers));
-      }
-
-      function looksLikeSamsungSignature(signature) {
-        return /Android/i.test(signature) &&
-          /SamsungBrowser|Samsung|SM-[A-Z0-9]+|GT-[A-Z0-9]+|SCH-[A-Z0-9]+|Galaxy/i.test(signature);
-      }
-
-      function getLowEntropyDeviceSignature() {
-        const ua = navigator.userAgent || "";
-        const platform = navigator.userAgentData?.platform || "";
-        const vendor = navigator.vendor || "";
-        const brands = Array.isArray(navigator.userAgentData?.brands)
-          ? navigator.userAgentData.brands.map((item) => item.brand).join(" ")
-          : "";
-
-        return `${ua} ${platform} ${vendor} ${brands}`;
-      }
-
-      function looksLikeSamsungDevice() {
-        return looksLikeSamsungSignature(getLowEntropyDeviceSignature());
-      }
-
-      async function detectSamsungDevice() {
-        if (looksLikeSamsungDevice()) {
-          return true;
-        }
-
-        const getHighEntropyValues = navigator.userAgentData?.getHighEntropyValues;
-        if (typeof getHighEntropyValues !== "function") {
-          return false;
-        }
-
-        try {
-          const data = await getHighEntropyValues.call(navigator.userAgentData, [
-            "model",
-            "platform",
-            "platformVersion",
-            "fullVersionList",
-          ]);
-          const fullBrands = Array.isArray(data.fullVersionList)
-            ? data.fullVersionList.map((item) => item.brand).join(" ")
-            : "";
-          const signature = `${getLowEntropyDeviceSignature()} ${data.model || ""} ${data.platform || ""} ${data.platformVersion || ""} ${fullBrands}`;
-
-          return looksLikeSamsungSignature(signature);
-        } catch (error) {
-          return false;
-        }
-      }
-
-      function getSamsungDeviceDetection() {
-        if (!samsungDeviceDetectionPromise) {
-          samsungDeviceDetectionPromise = detectSamsungDevice();
-        }
-
-        return samsungDeviceDetectionPromise;
-      }
-
-      async function applyRecommendedBuildForDevice(hasSamsungBuild) {
-        if (!hasSamsungBuild) {
-          applyRecommendedBuild(defaultRecommendedBuild);
+      nextSegments.forEach((segment) => {
+        if (segment.type === "text") {
+          fragment.append(createCounterTextSegment(segment.value));
           return;
         }
 
-        const isSamsungDevice = await getSamsungDeviceDetection();
-        applyRecommendedBuild(isSamsungDevice ? "samsung" : defaultRecommendedBuild);
+        fragment.append(
+          createCounterNumberSegment(
+            segment.value,
+            previousNumberSegments[numberSegmentIndex] || "",
+            shouldAnimate
+          )
+        );
+        numberSegmentIndex += 1;
+      });
+
+      element.classList.add("live-counter");
+      element.setAttribute("aria-label", nextValue);
+      element.replaceChildren(fragment);
+      element.dataset.counterValue = nextValue;
+    }
+
+    function getRateLimitBackoffMs(response) {
+      const remaining = Number(response.headers.get("x-ratelimit-remaining"));
+      const resetAt = Number(response.headers.get("x-ratelimit-reset"));
+
+      if (
+        Number.isFinite(resetAt) &&
+        resetAt > 0 &&
+        (
+          response.status === 403 ||
+          response.status === 429 ||
+          (Number.isFinite(remaining) && remaining <= 5)
+        )
+      ) {
+        return Math.max((resetAt * 1000) - Date.now() + 1000, liveRefreshErrorMs);
       }
 
-      function applyRecommendedBuild(buildKey) {
-        document.querySelectorAll(".build-card[data-build-key]").forEach((card) => {
-          const key = card.getAttribute("data-build-key");
-          const isRecommended = key === buildKey;
+      return null;
+    }
 
-          card.classList.toggle("recommended", isRecommended);
+    function assetMatches(assetName, matchers) {
+      const name = assetName.toLowerCase();
+      return matchers.some((matcher) => name.endsWith(matcher) || name.includes(matcher));
+    }
 
-          const tag = card.querySelector("[data-build-tag]");
-          if (tag) {
-            const defaultTag = tag.getAttribute("data-default-tag") || tag.textContent || "";
-            const recommendedTag = tag.getAttribute("data-recommended-tag") || "Recommended";
-            tag.textContent = isRecommended ? recommendedTag : defaultTag;
-          }
+    function findBuildAsset(assets, matchers) {
+      return assets.find((asset) => assetMatches(asset.name, matchers));
+    }
 
-          const button = card.querySelector(".build-footer .btn");
-          if (button) {
-            button.classList.toggle("btn-filled", isRecommended);
-            button.classList.toggle("btn-outlined", !isRecommended);
-          }
-        });
+    function looksLikeSamsungSignature(signature) {
+      return /Android/i.test(signature) &&
+        /SamsungBrowser|Samsung|SM-[A-Z0-9]+|GT-[A-Z0-9]+|SCH-[A-Z0-9]+|Galaxy/i.test(signature);
+    }
+
+    function getLowEntropyDeviceSignature() {
+      const ua = navigator.userAgent || "";
+      const platform = navigator.userAgentData?.platform || "";
+      const vendor = navigator.vendor || "";
+      const brands = Array.isArray(navigator.userAgentData?.brands)
+        ? navigator.userAgentData.brands.map((item) => item.brand).join(" ")
+        : "";
+
+      return `${ua} ${platform} ${vendor} ${brands}`;
+    }
+
+    function looksLikeSamsungDevice() {
+      return looksLikeSamsungSignature(getLowEntropyDeviceSignature());
+    }
+
+    async function detectSamsungDevice() {
+      if (looksLikeSamsungDevice()) {
+        return true;
       }
 
-      function setBuildCardState(build, latestAsset, totalDownloadsForBuild) {
-        const button = document.getElementById(`button-${build.key}`);
-        const count = document.getElementById(`count-${build.key}`);
+      const getHighEntropyValues = navigator.userAgentData?.getHighEntropyValues;
+      if (typeof getHighEntropyValues !== "function") {
+        return false;
+      }
 
-        if (!button || !count) return;
+      try {
+        const data = await getHighEntropyValues.call(navigator.userAgentData, [
+          "model",
+          "platform",
+          "platformVersion",
+          "fullVersionList",
+        ]);
+        const fullBrands = Array.isArray(data.fullVersionList)
+          ? data.fullVersionList.map((item) => item.brand).join(" ")
+          : "";
+        const signature = `${getLowEntropyDeviceSignature()} ${data.model || ""} ${data.platform || ""} ${data.platformVersion || ""} ${fullBrands}`;
 
-        if (latestAsset) {
-          button.href = latestAsset.browser_download_url;
-          button.textContent = "Download APK";
-          button.classList.remove("btn-disabled");
-          renderCounterText(
-            count,
-            `${numberFormat.format(totalDownloadsForBuild)} total downloads`
-          );
+        return looksLikeSamsungSignature(signature);
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function getSamsungDeviceDetection() {
+      if (!samsungDeviceDetectionPromise) {
+        samsungDeviceDetectionPromise = detectSamsungDevice();
+      }
+
+      return samsungDeviceDetectionPromise;
+    }
+
+    async function applyRecommendedBuildForDevice(hasSamsungBuild) {
+      if (!hasSamsungBuild) {
+        applyRecommendedBuild(defaultRecommendedBuild);
+        return;
+      }
+
+      const isSamsungDevice = await getSamsungDeviceDetection();
+      applyRecommendedBuild(isSamsungDevice ? "samsung" : defaultRecommendedBuild);
+    }
+
+    function applyRecommendedBuild(buildKey) {
+      document.querySelectorAll(".build-card[data-build-key]").forEach((card) => {
+        const key = card.getAttribute("data-build-key");
+        const isRecommended = key === buildKey;
+
+        card.classList.toggle("recommended", isRecommended);
+
+        const tag = card.querySelector("[data-build-tag]");
+        if (tag) {
+          const defaultTag = tag.getAttribute("data-default-tag") || tag.textContent || "";
+          const recommendedTag = tag.getAttribute("data-recommended-tag") || "Recommended";
+          tag.textContent = isRecommended ? recommendedTag : defaultTag;
+        }
+
+        const button = card.querySelector(".build-footer .btn");
+        if (button) {
+          button.classList.toggle("btn-filled", isRecommended);
+          button.classList.toggle("btn-outlined", !isRecommended);
+        }
+      });
+    }
+
+    function setBuildCardState(build, latestAsset, totalDownloadsForBuild) {
+      const button = document.getElementById(`button-${build.key}`);
+      const count = document.getElementById(`count-${build.key}`);
+
+      if (!button || !count) return;
+
+      if (latestAsset) {
+        button.href = latestAsset.browser_download_url;
+        const textSpan = button.querySelector(".btn-text");
+        if (textSpan) {
+          textSpan.textContent = "Download APK";
         } else {
-          button.href = latestReleasePage;
+          button.textContent = "Download APK";
+        }
+        button.classList.remove("btn-disabled");
+        renderCounterText(
+          count,
+          `Downloads: ${numberFormat.format(totalDownloadsForBuild)}`
+        );
+      } else {
+        button.href = latestReleasePage;
+        const textSpan = button.querySelector(".btn-text");
+        if (textSpan) {
+          textSpan.textContent = "Not in release";
+        } else {
           button.textContent = "Not in release";
-          button.classList.add("btn-disabled");
-          renderCounterText(count, build.fallbackText, { animate: false });
         }
+        button.classList.add("btn-disabled");
+        renderCounterText(count, build.fallbackText, { animate: false });
       }
+    }
 
-      function getAssetBasePath(folder) {
-        const host = window.location.hostname;
-        if (!host || host === "localhost" || host === "127.0.0.1") {
-          return `../assets/${folder}`;
-        }
-        if (host.endsWith(".github.io")) {
-          return `${rawAssetBase}/${folder}`;
-        }
+    function getAssetBasePath(folder) {
+      const host = window.location.hostname;
+      if (!host || host === "localhost" || host === "127.0.0.1") {
         return `../assets/${folder}`;
       }
+      if (host.endsWith(".github.io")) {
+        return `${rawAssetBase}/${folder}`;
+      }
+      return `../assets/${folder}`;
+    }
 
-      function hydrateThemeAwareScreenshots() {
-        const basePath = getAssetBasePath("screenshots");
-        const pictures = document.querySelectorAll("picture[data-shot]");
+    function hydrateThemeAwareScreenshots() {
+      const basePath = getAssetBasePath("screenshots");
+      const pictures = document.querySelectorAll("picture[data-shot]");
 
-        pictures.forEach((picture) => {
-          const shot = picture.getAttribute("data-shot");
-          if (!shot) return;
+      pictures.forEach((picture) => {
+        const shot = picture.getAttribute("data-shot");
+        if (!shot) return;
 
-          const darkSource = picture.querySelector('source[data-variant="dark"]');
-          const lightImage = picture.querySelector('img[data-variant="light"]');
+        const darkSource = picture.querySelector('source[data-variant="dark"]');
+        const lightImage = picture.querySelector('img[data-variant="light"]');
 
-          const darkUrl = `${basePath}/screenshot-dark-${shot}.png`;
-          const lightUrl = `${basePath}/screenshot-light-${shot}.png`;
+        const darkUrl = `${basePath}/screenshot-dark-${shot}.png`;
+        const lightUrl = `${basePath}/screenshot-light-${shot}.png`;
 
-          if (darkSource) {
-            darkSource.srcset = darkUrl;
-          }
-          if (lightImage) {
-            lightImage.src = lightUrl;
-          }
-        });
+        if (darkSource) {
+          darkSource.srcset = darkUrl;
+        }
+        if (lightImage) {
+          lightImage.src = lightUrl;
+        }
+      });
+    }
+
+    function hydrateStaticIcons() {
+      const basePath = getAssetBasePath("icons");
+      const icons = document.querySelectorAll("img[data-icon]");
+
+      icons.forEach((icon) => {
+        const iconName = icon.getAttribute("data-icon");
+        if (!iconName) return;
+
+        icon.src = `${basePath}/${iconName}.png`;
+      });
+    }
+
+    function initFaqAccordion() {
+      const items = document.querySelectorAll("[data-faq-item]");
+
+      function getPanelHeight(panel) {
+        return `${Math.ceil(panel.scrollHeight + 1)}px`;
       }
 
-      function hydrateStaticIcons() {
-        const basePath = getAssetBasePath("icons");
-        const icons = document.querySelectorAll("img[data-icon]");
+      function setInitialState(item) {
+        const button = item.querySelector(".faq-trigger");
+        const panel = item.querySelector("[data-faq-panel]");
+        const isOpen = item.classList.contains("is-open");
 
-        icons.forEach((icon) => {
-          const iconName = icon.getAttribute("data-icon");
-          if (!iconName) return;
+        if (!button || !panel) return;
 
-          icon.src = `${basePath}/${iconName}.png`;
-        });
+        button.setAttribute("aria-expanded", String(isOpen));
+        panel.hidden = !isOpen;
+        panel.style.opacity = isOpen ? "1" : "0";
+        panel.style.height = isOpen ? "auto" : "0px";
       }
 
-      function initFaqAccordion() {
-        const items = document.querySelectorAll("[data-faq-item]");
+      function openItem(item, button, panel) {
+        item.classList.add("is-open");
+        button.setAttribute("aria-expanded", "true");
+        panel.hidden = false;
+        panel.style.height = "0px";
+        panel.style.opacity = "0";
 
-        function getPanelHeight(panel) {
-          return `${Math.ceil(panel.scrollHeight + 1)}px`;
-        }
-
-        function setInitialState(item) {
-          const button = item.querySelector(".faq-trigger");
-          const panel = item.querySelector("[data-faq-panel]");
-          const isOpen = item.classList.contains("is-open");
-
-          if (!button || !panel) return;
-
-          button.setAttribute("aria-expanded", String(isOpen));
-          panel.hidden = !isOpen;
-          panel.style.opacity = isOpen ? "1" : "0";
-          panel.style.height = isOpen ? "auto" : "0px";
-        }
-
-        function openItem(item, button, panel) {
-          item.classList.add("is-open");
-          button.setAttribute("aria-expanded", "true");
-          panel.hidden = false;
-          panel.style.height = "0px";
-          panel.style.opacity = "0";
-
-          requestAnimationFrame(() => {
-            panel.style.height = getPanelHeight(panel);
-            panel.style.opacity = "1";
-          });
-
-          const onTransitionEnd = (event) => {
-            if (event.propertyName !== "height") return;
-            panel.style.height = "auto";
-            panel.removeEventListener("transitionend", onTransitionEnd);
-          };
-
-          panel.addEventListener("transitionend", onTransitionEnd);
-        }
-
-        function closeItem(item, button, panel) {
+        requestAnimationFrame(() => {
           panel.style.height = getPanelHeight(panel);
           panel.style.opacity = "1";
-
-          requestAnimationFrame(() => {
-            item.classList.remove("is-open");
-            button.setAttribute("aria-expanded", "false");
-            panel.style.height = "0px";
-            panel.style.opacity = "0";
-          });
-
-          const onTransitionEnd = (event) => {
-            if (event.propertyName !== "height") return;
-            panel.hidden = true;
-            panel.removeEventListener("transitionend", onTransitionEnd);
-          };
-
-          panel.addEventListener("transitionend", onTransitionEnd);
-        }
-
-        items.forEach((item) => {
-          setInitialState(item);
-
-          const button = item.querySelector(".faq-trigger");
-          const panel = item.querySelector("[data-faq-panel]");
-          if (!button || !panel) return;
-
-          button.addEventListener("click", () => {
-            if (item.classList.contains("is-open")) {
-              closeItem(item, button, panel);
-            } else {
-              openItem(item, button, panel);
-            }
-          });
         });
+
+        const onTransitionEnd = (event) => {
+          if (event.propertyName !== "height") return;
+          panel.style.height = "auto";
+          panel.removeEventListener("transitionend", onTransitionEnd);
+        };
+
+        panel.addEventListener("transitionend", onTransitionEnd);
       }
 
-      async function loadReleaseData({ preserveOnError = false } = {}) {
-        if (releaseDataRequestInFlight) return;
+      function closeItem(item, button, panel) {
+        panel.style.height = getPanelHeight(panel);
+        panel.style.opacity = "1";
 
-        const versionEl = document.getElementById("stat-version");
-        const totalDownloadsEl = document.getElementById("stat-total-downloads");
-        const statusEl = document.getElementById("stat-status");
-        const bannerTitleEl = document.getElementById("release-banner-title");
-        const bannerCopyEl = document.getElementById("release-banner-copy");
-        let nextRefreshDelay = document.hidden
-          ? liveRefreshHiddenMs
-          : getNextLiveRefreshDelay();
+        requestAnimationFrame(() => {
+          item.classList.remove("is-open");
+          button.setAttribute("aria-expanded", "false");
+          panel.style.height = "0px";
+          panel.style.opacity = "0";
+        });
 
-        releaseDataRequestInFlight = true;
+        const onTransitionEnd = (event) => {
+          if (event.propertyName !== "height") return;
+          panel.hidden = true;
+          panel.removeEventListener("transitionend", onTransitionEnd);
+        };
 
-        try {
-          const headers = { Accept: "application/vnd.github+json" };
-          if (releaseDataEtag) {
-            headers["If-None-Match"] = releaseDataEtag;
+        panel.addEventListener("transitionend", onTransitionEnd);
+      }
+
+      items.forEach((item) => {
+        setInitialState(item);
+
+        const button = item.querySelector(".faq-trigger");
+        const panel = item.querySelector("[data-faq-panel]");
+        if (!button || !panel) return;
+
+        button.addEventListener("click", () => {
+          if (item.classList.contains("is-open")) {
+            closeItem(item, button, panel);
+          } else {
+            openItem(item, button, panel);
           }
+        });
+      });
+    }
 
-          const response = await fetch(releasesApi, { headers });
-          const rateLimitBackoffMs = getRateLimitBackoffMs(response);
-          if (rateLimitBackoffMs != null) {
-            nextRefreshDelay = rateLimitBackoffMs;
-          }
+    async function loadReleaseData({ preserveOnError = false } = {}) {
+      if (releaseDataRequestInFlight) return;
 
-          if (response.status === 304) {
-            return;
-          }
+      const versionEl = document.getElementById("stat-version");
+      const totalDownloadsEls = document.querySelectorAll("#stat-total-downloads");
+      const statusEl = document.getElementById("stat-status");
+      const bannerTitleEl = document.getElementById("release-banner-title");
+      const bannerCopyEl = document.getElementById("release-banner-copy");
+      const bannerContainerEl = document.querySelector(".download-banner");
+      let nextRefreshDelay = document.hidden
+        ? liveRefreshHiddenMs
+        : getNextLiveRefreshDelay();
 
-          if (!response.ok) throw new Error(`API error ${response.status}`);
+      releaseDataRequestInFlight = true;
 
-          const responseEtag = response.headers.get("etag");
-          if (responseEtag) {
-            releaseDataEtag = responseEtag;
-          }
+      try {
+        const headers = { Accept: "application/vnd.github+json" };
+        if (releaseDataEtag) {
+          headers["If-None-Match"] = releaseDataEtag;
+        }
 
-          const releases = await response.json();
-          const publishedReleases = releases.filter((r) => !r.draft && !r.prerelease);
+        const response = await fetch(releasesApi, { headers });
+        const rateLimitBackoffMs = getRateLimitBackoffMs(response);
+        if (rateLimitBackoffMs != null) {
+          nextRefreshDelay = rateLimitBackoffMs;
+        }
 
-          if (!publishedReleases.length) throw new Error("No releases");
+        if (response.status === 304) {
+          return;
+        }
 
-          const latest = publishedReleases[0];
-          const allAssets = publishedReleases.flatMap((r) => r.assets || []);
-          const allDownloads = sumDownloads(allAssets);
-          const latestDownloads = sumDownloads(latest.assets || []);
-          const publishedAt = latest.published_at
-            ? new Date(latest.published_at).toLocaleDateString("en-US", {
-                year: "numeric", month: "short", day: "numeric",
-              })
-            : "Unknown date";
+        if (!response.ok) throw new Error(`API error ${response.status}`);
 
+        const responseEtag = response.headers.get("etag");
+        if (responseEtag) {
+          releaseDataEtag = responseEtag;
+        }
+
+        const releases = await response.json();
+        const publishedReleases = releases.filter((r) => !r.draft && !r.prerelease);
+
+        if (!publishedReleases.length) throw new Error("No releases");
+
+        const latest = publishedReleases[0];
+        const allAssets = publishedReleases.flatMap((r) => r.assets || []);
+        const allDownloads = sumDownloads(allAssets);
+        const latestDownloads = sumDownloads(latest.assets || []);
+        const publishedAt = latest.published_at
+          ? new Date(latest.published_at).toLocaleDateString("en-US", {
+            year: "numeric", month: "short", day: "numeric",
+          })
+          : "Unknown date";
+
+        if (bannerContainerEl) {
+          bannerContainerEl.classList.remove("banner-error");
+        }
+        if (versionEl) {
+          versionEl.textContent = latest.tag_name || latest.name || "Latest";
+        }
+        if (totalDownloadsEls.length) {
+          totalDownloadsEls.forEach((el) => {
+            renderCounterText(el, numberFormat.format(allDownloads));
+          });
+        }
+        if (statusEl) {
+          statusEl.textContent = "Live";
+        }
+        if (bannerTitleEl) {
+          bannerTitleEl.textContent = `Latest release: ${latest.name || latest.tag_name}`;
+        }
+        if (bannerCopyEl) {
+          renderCounterText(
+            bannerCopyEl,
+            `${numberFormat.format(latestDownloads)} downloads in the latest release, published ${publishedAt}.`
+          );
+        }
+
+        const hasSamsungBuild = Boolean(findBuildAsset(latest.assets || [], ["-samsung.apk"]));
+        await applyRecommendedBuildForDevice(hasSamsungBuild);
+
+        for (const build of builds) {
+          const latestAsset = findBuildAsset(latest.assets || [], build.matchers);
+          const totalDownloadsForBuild = publishedReleases.reduce((total, release) => {
+            const asset = findBuildAsset(release.assets || [], build.matchers);
+            return total + (asset?.download_count || 0);
+          }, 0);
+          setBuildCardState(build, latestAsset, totalDownloadsForBuild);
+        }
+      } catch (error) {
+        nextRefreshDelay = Math.max(nextRefreshDelay, liveRefreshErrorMs);
+
+        if (bannerContainerEl) {
+          bannerContainerEl.classList.add("banner-error");
+        }
+
+        if (!preserveOnError) {
           if (versionEl) {
-            versionEl.textContent = latest.tag_name || latest.name || "Latest";
+            versionEl.textContent = "Latest";
           }
-          if (totalDownloadsEl) {
-            renderCounterText(totalDownloadsEl, numberFormat.format(allDownloads));
+          if (totalDownloadsEls.length) {
+            totalDownloadsEls.forEach((el) => {
+              renderCounterText(el, "N/A", { animate: false });
+            });
           }
           if (statusEl) {
-            statusEl.textContent = "Live";
+            statusEl.textContent = "API Error";
           }
           if (bannerTitleEl) {
-            bannerTitleEl.textContent = `Latest release: ${latest.name || latest.tag_name}`;
+            bannerTitleEl.textContent = "Release data unavailable";
           }
           if (bannerCopyEl) {
             renderCounterText(
               bannerCopyEl,
-              `${numberFormat.format(latestDownloads)} downloads in the latest release, published ${publishedAt}.`
+              "You can download the APK manually from GitHub.",
+              { animate: false }
             );
           }
 
-          const hasSamsungBuild = Boolean(findBuildAsset(latest.assets || [], ["-samsung.apk"]));
-          await applyRecommendedBuildForDevice(hasSamsungBuild);
-
           for (const build of builds) {
-            const latestAsset = findBuildAsset(latest.assets || [], build.matchers);
-            const totalDownloadsForBuild = publishedReleases.reduce((total, release) => {
-              const asset = findBuildAsset(release.assets || [], build.matchers);
-              return total + (asset?.download_count || 0);
-            }, 0);
-            setBuildCardState(build, latestAsset, totalDownloadsForBuild);
-          }
-        } catch (error) {
-          nextRefreshDelay = Math.max(nextRefreshDelay, liveRefreshErrorMs);
-
-          if (!preserveOnError) {
-            if (versionEl) {
-              versionEl.textContent = "Latest";
-            }
-            if (totalDownloadsEl) {
-              renderCounterText(totalDownloadsEl, "N/A", { animate: false });
-            }
-            if (statusEl) {
-              statusEl.textContent = "API Error";
-            }
-            if (bannerTitleEl) {
-              bannerTitleEl.textContent = "Release data unavailable";
-            }
-            if (bannerCopyEl) {
-              renderCounterText(
-                bannerCopyEl,
-                "You can download the APK manually from GitHub.",
-                { animate: false }
-              );
-            }
-
-            for (const build of builds) {
-              const button = document.getElementById(`button-${build.key}`);
-              const count = document.getElementById(`count-${build.key}`);
-              if (button) {
-                button.href = latestReleasePage;
+            const button = document.getElementById(`button-${build.key}`);
+            const count = document.getElementById(`count-${build.key}`);
+            if (button) {
+              button.href = latestReleasePage;
+              const textSpan = button.querySelector(".btn-text");
+              if (textSpan) {
+                textSpan.textContent = "Open GitHub";
+              } else {
                 button.textContent = "Open GitHub";
-                button.classList.remove("btn-disabled");
               }
-              if (count) {
-                renderCounterText(count, "Could not load stats.", { animate: false });
-              }
+              button.classList.remove("btn-disabled");
+            }
+            if (count) {
+              renderCounterText(count, "Could not load stats.", { animate: false });
             }
           }
-
-          console.error("Failed to load release data", error);
-        } finally {
-          releaseDataRequestInFlight = false;
-          scheduleReleaseDataRefresh(nextRefreshDelay);
         }
+
+        console.error("Failed to load release data", error);
+      } finally {
+        releaseDataRequestInFlight = false;
+        scheduleReleaseDataRefresh(nextRefreshDelay);
       }
+    }
 
-      hydrateThemeAwareScreenshots();
-      hydrateStaticIcons();
-      initFaqAccordion();
-      applyRecommendedBuild(looksLikeSamsungDevice() ? "samsung" : defaultRecommendedBuild);
-      getSamsungDeviceDetection().then((isSamsungDevice) => {
-        applyRecommendedBuild(isSamsungDevice ? "samsung" : defaultRecommendedBuild);
+    function initMobileMenu() {
+      const toggle = document.querySelector(".mobile-menu-toggle");
+      const nav = document.querySelector(".nav-links");
+
+      if (!toggle || !nav) return;
+
+      toggle.addEventListener("click", () => {
+        const active = nav.classList.toggle("is-active");
+        toggle.classList.toggle("is-active");
+        toggle.setAttribute("aria-expanded", String(active));
+        document.body.style.overflow = active ? "hidden" : "";
       });
-      document.addEventListener("visibilitychange", () => {
-        if (!document.hidden) {
-          scheduleReleaseDataRefresh(450);
-        }
+
+      nav.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          nav.classList.remove("is-active");
+          toggle.classList.remove("is-active");
+          toggle.setAttribute("aria-expanded", "false");
+          document.body.style.overflow = "";
+        });
       });
-      loadReleaseData();
-    </script>
-  </body>
+    }
+
+    hydrateThemeAwareScreenshots();
+    hydrateStaticIcons();
+    initFaqAccordion();
+    initMobileMenu();
+    applyRecommendedBuild(looksLikeSamsungDevice() ? "samsung" : defaultRecommendedBuild);
+    getSamsungDeviceDetection().then((isSamsungDevice) => {
+      applyRecommendedBuild(isSamsungDevice ? "samsung" : defaultRecommendedBuild);
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        scheduleReleaseDataRefresh(450);
+      }
+    });
+    loadReleaseData();
+  </script>
+</body>
+
 </html>
