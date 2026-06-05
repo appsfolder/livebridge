@@ -289,6 +289,10 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
     }
 
+    .btn:active {
+      transform: scale(0.97) !important;
+    }
+
     .btn-filled {
       background-color: var(--primary);
       color: var(--on-primary);
@@ -658,8 +662,7 @@
       font-size: 1rem;
     }
 
-    .feature-list li::before {
-      content: "✓";
+    .feature-tick-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -669,17 +672,24 @@
       border: 1.5px solid var(--primary);
       color: var(--primary);
       border-radius: 50%;
-      font-size: 0.85rem;
-      font-weight: 800;
       flex-shrink: 0;
     }
 
     @media (prefers-color-scheme: light) {
-      .feature-list li::before {
+      .feature-tick-wrapper {
         background-color: rgba(13, 148, 136, 0.08);
         border-color: var(--primary);
         color: var(--primary);
       }
+    }
+
+    .feature-check-icon {
+      width: 12px;
+      height: 12px;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      display: block;
     }
 
     .showcase-visual {
@@ -700,40 +710,11 @@
 
     .hero-picture {
       max-width: 352px;
-      position: relative;
-      isolation: isolate;
-      overflow: visible;
       margin: 0 auto;
     }
 
     .hero-picture img {
       margin: 0 auto;
-    }
-
-    .hero-picture::before,
-    .hero-picture::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 52%;
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      z-index: -1;
-    }
-
-    .hero-picture::before {
-      width: 122%;
-      aspect-ratio: 1;
-      background: radial-gradient(circle, var(--hero-glow-core) 0%, var(--hero-glow-soft) 42%, transparent 74%);
-      filter: blur(18px);
-    }
-
-    .hero-picture::after {
-      width: 94%;
-      aspect-ratio: 1;
-      background: radial-gradient(circle, var(--hero-glow-secondary) 0%, transparent 72%);
-      filter: blur(32px);
     }
 
     .showcase-img {
@@ -828,6 +809,19 @@
       font-family: "Plus Jakarta Sans", sans-serif;
       font-size: 1.15rem;
       font-weight: 700;
+    }
+
+    .release-link {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-color: var(--outline);
+      text-underline-offset: 4px;
+      transition: var(--transition-smooth);
+    }
+
+    .release-link:hover {
+      text-decoration-color: var(--primary);
+      opacity: 0.85;
     }
 
     .banner-text-wrapper span {
@@ -947,6 +941,11 @@
     }
 
     @media (max-width: 480px) {
+      .card-top-row {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
       .card-badge-recommended {
         font-size: 0.6rem;
         margin-left: 2px;
@@ -1099,22 +1098,19 @@
     }
 
     .live-counter {
-      display: inline-flex;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 0;
+      display: inline;
       white-space: pre-wrap;
       font-variant-numeric: tabular-nums;
     }
 
     .live-counter-segment {
-      display: inline-flex;
-      align-items: baseline;
-      white-space: pre;
+      display: inline;
+      white-space: pre-wrap;
     }
 
     .live-counter-segment--number {
       display: inline-flex;
+      align-items: baseline;
       white-space: nowrap;
     }
 
@@ -1444,7 +1440,9 @@
         left: 0;
         right: 0;
         height: calc(100svh - 72px);
-        background-color: var(--bg);
+        background-color: var(--header-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -1522,6 +1520,31 @@
         margin-bottom: 24px;
       }
 
+      .banner-release-info {
+        flex: none;
+      }
+
+      .banner-stat-col {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--surface-container);
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        gap: 12px;
+        flex-shrink: 0;
+      }
+
+      .banner-stat-label {
+        margin-bottom: 0;
+        font-size: 0.72rem;
+      }
+
+      .banner-stat-value {
+        font-size: 1.15rem;
+      }
+
       .build-card {
         padding: 24px;
       }
@@ -1556,6 +1579,29 @@
 
       .hero-scroll-wrap {
         margin: -10px 0 16px;
+      }
+
+      .stats {
+        gap: 8px;
+        margin: 24px auto 0;
+      }
+
+      .stat-card {
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 10px 4px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      }
+
+      .stat-value {
+        font-size: 1.15rem;
+      }
+
+      .stat-label {
+        font-size: 0.72rem;
+        line-height: 1.3;
       }
 
       .section-header h2 {
@@ -1594,10 +1640,15 @@
         margin-bottom: 12px;
       }
 
-      .feature-list li::before {
-        width: 22px;
-        height: 22px;
-        font-size: 0.75rem;
+      .feature-tick-wrapper {
+        width: 20px;
+        height: 20px;
+        margin-top: 2px;
+      }
+
+      .feature-check-icon {
+        width: 10px;
+        height: 10px;
       }
 
       .build-card {
@@ -1619,12 +1670,28 @@
         padding: 20px;
       }
 
-      .banner-info strong {
-        font-size: 1.1rem;
+      .banner-release-info {
+        align-items: flex-start;
+        gap: 12px;
       }
 
-      .banner-info span {
-        font-size: 0.9rem;
+      .banner-status-icon-wrapper {
+        width: 36px;
+        height: 36px;
+        margin-top: 2px;
+      }
+
+      .banner-check-icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      .banner-title-row strong {
+        font-size: 1.05rem;
+      }
+
+      .banner-text-wrapper span {
+        font-size: 0.85rem;
       }
 
       .faq {
@@ -1769,9 +1836,30 @@
             <p>Convert messy progress notifications and text-only updates into one clean, unified surface that stays
               visible while the task is ongoing.</p>
             <ul class="feature-list">
-              <li>Text progress conversion</li>
-              <li>Media integrations for AOSP</li>
-              <li>Real-time network speed tracking</li>
+              <li>
+                <span class="feature-tick-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="feature-check-icon">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span>Text progress conversion</span>
+              </li>
+              <li>
+                <span class="feature-tick-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="feature-check-icon">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span>Media integrations for AOSP</span>
+              </li>
+              <li>
+                <span class="feature-tick-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="feature-check-icon">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span>Real-time network speed tracking</span>
+              </li>
             </ul>
           </div>
           <div class="showcase-visual">
@@ -1788,9 +1876,30 @@
             <p>LiveBridge is built with meticulous attention to detail. VPN configurations, network speeds, connected
               devices, OTP codes, taxi arrivals, and delivery tracking—all unified in a single app.</p>
             <ul class="feature-list">
-              <li>Smart OTP code extraction & quick copy</li>
-              <li>Tailored widgets for essential daily tasks</li>
-              <li>Always visible with native Live Updates</li>
+              <li>
+                <span class="feature-tick-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="feature-check-icon">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span>Smart OTP code extraction & quick copy</span>
+              </li>
+              <li>
+                <span class="feature-tick-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="feature-check-icon">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span>Tailored widgets for essential daily tasks</span>
+              </li>
+              <li>
+                <span class="feature-tick-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="feature-check-icon">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span>Always visible with native Live Updates</span>
+              </li>
             </ul>
           </div>
           <div class="showcase-visual">
@@ -1807,9 +1916,30 @@
             <p>Android UIs are highly diverse. LiveBridge adapts gracefully to OEM differences, supporting exclusive ROM
               features for Xiaomi HyperOS and Samsung One UI.</p>
             <ul class="feature-list">
-              <li>Samsung Now Bar specific integrations</li>
-              <li>Xiaomi HyperOS capsule compatibility</li>
-              <li>Granular, per-app customization rules</li>
+              <li>
+                <span class="feature-tick-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="feature-check-icon">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span>Samsung Now Bar specific integrations</span>
+              </li>
+              <li>
+                <span class="feature-tick-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="feature-check-icon">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span>Xiaomi HyperOS capsule compatibility</span>
+              </li>
+              <li>
+                <span class="feature-tick-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="feature-check-icon">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span>Granular, per-app customization rules</span>
+              </li>
             </ul>
           </div>
           <div class="showcase-visual">
@@ -2667,7 +2797,8 @@
           statusEl.textContent = "Live";
         }
         if (bannerTitleEl) {
-          bannerTitleEl.textContent = `Latest release: ${latest.name || latest.tag_name}`;
+          const htmlUrl = latest.html_url || "https://github.com/appsfolder/livebridge/releases";
+          bannerTitleEl.innerHTML = `<a href="${htmlUrl}" target="_blank" rel="noreferrer" class="release-link">Latest release: ${latest.name || latest.tag_name}</a>`;
         }
         if (bannerCopyEl) {
           renderCounterText(
