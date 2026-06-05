@@ -1552,9 +1552,7 @@
         left: 0;
         right: 0;
         height: calc(100svh - 72px);
-        background-color: var(--header-bg);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        background-color: var(--bg);
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -1567,6 +1565,17 @@
         z-index: 99;
         border-top: 1px solid var(--border);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-links a:not(.nav-github-link) {
+        color: var(--text);
+        font-size: 1.35rem;
+        font-weight: 700;
+        padding: 8px 0;
+      }
+
+      .nav-links a:not(.nav-github-link):hover {
+        color: var(--primary);
       }
 
       .nav-links.is-active {
@@ -2950,7 +2959,7 @@
         if (bannerCopyEl) {
           renderCounterText(
             bannerCopyEl,
-            `${numberFormat.format(latestDownloads)} downloads in the latest release, published ${publishedAt}.`
+            `${numberFormat.format(latestDownloads)} downloads in the latest release, published ${publishedAt}`
           );
         }
 
