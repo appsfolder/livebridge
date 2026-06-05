@@ -1285,16 +1285,128 @@
 
     .footer {
       border-top: 1px solid var(--border);
-      padding: 40px 0;
-      text-align: center;
+      padding: 64px 0 40px;
+      background-color: var(--surface);
       color: var(--text-muted);
-      font-size: 0.95rem;
-      font-weight: 500;
+      transition: background-color 0.3s ease;
     }
 
     .footer a {
       color: var(--primary);
-      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-container {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 64px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .footer-logo-link {
+      font-size: 1.5rem;
+    }
+
+    .footer-desc {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      max-width: 320px;
+      margin: 0;
+      color: var(--text-muted);
+    }
+
+    .footer-links-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .footer-col h4 {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-col a {
+      display: inline-block;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      transition: var(--transition-smooth);
+    }
+
+    .footer-col a:hover {
+      color: var(--primary);
+      transform: translateX(2px);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: center;
+    }
+
+    .footer-copyright {
+      margin: 0;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 760px) {
+      .footer-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+      }
+
+      .footer-brand {
+        align-items: center;
+      }
+
+      .footer-desc {
+        max-width: 100%;
+      }
+
+      .footer-links-grid {
+        gap: 24px;
+      }
+
+      .footer-col a:hover {
+        transform: none;
+      }
     }
 
     @keyframes hero-bounce {
@@ -2245,12 +2357,47 @@
         </div>
       </section>
     </main>
-
-    <footer class="footer">
-      <p>Built around the latest GitHub release data for <a href="https://github.com/appsfolder/livebridge"
-          target="_blank">appsfolder/livebridge</a>.</p>
-    </footer>
   </div>
+
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <a href="#" class="logo-link footer-logo-link">
+          <img src="./icon-master.png" alt="LiveBridge Logo" width="32" height="32" class="header-logo" />
+          <span>LiveBridge</span>
+        </a>
+        <p class="footer-desc">
+          Bringing native Live Updates notifications to Android 16+
+        </p>
+      </div>
+      <div class="footer-links-grid">
+        <div class="footer-col">
+          <h4>Project</h4>
+          <ul>
+            <li><a href="https://github.com/appsfolder/livebridge" target="_blank" rel="noreferrer">GitHub
+                Repository</a></li>
+            <li><a href="https://github.com/appsfolder/livebridge/releases" target="_blank"
+                rel="noreferrer">Releases</a></li>
+            <li><a href="https://github.com/appsfolder/livebridge/issues" target="_blank" rel="noreferrer">Issue
+                Tracker</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <ul>
+            <li><a href="https://t.me/livebridge_dev" target="_blank" rel="noreferrer">Telegram Channel</a></li>
+            <li><a href="https://boosty.to/appsfolder" target="_blank" rel="noreferrer">Donate on Boosty</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p class="footer-copyright">Built around the latest GitHub release data for <a
+          href="https://github.com/appsfolder/livebridge" target="_blank"
+          class="footer-copyright-link">appsfolder/livebridge</a>
+      </p>
+    </div>
+  </footer>
 
   <script>
     const owner = "appsfolder";
