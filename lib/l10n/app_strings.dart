@@ -344,7 +344,7 @@ class AppStrings {
     ptBr: 'Backup e restauração',
     zhHans: '备份与恢复',
     zhHant: '備份與還原',
-    ko: '백업 & 복구',
+    ko: '백업 및 복구',
   );
 
   String get exportLiveBridgeSettingsTitle => tr(
@@ -394,7 +394,7 @@ class AppStrings {
     ptBr: 'Falha ao exportar configurações do LiveBridge.',
     zhHans: '导出 LiveBridge 设置失败。',
     zhHant: '匯出 LiveBridge 設定失敗。',
-    ko: 'LiveBridge 설정을 내보낼 수 없습니다.',
+    ko: 'LiveBridge 설정을 내보내지 못했습니다.',
   );
 
   String get liveBridgeSettingsImported => tr(
@@ -414,7 +414,7 @@ class AppStrings {
     ptBr: 'Falha ao importar configurações do LiveBridge.',
     zhHans: '导入 LiveBridge 设置失败。',
     zhHant: '匯入 LiveBridge 設定失敗。',
-    ko: 'LiveBridge 설정을 불러올 수 없습니다.',
+    ko: 'LiveBridge 설정을 불러오지 못했습니다.',
   );
 
   String get copyOldDebugJsonFirst => tr(
@@ -424,7 +424,7 @@ class AppStrings {
     ptBr: 'copie seu debug JSON antigo primeiro',
     zhHans: '请先复制旧的 debug JSON',
     zhHant: '請先複製舊的 debug JSON',
-    ko: '구버전 debug JSON을 먼저 복사해주세요',
+    ko: '먼저 이전 debug JSON을 복사해 주세요',
   );
 
   String get appLanguageTitle => tr(
@@ -524,7 +524,7 @@ class AppStrings {
     ptBr: 'tópicos do Telegram',
     zhHans: 'telegram 话题',
     zhHant: 'telegram 話題',
-    ko: '텔레그램 주제',
+    ko: 'Telegram 토픽',
   );
 
   String get rulesModeAllApps => tr(
@@ -554,7 +554,7 @@ class AppStrings {
     ptBr: 'excluir selecionados',
     zhHans: '排除已选择',
     zhHant: '排除已選取',
-    ko: '선택합 앱만 제외',
+    ko: '선택한 앱만 제외',
   );
 
   String get permissionCheckRequired => tr(
@@ -734,7 +734,7 @@ class AppStrings {
     ptBr: '(exp)',
     zhHans: '（实验）',
     zhHant: '（實驗）',
-    ko: '(불안정)',
+    ko: '(실험)',
   );
 
   String get allAppsTitle => tr(
@@ -944,7 +944,7 @@ class AppStrings {
     ptBr: 'Configurações por app',
     zhHans: '按应用设置',
     zhHant: '各應用設定',
-    ko: '앱 별 설정',
+    ko: '앱별 설정',
   );
 
   String get defaultsTitle => tr(
@@ -1004,7 +1004,7 @@ class AppStrings {
     ptBr: 'Origem do título',
     zhHans: '标题来源',
     zhHant: '標題來源',
-    ko: '제목',
+    ko: '제목 소스',
   );
 
   String get contentSourceTitle => tr(
@@ -1014,7 +1014,7 @@ class AppStrings {
     ptBr: 'Origem do conteúdo',
     zhHans: '内容来源',
     zhHant: '內容來源',
-    ko: '내용',
+    ko: '내용 소스',
   );
 
   String get notificationTitleOption => tr(
@@ -1074,7 +1074,7 @@ class AppStrings {
     ptBr: 'Tudo pronto',
     zhHans: '已是最新',
     zhHant: '已是最新',
-    ko: '준비 완료',
+    ko: '최신 상태',
   );
 
   String get appUpdateDownloadsSubtitle => tr(
@@ -1104,7 +1104,7 @@ class AppStrings {
     ptBr: 'já está na versão mais recente',
     zhHans: '已经是最新版本',
     zhHant: '已是最新版本',
-    ko: '최신 버전이 준비됨',
+    ko: '이미 최신 버전입니다',
   );
 
   String get appUpdateLogTitle => tr(
@@ -1214,7 +1214,7 @@ class AppStrings {
     ptBr: 'Tamanho do log',
     zhHans: '日志大小',
     zhHant: '記錄大小',
-    ko: '로그 크가',
+    ko: '로그 크기',
   );
 
   String get xiaomiHyperIslandTitle => tr(
@@ -1345,7 +1345,7 @@ class AppStrings {
     ptBr: 'de $appLabel',
     zhHans: '来自 $appLabel',
     zhHant: '來自 $appLabel',
-    ko: '출처: ',
+    ko: '$appLabel 앱에서',
   );
 
   String conversionLogAt(String time) => tr(
@@ -1355,7 +1355,7 @@ class AppStrings {
     ptBr: 'às $time',
     zhHans: time,
     zhHant: time,
-    ko: '시간: ',
+    ko: '$time',
   );
 
   String get conversionLogEntryTitleLabel => tr(
@@ -1395,7 +1395,7 @@ class AppStrings {
     ptBr: 'Buscar apps...',
     zhHans: '搜索应用...',
     zhHant: '搜尋應用程式...',
-    ko: '앱을 검색하는 중...',
+    ko: '앱 검색...',
   );
 
   String get heroTitle => 'LiveBridge';
@@ -1407,7 +1407,7 @@ class AppStrings {
     ptBr: 'Reportar um bug',
     zhHans: '报告问题',
     zhHant: '回報問題',
-    ko: '버그 제보',
+    ko: '버그 제보하기',
   );
 
   String get supportLiveBridgeTitle => tr(
@@ -1438,7 +1438,7 @@ class AppStrings {
         'Doações são opcionais e não desbloqueiam recursos. Elas ajudam com aparelhos de teste e tempo de desenvolvimento.',
     zhHans: '捐赠是自愿的，不会解锁功能。它们用于测试设备和开发时间。',
     zhHant: '捐贈是自願的，不會解鎖功能。它們用於測試裝置和開發時間。',
-    ko: '기부는 선택이며 별도의 기능을 해금하지 않으며 개발자의 기기 테스트 및 개발에 사용됩니다.',
+    ko: '기부는 선택 사항이며 기능을 잠금 해제하지 않습니다. 테스트 기기와 개발 시간에 보탬이 됩니다.',
   );
 
   String get supportBoostyTitle => tr(
@@ -1498,7 +1498,7 @@ class AppStrings {
     ptBr: 'tópicos no telegram',
     zhHans: 'telegram 话题',
     zhHant: 'telegram 話題',
-    ko: '탤레그램 주제',
+    ko: 'Telegram 토픽',
   );
 
   String get supportGithubTitle => tr(
@@ -1508,7 +1508,7 @@ class AppStrings {
     ptBr: 'GitHub',
     zhHans: 'GitHub',
     zhHant: 'GitHub',
-    ko: 'GitHub',
+    ko: 'GitHub에서 Star 주기',
   );
 
   String get supportGithubSubtitle => tr(
@@ -1578,7 +1578,7 @@ class AppStrings {
     ptBr: 'Permitir acesso do app as notificações',
     zhHans: '通知监听访问',
     zhHant: '通知監聽存取',
-    ko: '알림 읽기 접근 권힌',
+    ko: '알림 읽기 접근 권한',
   );
 
   String get postNotifications => tr(
@@ -1688,7 +1688,7 @@ class AppStrings {
     ptBr: 'Verificação de atualizações',
     zhHans: '检查更新',
     zhHant: '檢查更新',
-    ko: '업데이트 확인 중',
+    ko: '업데이트 확인',
   );
 
   String get updateChecksDescription => tr(
@@ -2030,7 +2030,7 @@ class AppStrings {
     ptBr: 'oculta notificações de ADB e dispositivos de depuração',
     zhHans: '隐藏 ADB 和调试设备通知',
     zhHant: '隱藏 ADB 與偵錯裝置通知',
-    ko: 'ADB 및 디버깅 기기를 알림에서 숨깁니다.',
+    ko: 'ADB 및 디버깅 기기 알림을 숨깁니다.',
   );
 
   String get mediaPlaybackDescription => tr(
@@ -2194,7 +2194,7 @@ class AppStrings {
         'oculta a Notificação ao vivo de velocidade de rede abaixo deste nível',
     zhHans: '当网速低于此阈值时隐藏网络速度 Live Update',
     zhHant: '當網速低於此門檻時隱藏網路速度 Live Update',
-    ko: '네트워크 속도 제한이 기준치 미만이면 숨깁니다.',
+    ko: '네트워크 트래픽이 기준치 미만이면 네트워크 속도 Live Update를 숨깁니다.',
   );
 
   String get xiaomiHyperIslandDescription => tr(
