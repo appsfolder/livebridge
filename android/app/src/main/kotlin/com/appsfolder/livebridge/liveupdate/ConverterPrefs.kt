@@ -98,6 +98,14 @@ class ConverterPrefs(context: Context) {
         prefs.edit().putBoolean(KEY_HIDE_LOCKSCREEN_CONTENT_ENABLED, value).apply()
     }
 
+    fun getConvertedNotificationSoundEnabled(): Boolean {
+        return prefs.getBoolean(KEY_CONVERTED_NOTIFICATION_SOUND_ENABLED, false)
+    }
+
+    fun setConvertedNotificationSoundEnabled(value: Boolean) {
+        prefs.edit().putBoolean(KEY_CONVERTED_NOTIFICATION_SOUND_ENABLED, value).apply()
+    }
+
     fun getHintsDisabled(): Boolean {
         return prefs.getBoolean(KEY_HINTS_DISABLED, false)
     }
@@ -611,8 +619,10 @@ class ConverterPrefs(context: Context) {
             .putString(KEY_USER_PARSER_DICTIONARY, normalized.ifBlank { null })
             .remove(KEY_CUSTOM_PARSER_DICTIONARY_LEGACY)
             .remove(KEY_PARSER_DICTIONARY_EN_OVERRIDE)
+            .remove(KEY_PARSER_DICTIONARY_PT_BR_OVERRIDE)
             .remove(KEY_PARSER_DICTIONARY_RU_OVERRIDE)
             .remove(KEY_PARSER_DICTIONARY_ZH_OVERRIDE)
+            .remove(KEY_PARSER_DICTIONARY_KO_OVERRIDE)
             .apply()
     }
 
@@ -645,14 +655,15 @@ class ConverterPrefs(context: Context) {
         return value.ifBlank { null }
     }
 
-    fun setParserDictionaryLanguageOverrideRaw(languageId: String, value: String?) {
-        val key = parserDictionaryOverrideKey(languageId) ?: return
+    fun setParserDictionaryLanguageOverrideRaw(languageId: String, value: String?): Boolean {
+        val key = parserDictionaryOverrideKey(languageId) ?: return false
         val normalized = value?.trim().orEmpty()
         prefs.edit()
             .putString(key, normalized.ifBlank { null })
             .remove(KEY_USER_PARSER_DICTIONARY)
             .remove(KEY_CUSTOM_PARSER_DICTIONARY_LEGACY)
             .apply()
+        return true
     }
 
     fun clearCustomParserDictionary() {
@@ -660,8 +671,10 @@ class ConverterPrefs(context: Context) {
             .remove(KEY_USER_PARSER_DICTIONARY)
             .remove(KEY_CUSTOM_PARSER_DICTIONARY_LEGACY)
             .remove(KEY_PARSER_DICTIONARY_EN_OVERRIDE)
+            .remove(KEY_PARSER_DICTIONARY_PT_BR_OVERRIDE)
             .remove(KEY_PARSER_DICTIONARY_RU_OVERRIDE)
             .remove(KEY_PARSER_DICTIONARY_ZH_OVERRIDE)
+            .remove(KEY_PARSER_DICTIONARY_KO_OVERRIDE)
             .apply()
     }
 
@@ -776,6 +789,7 @@ class ConverterPrefs(context: Context) {
             .put("spring_transitions_enabled", getSpringTransitionsEnabled())
             .put("prevent_mirror_dismiss_enabled", getPreventMirrorDismissEnabled())
             .put("hide_lockscreen_content_enabled", getHideLockscreenContentEnabled())
+            .put("converted_notification_sound_enabled", getConvertedNotificationSoundEnabled())
             .put("hints_disabled", getHintsDisabled())
             .put("conversion_log_enabled", getConversionLogEnabled())
             .put("conversion_log_max_bytes", getConversionLogMaxBytes())
@@ -878,6 +892,8 @@ class ConverterPrefs(context: Context) {
         bool(settings, "spring_transitions_enabled")?.let(::setSpringTransitionsEnabled)
         bool(settings, "prevent_mirror_dismiss_enabled")?.let(::setPreventMirrorDismissEnabled)
         bool(settings, "hide_lockscreen_content_enabled")?.let(::setHideLockscreenContentEnabled)
+        bool(settings, "converted_notification_sound_enabled")
+            ?.let(::setConvertedNotificationSoundEnabled)
         bool(settings, "hints_disabled")?.let(::setHintsDisabled)
         bool(settings, "conversion_log_enabled")?.let(::setConversionLogEnabled)
         int(settings, "conversion_log_max_bytes")?.let(::setConversionLogMaxBytes)
@@ -1065,8 +1081,10 @@ class ConverterPrefs(context: Context) {
     private fun parserDictionaryOverrideKey(languageId: String): String? {
         return when (languageId.trim().lowercase(Locale.ROOT)) {
             "en" -> KEY_PARSER_DICTIONARY_EN_OVERRIDE
+            "pt-br" -> KEY_PARSER_DICTIONARY_PT_BR_OVERRIDE
             "ru" -> KEY_PARSER_DICTIONARY_RU_OVERRIDE
             "zh" -> KEY_PARSER_DICTIONARY_ZH_OVERRIDE
+            "ko" -> KEY_PARSER_DICTIONARY_KO_OVERRIDE
             else -> null
         }
     }
@@ -1111,6 +1129,8 @@ class ConverterPrefs(context: Context) {
             "prevent_mirror_dismiss_enabled"
         private const val KEY_HIDE_LOCKSCREEN_CONTENT_ENABLED =
             "hide_lockscreen_content_enabled"
+        private const val KEY_CONVERTED_NOTIFICATION_SOUND_ENABLED =
+            "converted_notification_sound_enabled"
         private const val KEY_HINTS_DISABLED = "hints_disabled"
         private const val KEY_CONVERSION_LOG_ENABLED = "conversion_log_enabled"
         private const val KEY_BUG_REPORT_AUTO_COPY_ENABLED = "bug_report_auto_copy_enabled"
@@ -1169,10 +1189,14 @@ class ConverterPrefs(context: Context) {
             "parser_dictionary_enabled_languages"
         private const val KEY_PARSER_DICTIONARY_EN_OVERRIDE =
             "parser_dictionary_en_override"
+        private const val KEY_PARSER_DICTIONARY_PT_BR_OVERRIDE =
+            "parser_dictionary_pt_br_override"
         private const val KEY_PARSER_DICTIONARY_RU_OVERRIDE =
             "parser_dictionary_ru_override"
         private const val KEY_PARSER_DICTIONARY_ZH_OVERRIDE =
             "parser_dictionary_zh_override"
+        private const val KEY_PARSER_DICTIONARY_KO_OVERRIDE =
+            "parser_dictionary_ko_override"
 
         private const val KEY_PACKAGE_FILTER_LEGACY = "package_filter"
         private const val MIN_AOSP_CUTTING_LENGTH = 7
@@ -1185,7 +1209,8 @@ class ConverterPrefs(context: Context) {
         private const val MAX_CONVERSION_LOG_MAX_BYTES = 25 * 1024 * 1024
         private const val DEFAULT_CONVERSION_LOG_MAX_BYTES = 5 * 1024 * 1024
         private val SUPPORTED_PARSER_DICTIONARY_LANGUAGE_IDS =
-            setOf("en", "ru", "zh")
-        private val DEFAULT_PARSER_DICTIONARY_LANGUAGE_IDS = setOf("en", "ru", "zh")
+            setOf("en", "pt-br", "ru", "zh", "ko")
+        private val DEFAULT_PARSER_DICTIONARY_LANGUAGE_IDS =
+            SUPPORTED_PARSER_DICTIONARY_LANGUAGE_IDS
     }
 }

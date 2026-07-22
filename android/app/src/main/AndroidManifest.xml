@@ -89,6 +89,11 @@
             android:exported="false"
         />
 
+        <receiver
+            android:name=".liveupdate.MirrorContentIntentReceiver"
+            android:exported="false"
+        />
+
         <meta-data android:name="flutterEmbedding" android:value="2" />
     </application>
 

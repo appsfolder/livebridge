@@ -251,9 +251,11 @@ class MainActivity : FlutterActivity() {
                     res.error("invalid_dictionary", "Dictionary JSON is invalid", null)
                     return
                 }
-                prefs.setParserDictionaryLanguageOverrideRaw(languageId, raw)
-                LiveParserDictionaryLoader.invalidate()
-                res.success(true)
+                val saved = prefs.setParserDictionaryLanguageOverrideRaw(languageId, raw)
+                if (saved) {
+                    LiveParserDictionaryLoader.invalidate()
+                }
+                res.success(saved)
             }
 
             "getPackageRules" -> res.success(prefs.getPackageRulesRaw())
@@ -320,6 +322,17 @@ class MainActivity : FlutterActivity() {
             "getHideLockscreenContentEnabled" -> res.success(prefs.getHideLockscreenContentEnabled())
             "setHideLockscreenContentEnabled" -> {
                 prefs.setHideLockscreenContentEnabled(call.argument<Boolean>("value") ?: false)
+                LiveUpdateNotifier.ensureChannel(applicationContext)
+                res.success(true)
+            }
+
+            "getConvertedNotificationSoundEnabled" -> {
+                res.success(prefs.getConvertedNotificationSoundEnabled())
+            }
+            "setConvertedNotificationSoundEnabled" -> {
+                prefs.setConvertedNotificationSoundEnabled(
+                    call.argument<Boolean>("value") ?: false
+                )
                 LiveUpdateNotifier.ensureChannel(applicationContext)
                 res.success(true)
             }

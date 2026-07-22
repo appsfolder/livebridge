@@ -11,6 +11,7 @@ class AppStrings {
     final String countryCode = locale.countryCode?.toLowerCase() ?? '';
     return languageCode == 'pt' && countryCode == 'br';
   }
+
   bool get isKo => locale.languageCode.toLowerCase().startsWith('ko');
 
   bool get isZhHans {
@@ -928,13 +929,23 @@ class AppStrings {
   );
 
   String get bypassTitle => tr(
-    en: 'Bypass',
-    ru: 'Bypass',
-    tr: 'Bypass',
-    ptBr: 'Forçar notificações ao vivo',
-    zhHans: '绕过',
-    zhHant: '繞過',
-    ko: '제외할 앱',
+    en: 'Always convert',
+    ru: 'Всегда конвертировать',
+    tr: 'Her zaman dönüştür',
+    ptBr: 'Sempre converter',
+    zhHans: '始终转换',
+    zhHant: '一律轉換',
+    ko: '항상 변환',
+  );
+
+  String get bypassDescription => tr(
+    en: 'Converts selected apps even when no rule matches',
+    ru: 'Конвертирует выбранные приложения, даже если правила не совпали',
+    tr: 'Hiçbir kural eşleşmese bile seçili uygulamaları dönüştürür',
+    ptBr: 'Converte os apps selecionados mesmo sem uma regra correspondente',
+    zhHans: '即使没有匹配规则，也转换所选应用的通知',
+    zhHant: '即使沒有符合規則，也轉換所選應用程式的通知',
+    ko: '일치하는 규칙이 없어도 선택한 앱의 알림을 변환합니다',
   );
 
   String get perAppSettingsTitle => tr(
@@ -1671,6 +1682,16 @@ class AppStrings {
     ko: '잠금화면 내용 숨기기',
   );
 
+  String get convertedNotificationSoundTitle => tr(
+    en: 'Converted notification sound',
+    ru: 'Звук конвертированных уведомлений',
+    tr: 'Dönüştürülen bildirim sesi',
+    ptBr: 'Som das notificações convertidas',
+    zhHans: '转换通知声音',
+    zhHant: '轉換通知聲音',
+    ko: '변환된 알림 소리',
+  );
+
   String get disableHintsTitle => tr(
     en: 'Disable hints',
     ru: 'Отключить подсказки',
@@ -2144,6 +2165,17 @@ class AppStrings {
     zhHans: '在锁屏上显示 Content hidden 而不是通知文本',
     zhHant: '在鎖定畫面顯示 Content hidden 而不是通知文字',
     ko: '잠금화면에 알림을 표시할 때 내용을 숨깁니다.',
+  );
+
+  String get convertedNotificationSoundDescription => tr(
+    en: 'plays a sound when a converted notification first appears',
+    ru: 'воспроизводит звук при первом появлении конвертированного уведомления',
+    tr: 'dönüştürülen bir bildirim ilk göründüğünde ses çalar',
+    ptBr:
+        'reproduz um som quando uma notificação convertida aparece pela primeira vez',
+    zhHans: '转换通知首次出现时播放声音',
+    zhHant: '轉換通知首次出現時播放聲音',
+    ko: '변환된 알림이 처음 표시될 때 소리를 재생합니다.',
   );
 
   String get disableHintsDescription => tr(

@@ -181,7 +181,7 @@
       ],
       "exclude_patterns": [
         "(happy birthday|birthday)",
-        "(discount|\\d+%\\s*off|promo\\s*code|coupon|cash\\s*back|cashback|sale)",
+        "(discount|\\d+%\\s*off|promo\\s*code|coupon|cash\\s*back|cashback|sale|special\\s+offer|limited\\s+time\\s+offer|play\\s+app|in[-\\s]?app\\s+item|choose\\s+from\\s+any|(?:[$€£₹₽₩¥]\\s*)?\\d+(?:[.,]\\d+)?\\s*(?:usd|eur|gbp|inr|rub|krw|jpy)?\\s+off\\b)",
         "(hotspot|personal\\s+hotspot|tether(?:ing)?|wifi\\s+hotspot|\\b\\d+\\s+devices?\\b)"
       ],
       "signals": [

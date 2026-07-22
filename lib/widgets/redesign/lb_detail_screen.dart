@@ -8,7 +8,7 @@ import '../../utils/livebridge_haptics.dart';
 import 'lb_icon.dart';
 import 'lb_swipe_dismiss_detail.dart';
 
-class LbDetailScreen extends StatelessWidget {
+class LbDetailScreen extends StatefulWidget {
   const LbDetailScreen({
     super.key,
     required this.title,
@@ -23,6 +23,19 @@ class LbDetailScreen extends StatelessWidget {
   final Widget? trailing;
   final Widget? floatingBottom;
   final double floatingBottomReservedHeight;
+
+  @override
+  State<LbDetailScreen> createState() => _LbDetailScreenState();
+}
+
+class _LbDetailScreenState extends State<LbDetailScreen> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,71 +58,80 @@ class LbDetailScreen extends StatelessWidget {
                 builder: (BuildContext context, BoxConstraints constraints) {
                   return Stack(
                     children: <Widget>[
-                      SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        padding: EdgeInsets.fromLTRB(
-                          LbSpacing.screenHorizontal,
-                          topInset + LbSpacing.detailTopInset,
-                          LbSpacing.screenHorizontal,
-                          LbSpacing.screenBottom +
-                              bottomInset +
-                              floatingBottomReservedHeight,
-                        ),
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minHeight: constraints.maxHeight,
+                      PrimaryScrollController(
+                        controller: _scrollController,
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          physics: const BouncingScrollPhysics(),
+                          padding: EdgeInsets.fromLTRB(
+                            LbSpacing.screenHorizontal,
+                            topInset + LbSpacing.detailTopInset,
+                            LbSpacing.screenHorizontal,
+                            LbSpacing.screenBottom +
+                                bottomInset +
+                                widget.floatingBottomReservedHeight,
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () {
-                                      unawaited(LiveBridgeHaptics.selection());
-                                      Navigator.of(context).maybePop();
-                                    },
-                                    behavior: HitTestBehavior.opaque,
-                                    child: SizedBox(
-                                      width:
-                                          LbSpacing.detailBackIconSize +
-                                          LbSpacing.xs,
-                                      height:
-                                          LbSpacing.detailBackIconSize +
-                                          LbSpacing.xs,
-                                      child: Center(
-                                        child: LbIcon(
-                                          symbol: LbIconSymbol.back,
-                                          size: LbSpacing.detailBackIconSize,
-                                          color: palette.textPrimary,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minHeight: constraints.maxHeight,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () {
+                                        unawaited(
+                                          LiveBridgeHaptics.selection(),
+                                        );
+                                        Navigator.of(context).maybePop();
+                                      },
+                                      behavior: HitTestBehavior.opaque,
+                                      child: SizedBox(
+                                        width:
+                                            LbSpacing.detailBackIconSize +
+                                            LbSpacing.xs,
+                                        height:
+                                            LbSpacing.detailBackIconSize +
+                                            LbSpacing.xs,
+                                        child: Center(
+                                          child: LbIcon(
+                                            symbol: LbIconSymbol.back,
+                                            size: LbSpacing.detailBackIconSize,
+                                            color: palette.textPrimary,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: LbSpacing.detailHeaderGap,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      title,
-                                      style: LbTextStyles.detailTitle.copyWith(
-                                        color: palette.textPrimary,
+                                    const SizedBox(
+                                      width: LbSpacing.detailHeaderGap,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        widget.title,
+                                        style: LbTextStyles.detailTitle
+                                            .copyWith(
+                                              color: palette.textPrimary,
+                                            ),
                                       ),
                                     ),
-                                  ),
-                                  if (trailing != null) ...<Widget>[
-                                    const SizedBox(width: LbSpacing.md),
-                                    trailing!,
+                                    if (widget.trailing != null) ...<Widget>[
+                                      const SizedBox(width: LbSpacing.md),
+                                      widget.trailing!,
+                                    ],
                                   ],
-                                ],
-                              ),
-                              const SizedBox(height: LbSpacing.detailTitleGap),
-                              ...children,
-                            ],
+                                ),
+                                const SizedBox(
+                                  height: LbSpacing.detailTitleGap,
+                                ),
+                                ...widget.children,
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                      if (floatingBottom != null) floatingBottom!,
+                      if (widget.floatingBottom != null) widget.floatingBottom!,
                     ],
                   );
                 },

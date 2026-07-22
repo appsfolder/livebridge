@@ -16,9 +16,12 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.icu.text.BreakIterator
 import android.media.MediaMetadata
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import android.media.session.MediaController
 import android.media.session.MediaSession
 import android.media.session.MediaSessionManager
@@ -66,10 +69,6 @@ object LiveUpdateNotifier {
         "com.google.android.dialer",
         "com.google.android.apps.dialer"
     )
-    private val WHATSAPP_CALL_MIRROR_BLOCKED_PACKAGES = setOf(
-        "com.whatsapp",
-        "com.whatsapp.w4b"
-    )
     private val DISCORD_PACKAGES = setOf(
         "com.discord",
         "com.discord.alpha",
@@ -106,6 +105,10 @@ object LiveUpdateNotifier {
     )
     private val callActiveTextPattern = Regex(
         """((?:ongoing|active).{0,40}\bcall\b|call\s+in\s+progress|on\s+call|in\s+call|(?:voice|\u0433\u043e\u043b\u043e\u0441\u043e\u0432\p{L}*(?:\s+\u0441\u0432\u044f\u0437\p{L}*)?).{0,60}(?:connected|\u043f\u043e\u0434\u043a\u043b\u044e\u0447\p{L}*)|\u0440\u0430\u0437\u0433\u043e\u0432\u043e\u0440|\u0438\u0434[\u0435\u0451]\u0442\s+\u0437\u0432\u043e\u043d\u043e\u043a|\u0442\u0435\u043a\u0443\u0449\u0438\u0439\s+\u0437\u0432\u043e\u043d\u043e\u043a|\u901a\u8bdd\u4e2d|\u901a\u8a71\u4e2d)""",
+        setOf(RegexOption.IGNORE_CASE)
+    )
+    private val callEndedTextPattern = Regex(
+        """(call\s+(?:ended|finished|disconnected)|(?:missed|declined|rejected|completed)\s+(?:voice\s+|video\s+)?call|звонок\s+(?:завершен|окончен|пропущен|отклонен)|пропущенный\s+(?:аудио|\u0432идео)?\s*звонок|通话结束|通話結束|未接来电|未接來電)""",
         setOf(RegexOption.IGNORE_CASE)
     )
     private val callContextTextPattern = Regex(
@@ -156,28 +159,40 @@ object LiveUpdateNotifier {
         }
 
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val soundEnabled = ConverterPrefs(context).getConvertedNotificationSoundEnabled()
         MirrorNotificationChannel.entries.forEach { channel ->
             ensureMirrorChannel(
                 manager = manager,
                 context = context,
-                channel = channel
+                channel = channel,
+                audible = false
             )
+            if (soundEnabled) {
+                ensureMirrorChannel(
+                    manager = manager,
+                    context = context,
+                    channel = channel,
+                    audible = true
+                )
+            }
         }
     }
 
     private fun ensureMirrorChannel(
         manager: NotificationManager,
         context: Context,
-        channel: MirrorNotificationChannel
+        channel: MirrorNotificationChannel,
+        audible: Boolean
     ) {
         val lockscreenVisibility = mirrorChannelLockscreenVisibility(context)
-        val current = manager.getNotificationChannel(channel.id)
+        val channelId = channel.id(audible)
+        val current = manager.getNotificationChannel(channelId)
         if (current == null) {
-            manager.createNotificationChannel(createChannel(context, channel))
+            manager.createNotificationChannel(createChannel(context, channel, audible))
             return
         }
 
-        val channelText = mirrorChannelText(context, channel)
+        val channelText = mirrorChannelText(context, channel, audible)
         val shouldUpdate =
             current.name?.toString() != channelText.name ||
                     current.description != channelText.description ||
@@ -194,24 +209,35 @@ object LiveUpdateNotifier {
 
     private fun createChannel(
         context: Context,
-        channel: MirrorNotificationChannel
+        channel: MirrorNotificationChannel,
+        audible: Boolean
     ): NotificationChannel {
-        val channelText = mirrorChannelText(context, channel)
+        val channelText = mirrorChannelText(context, channel, audible)
         return NotificationChannel(
-            channel.id,
+            channel.id(audible),
             channelText.name,
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
             description = channelText.description
             enableVibration(false)
-            setSound(null, null)
+            if (audible) {
+                setSound(
+                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
+                    AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build()
+                )
+            } else {
+                setSound(null, null)
+            }
             lockscreenVisibility = mirrorChannelLockscreenVisibility(context)
         }
     }
 
     private fun mirrorChannelLockscreenVisibility(context: Context): Int {
         return if (ConverterPrefs(context).getHideLockscreenContentEnabled()) {
-            Notification.VISIBILITY_PRIVATE
+            Notification.VISIBILITY_SECRET
         } else {
             Notification.VISIBILITY_PUBLIC
         }
@@ -247,7 +273,9 @@ object LiveUpdateNotifier {
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
                     ?: return@runCatching emptyList()
             notificationManager.activeNotifications
-                .filter { it.notification.channelId == MirrorNotificationChannel.CALLS.id }
+                .filter {
+                    MirrorNotificationChannel.CALLS.matches(it.notification.channelId)
+                }
                 .map { it.id }
         }.getOrDefault(emptyList())
         val notificationIds = (stateNotificationIds + activeNotificationIds).distinct()
@@ -288,10 +316,6 @@ object LiveUpdateNotifier {
                 return notMirroredResult()
             }
             if (isNativeInCallNotification(sbn)) {
-                cancelMirrorsForIgnoredSource(manager, sbn)
-                return notMirroredResult()
-            }
-            if (isWhatsAppCallMirrorBlocked(sbn)) {
                 cancelMirrorsForIgnoredSource(manager, sbn)
                 return notMirroredResult()
             }
@@ -924,6 +948,9 @@ object LiveUpdateNotifier {
             fallbackTitle = sbn.packageName
         )
         val actionTexts = collectCallActionTexts(source)
+        if (contentTexts.any(callEndedTextPattern::containsMatchIn)) {
+            return null
+        }
         if (hasIncomingOrDialingCallMarker(contentTexts, actionTexts)) {
             return null
         }
@@ -967,37 +994,6 @@ object LiveUpdateNotifier {
         val packageName = sbn.packageName.lowercase(Locale.ROOT)
         return packageName in NATIVE_IN_CALL_PACKAGES &&
                 sbn.notification.category == Notification.CATEGORY_CALL
-    }
-
-    private fun isWhatsAppCallMirrorBlocked(sbn: StatusBarNotification): Boolean {
-        val packageName = sbn.packageName.lowercase(Locale.ROOT)
-        if (packageName !in WHATSAPP_CALL_MIRROR_BLOCKED_PACKAGES) {
-            return false
-        }
-
-        val source = sbn.notification
-        if (source.category == Notification.CATEGORY_CALL) {
-            return true
-        }
-
-        val ongoing = sbn.isOngoing ||
-                source.flags and Notification.FLAG_ONGOING_EVENT != 0 ||
-                !sbn.isClearable
-        if (!ongoing) {
-            return false
-        }
-
-        val actionTexts = collectCallActionTexts(source)
-        if (actionTexts.any(callEndActionPattern::containsMatchIn)) {
-            return true
-        }
-
-        val contentTexts = collectCallContentTexts(
-            notification = source,
-            fallbackTitle = sbn.packageName
-        )
-        return contentTexts.any(callActiveTextPattern::containsMatchIn) &&
-                contentTexts.any(callDurationPattern::containsMatchIn)
     }
 
     private fun isDiscordVoiceConnectionNotification(
@@ -1071,6 +1067,19 @@ object LiveUpdateNotifier {
         generation: Long
     ) {
         mainHandler.postDelayed({
+            if (LiveUpdateNotificationListenerService.isSourceNotificationActive(mirrorKey) == false) {
+                synchronized(stateLock) {
+                    val state = callMirrorStates[mirrorKey]
+                    if (state?.generation == generation) {
+                        callMirrorStates.remove(mirrorKey)
+                    }
+                }
+                cancelMirroredNotification(
+                    NotificationManagerCompat.from(context),
+                    mirrorIdForKey(mirrorKey)
+                )
+                return@postDelayed
+            }
             val frame = synchronized(stateLock) {
                 val state = callMirrorStates[mirrorKey] ?: return@synchronized null
                 if (state.generation != generation || isUserDismissedMirrorLocked(mirrorKey)) {
@@ -1333,6 +1342,27 @@ object LiveUpdateNotifier {
         }
     }
 
+    fun handleMirroredContentTap(context: Context, sourceKey: String) {
+        val manager = NotificationManagerCompat.from(context)
+        val notificationIds = synchronized(stateLock) {
+            val aggregateKeys = listOfNotNull(
+                sbnToAggregateKey[sourceKey],
+                sbnToOtpAggregateKey[sourceKey]
+            ).toSet()
+            val ids = buildSet {
+                add(mirrorIdForKey(sourceKey))
+                aggregateKeys.forEach { add(mirrorIdForKey(it)) }
+                addAll(clearAggregateTrackingForSbnKeyLocked(sourceKey))
+            }
+            userDismissedMirrorKeys.add(sourceKey)
+            userDismissedMirrorKeys.addAll(aggregateKeys)
+            ids
+        }
+        notificationIds.forEach { notificationId ->
+            cancelMirroredNotification(manager, notificationId)
+        }
+    }
+
     private fun notMirroredResult(): MirrorResult {
         return MirrorResult(mirrored = false)
     }
@@ -1347,7 +1377,7 @@ object LiveUpdateNotifier {
     private fun isMirrorNotificationChannel(channelId: String?): Boolean {
         val normalized = channelId?.trim().orEmpty()
         return normalized.isNotEmpty() &&
-                MirrorNotificationChannel.entries.any { it.id == normalized }
+                MirrorNotificationChannel.entries.any { it.matches(normalized) }
     }
 
     private fun mirrorChannelForSmartRule(ruleId: String?): MirrorNotificationChannel {
@@ -1360,10 +1390,11 @@ object LiveUpdateNotifier {
 
     private fun mirrorChannelText(
         context: Context,
-        channel: MirrorNotificationChannel
+        channel: MirrorNotificationChannel,
+        audible: Boolean = false
     ): MirrorChannelText {
         val isRussian = isRussianLocale(context)
-        return when (channel) {
+        val base = when (channel) {
             MirrorNotificationChannel.LEGACY -> {
                 if (isRussian) {
                     MirrorChannelText(
@@ -1479,17 +1510,24 @@ object LiveUpdateNotifier {
             MirrorNotificationChannel.BYPASS -> {
                 if (isRussian) {
                     MirrorChannelText(
-                        name = "Bypass applications",
+                        name = "Always convert applications",
                         description = "Уведомления приложений из bypass-списка"
                     )
                 } else {
                     MirrorChannelText(
-                        name = "Bypass applications",
+                        name = "Always convert applications",
                         description = "Notifications from bypassed apps"
                     )
                 }
             }
         }
+        if (!audible) {
+            return base
+        }
+        return MirrorChannelText(
+            name = if (isRussian) "${base.name} (со звуком)" else "${base.name} (sound)",
+            description = base.description
+        )
     }
 
     private fun passesBaseFilters(
@@ -1641,10 +1679,15 @@ object LiveUpdateNotifier {
                 null
             }
         val sourceLargeIcon = resolveSourceLargeIconBitmap(context, source)
+        val readableLargeIcon = resolveReadableLargeIcon(
+            context = context,
+            packageName = sbn.packageName,
+            source = sourceLargeIcon
+        )
         val preferredLargeIcon = largeIconOverride ?: if (shouldTryNavigationArrowIcon) {
-            navigationDrawable?.bitmap ?: sourceLargeIcon
+            navigationDrawable?.bitmap ?: readableLargeIcon
         } else {
-            sourceLargeIcon
+            readableLargeIcon
         }
 
         val appName = resolveAppName(context, sbn.packageName)
@@ -1711,12 +1754,14 @@ object LiveUpdateNotifier {
             displayText
         }
         val hideLockscreenContent = runtimePrefs.getHideLockscreenContentEnabled()
+        val convertedNotificationSound =
+            runtimePrefs.getConvertedNotificationSoundEnabled()
         val visibility = when {
             preferMediaControls &&
                     !runtimePrefs.getSmartMediaPlaybackShowOnLockScreen() ->
                 NotificationCompat.VISIBILITY_SECRET
 
-            hideLockscreenContent -> NotificationCompat.VISIBILITY_PRIVATE
+            hideLockscreenContent -> NotificationCompat.VISIBILITY_SECRET
             else -> NotificationCompat.VISIBILITY_PUBLIC
         }
         val useMediaActionSymbols = preferMediaControls &&
@@ -1747,13 +1792,14 @@ object LiveUpdateNotifier {
             null
         }
 
-        val builder = NotificationCompat.Builder(context, mirrorChannel.id)
+        val builder = NotificationCompat.Builder(
+            context,
+            mirrorChannel.id(convertedNotificationSound)
+        )
             .setContentTitle(contentTitle)
             .setContentText(contentText)
             .setSubText(appName)
             .setOnlyAlertOnce(true)
-            .setSilent(true)
-            .setDefaults(0)
             .setOngoing(true)
             .setAutoCancel(false)
             .setWhen(callChronometerStart ?: resolveStableWhen(source, sbn.postTime))
@@ -1770,6 +1816,14 @@ object LiveUpdateNotifier {
             )
             .setVisibility(visibility)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+        if (convertedNotificationSound) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                builder.setDefaults(Notification.DEFAULT_SOUND)
+            }
+        } else {
+            builder.setSilent(true).setDefaults(0)
+        }
 
         if (callChronometerStart != null) {
             builder.setUsesChronometer(true)
@@ -1790,24 +1844,6 @@ object LiveUpdateNotifier {
         applySmallIcon(context, builder, preferredSmallIcon)
         preferredLargeIcon?.let(builder::setLargeIcon)
 
-        if (hideLockscreenContent && visibility == NotificationCompat.VISIBILITY_PRIVATE) {
-            val publicBuilder = NotificationCompat.Builder(context, mirrorChannel.id)
-                .setContentTitle(LOCKSCREEN_CONTENT_HIDDEN_TEXT)
-                .setOnlyAlertOnce(true)
-                .setSilent(true)
-                .setDefaults(0)
-                .setOngoing(true)
-                .setAutoCancel(false)
-                .setWhen(resolveStableWhen(source, sbn.postTime))
-                .setShowWhen(false)
-                .setColor(progressColor)
-                .setCategory(Notification.CATEGORY_STATUS)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-            applySmallIcon(context, publicBuilder, preferredSmallIcon)
-            builder.setPublicVersion(publicBuilder.build())
-        }
-
         if (requestPromoted) {
             builder.setRequestPromotedOngoing(true)
         }
@@ -1816,7 +1852,21 @@ object LiveUpdateNotifier {
             builder.addAction(buildCopyOtpAction(context, sbn, otpOverride.code))
         }
 
-        source.contentIntent?.let(builder::setContentIntent)
+        source.contentIntent?.let { sourceContentIntent ->
+            val proxyIntent = Intent(context, MirrorContentIntentReceiver::class.java)
+                .putExtra(MirrorContentIntentReceiver.EXTRA_SOURCE_KEY, sbn.key)
+                .putExtra(
+                    MirrorContentIntentReceiver.EXTRA_SOURCE_CONTENT_INTENT,
+                    sourceContentIntent
+                )
+            val proxyPendingIntent = PendingIntent.getBroadcast(
+                context,
+                mirrorIdForKey(sbn.key),
+                proxyIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            builder.setContentIntent(proxyPendingIntent)
+        }
         copySourceActions(
             source = source,
             builder = builder,
@@ -2313,39 +2363,138 @@ object LiveUpdateNotifier {
             return null
         }
 
-        for (pattern in parserDictionary.otpCodePatterns) {
+        val candidates = mutableMapOf<String, OtpCandidate>()
+        val triggerRanges = collectOtpTriggerRanges(combinedLower, parserDictionary)
+
+        for ((patternIndex, pattern) in parserDictionary.otpCodePatterns.withIndex()) {
             for (match in pattern.findAll(combinedText)) {
-                val rawValue = match.groupValues.getOrNull(1)?.ifBlank { match.value } ?: match.value
+                val valueGroup = match.groups[1]
+                val rawValue = valueGroup?.value?.ifBlank { match.value } ?: match.value
+                val valueRange = valueGroup?.range ?: match.range
                 val digits = rawValue.filter(Char::isDigit)
                 if (digits.length !in OTP_CODE_LENGTH) {
                     continue
                 }
-                if (!hasOtpTokenBoundaries(combinedText, match.range.first, match.range.last + 1)) {
+                if (!hasOtpTokenBoundaries(combinedText, valueRange.first, valueRange.last + 1)) {
                     continue
                 }
-                if (isLikelyMoneyCandidate(combinedLower, match.range.first, match.range.last + 1, parserDictionary)) {
+                if (isLikelyMoneyCandidate(
+                        combinedLower,
+                        valueRange.first,
+                        valueRange.last + 1,
+                        parserDictionary
+                    )
+                ) {
                     continue
                 }
                 if (looksLikeOrderContextAroundMatch(
                         combinedLower,
-                        match.range.first,
-                        match.range.last + 1,
+                        valueRange.first,
+                        valueRange.last + 1,
                         parserDictionary
                     ) &&
                     !hasStrongTrigger
                 ) {
                     continue
                 }
-                if (digits.length in OTP_CODE_LENGTH) {
-                    return OtpMatch(
-                        code = digits,
-                        aggregateKey = otpAggregateKeyForCode(packageName, digits)
+
+                val candidate = OtpCandidate(
+                    code = digits,
+                    start = valueRange.first,
+                    score = scoreOtpCandidate(
+                        textLower = combinedLower,
+                        rawValue = rawValue,
+                        start = valueRange.first,
+                        endExclusive = valueRange.last + 1,
+                        patternIndex = patternIndex,
+                        triggerRanges = triggerRanges
                     )
+                )
+                val previous = candidates[digits]
+                if (previous == null || candidate.score > previous.score) {
+                    candidates[digits] = candidate
                 }
             }
         }
 
-        return null
+        val selected = candidates.values.maxWithOrNull(
+            compareBy<OtpCandidate> { it.score }
+                .thenBy { -it.start }
+        ) ?: return null
+
+        return OtpMatch(
+            code = selected.code,
+            aggregateKey = otpAggregateKeyForCode(packageName, selected.code)
+        )
+    }
+
+    private fun collectOtpTriggerRanges(
+        textLower: String,
+        parserDictionary: LiveParserDictionary
+    ): List<IntRange> {
+        val ranges = mutableListOf<IntRange>()
+        parserDictionary.otpStrongTriggers.forEach { trigger ->
+            val normalized = trigger.lowercase(Locale.ROOT).trim()
+            if (normalized.isEmpty()) {
+                return@forEach
+            }
+            var start = textLower.indexOf(normalized)
+            while (start >= 0) {
+                ranges += start until (start + normalized.length)
+                start = textLower.indexOf(normalized, start + normalized.length)
+            }
+        }
+        parserDictionary.otpLooseTriggerPattern.findAll(textLower).forEach { match ->
+            ranges += match.range
+        }
+        return ranges
+    }
+
+    private fun scoreOtpCandidate(
+        textLower: String,
+        rawValue: String,
+        start: Int,
+        endExclusive: Int,
+        patternIndex: Int,
+        triggerRanges: List<IntRange>
+    ): Int {
+        var score = if (patternIndex == 0) 400 else 0
+        val nearestTrigger = triggerRanges.minOfOrNull { triggerRange ->
+            when {
+                endExclusive <= triggerRange.first -> triggerRange.first - endExclusive
+                start > triggerRange.last -> start - triggerRange.last - 1
+                else -> 0
+            }
+        }
+        if (nearestTrigger != null) {
+            score += (220 - nearestTrigger.coerceAtMost(220))
+        }
+        if (rawValue.any { it == '-' || it.isWhitespace() }) {
+            score += 12
+        }
+        score += (8 - rawValue.count(Char::isDigit)) * 3
+        if (isLikelyPhoneCandidate(textLower, start, endExclusive)) {
+            score -= 500
+        }
+        return score
+    }
+
+    private fun isLikelyPhoneCandidate(
+        textLower: String,
+        start: Int,
+        endExclusive: Int
+    ): Boolean {
+        val windowStart = (start - 28).coerceAtLeast(0)
+        val windowEnd = (endExclusive + 28).coerceAtMost(textLower.length)
+        val context = textLower.substring(windowStart, windowEnd)
+        val hasPhoneMarker = Regex(
+            "(?:phone|mobile|telephone|tel\\.?|call|whatsapp|телефон|мобильн|звон|номер\\s+телефона|telefon|nomor\\s+(?:telepon|hp))",
+            RegexOption.IGNORE_CASE
+        ).containsMatchIn(context)
+        val hasInternationalPrefix = textLower
+            .substring((start - 3).coerceAtLeast(0), start)
+            .contains('+')
+        return hasPhoneMarker || hasInternationalPrefix
     }
 
     private fun otpAggregateKeyForCode(packageName: String, code: String): String {
@@ -3347,6 +3496,111 @@ object LiveUpdateNotifier {
         }
     }
 
+    private fun resolveAppLargeIconBitmap(context: Context, packageName: String): Bitmap? {
+        return try {
+            val drawable = context.packageManager.getApplicationIcon(packageName)
+            drawableToBitmap(drawable)
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun resolveReadableLargeIcon(
+        context: Context,
+        packageName: String,
+        source: Bitmap?
+    ): Bitmap? {
+        if (source == null) {
+            return resolveAppLargeIconBitmap(context, packageName)
+        }
+
+        val sourceStats = analyzeBitmapContrast(source)
+        if (!sourceStats.isNearlyWhite) {
+            return source
+        }
+
+        val appIcon = resolveAppLargeIconBitmap(context, packageName)
+        if (appIcon != null && !analyzeBitmapContrast(appIcon).isNearlyWhite) {
+            return appIcon
+        }
+
+        return if (sourceStats.visibleRatio < 0.72f) {
+            placeLightGlyphOnContrastBackground(source)
+        } else {
+            null
+        }
+    }
+
+    private fun analyzeBitmapContrast(bitmap: Bitmap): BitmapContrastStats {
+        if (bitmap.width <= 0 || bitmap.height <= 0) {
+            return BitmapContrastStats(isNearlyWhite = false, visibleRatio = 0f)
+        }
+
+        val sampleColumns = minOf(bitmap.width, 24)
+        val sampleRows = minOf(bitmap.height, 24)
+        var visible = 0
+        var light = 0
+        val total = sampleColumns * sampleRows
+        for (row in 0 until sampleRows) {
+            val y = ((row + 0.5f) * bitmap.height / sampleRows)
+                .toInt()
+                .coerceIn(0, bitmap.height - 1)
+            for (column in 0 until sampleColumns) {
+                val x = ((column + 0.5f) * bitmap.width / sampleColumns)
+                    .toInt()
+                    .coerceIn(0, bitmap.width - 1)
+                val color = bitmap.getPixel(x, y)
+                if (Color.alpha(color) < 40) {
+                    continue
+                }
+                visible += 1
+                val luminance = (
+                        Color.red(color) * 0.2126f +
+                                Color.green(color) * 0.7152f +
+                                Color.blue(color) * 0.0722f
+                        ) / 255f
+                if (luminance >= 0.9f) {
+                    light += 1
+                }
+            }
+        }
+        val visibleRatio = if (total == 0) 0f else visible.toFloat() / total.toFloat()
+        val lightRatio = if (visible == 0) 0f else light.toFloat() / visible.toFloat()
+        return BitmapContrastStats(
+            isNearlyWhite = visible > 0 && lightRatio >= 0.86f,
+            visibleRatio = visibleRatio
+        )
+    }
+
+    private fun placeLightGlyphOnContrastBackground(source: Bitmap): Bitmap {
+        val result = Bitmap.createBitmap(
+            source.width.coerceAtLeast(1),
+            source.height.coerceAtLeast(1),
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(result)
+        val size = minOf(result.width, result.height).toFloat()
+        val left = (result.width - size) / 2f
+        val top = (result.height - size) / 2f
+        val bounds = RectF(left, top, left + size, top + size)
+        canvas.drawOval(bounds, Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.rgb(38, 48, 47)
+        })
+        val inset = size * 0.12f
+        canvas.drawBitmap(
+            source,
+            null,
+            RectF(
+                bounds.left + inset,
+                bounds.top + inset,
+                bounds.right - inset,
+                bounds.bottom - inset
+            ),
+            Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
+        )
+        return result
+    }
+
     private fun resolveSourceLargeIconBitmap(context: Context, notification: Notification): Bitmap? {
         val extras = notification.extras
         val fromExtras = extras.get(Notification.EXTRA_LARGE_ICON)
@@ -3719,10 +3973,23 @@ object LiveUpdateNotifier {
             }
         }
 
-        actions.take(safeMaxActions).forEach { frameworkAction ->
+        actions
+            .withIndex()
+            .sortedWith(
+                compareByDescending<IndexedValue<Notification.Action>> {
+                    hasRemoteInput(it.value)
+                }.thenBy { it.index }
+            )
+            .take(safeMaxActions)
+            .forEach { (_, frameworkAction) ->
             val compatAction = toCompatAction(frameworkAction) ?: return@forEach
             builder.addAction(compatAction)
         }
+    }
+
+    private fun hasRemoteInput(action: Notification.Action): Boolean {
+        return !action.remoteInputs.isNullOrEmpty() ||
+                !action.dataOnlyRemoteInputs.isNullOrEmpty()
     }
 
     private fun selectPreferredMediaActions(
@@ -3814,14 +4081,27 @@ object LiveUpdateNotifier {
 
         return try {
             val copied = NotificationCompat.Action.Builder.fromAndroidAction(frameworkAction).build()
-            NotificationCompat.Action.Builder(
+            if (titleOverride.isNullOrBlank()) {
+                return NotificationCompat.Action.Builder(copied).build()
+            }
+            val actionBuilder = NotificationCompat.Action.Builder(
                 transparentActionIcon,
-                titleOverride?.takeIf { it.isNotBlank() }
-                    ?: copied.title?.toString()?.takeIf { it.isNotBlank() }
-                    ?: frameworkAction.title?.toString()?.takeIf { it.isNotBlank() }
-                    ?: "Action",
+                titleOverride,
                 copied.actionIntent ?: frameworkAction.actionIntent
-            ).build()
+            )
+                .addExtras(copied.extras)
+                .setAllowGeneratedReplies(copied.allowGeneratedReplies)
+                .setSemanticAction(copied.semanticAction)
+                .setShowsUserInterface(copied.showsUserInterface)
+                .setContextual(copied.isContextual)
+                .setAuthenticationRequired(copied.isAuthenticationRequired)
+            (
+                    copied.remoteInputs.orEmpty().asList() +
+                            copied.dataOnlyRemoteInputs.orEmpty().asList()
+                    )
+                .distinctBy { it.resultKey }
+                .forEach(actionBuilder::addRemoteInput)
+            actionBuilder.build()
         } catch (_: Exception) {
             val title = titleOverride?.takeIf { it.isNotBlank() }
                 ?: frameworkAction.title?.toString()?.takeIf { it.isNotBlank() }
@@ -4582,12 +4862,25 @@ object LiveUpdateNotifier {
         CALLS("livebridge_calls"),
         NETWORK_CONNECTIONS("livebridge_network_connections"),
         MISCELLANEOUS("livebridge_miscellaneous_conversions"),
-        BYPASS("livebridge_bypass_applications")
+        BYPASS("livebridge_bypass_applications");
+
+        fun id(audible: Boolean): String {
+            return if (audible) "${id}_sound" else id
+        }
+
+        fun matches(channelId: String?): Boolean {
+            return channelId == id || channelId == id(true)
+        }
     }
 
     private data class MirrorChannelText(
         val name: String,
         val description: String
+    )
+
+    private data class BitmapContrastStats(
+        val isNearlyWhite: Boolean,
+        val visibleRatio: Float
     )
 
     private data class SmartStageMatch(
@@ -4676,5 +4969,11 @@ object LiveUpdateNotifier {
     private data class OtpMatch(
         val code: String,
         val aggregateKey: String
+    )
+
+    private data class OtpCandidate(
+        val code: String,
+        val start: Int,
+        val score: Int
     )
 }

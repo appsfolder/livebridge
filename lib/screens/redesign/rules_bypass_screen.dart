@@ -10,6 +10,7 @@ import '../../utils/livebridge_haptics.dart';
 import '../../widgets/redesign/lb_apps_loading_state.dart';
 import '../../widgets/redesign/lb_detail_screen.dart';
 import '../../widgets/redesign/lb_installed_app_avatar.dart';
+import '../../widgets/redesign/lb_incremental_list_component.dart';
 import '../../widgets/redesign/lb_list_component.dart';
 import '../../widgets/redesign/lb_search_pill.dart';
 import '../../widgets/redesign/lb_toast.dart';
@@ -205,7 +206,7 @@ class _RulesBypassScreenState extends State<RulesBypassScreen> {
         ),
       );
     }
-    return LbListComponent(
+    return LbIncrementalListComponent(
       key: ValueKey<Object>((_showSystemApps, _searchQuery)),
       items: _buildAppItems(),
       rowHeight: LbSpacing.recentRowHeight,

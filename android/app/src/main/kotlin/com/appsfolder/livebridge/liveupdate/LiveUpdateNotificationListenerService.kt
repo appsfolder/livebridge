@@ -57,6 +57,7 @@ class LiveUpdateNotificationListenerService : NotificationListenerService() {
 
     override fun onCreate() {
         super.onCreate()
+        activeInstance = this
 
         if (!prefs.getConverterEnabled()) {
             LiveUpdateNotifier.clearRuntimeState()
@@ -149,7 +150,18 @@ class LiveUpdateNotificationListenerService : NotificationListenerService() {
         mainHandler.removeCallbacksAndMessages(null)
         rebindScheduled = false
         snapshotSyncScheduled = false
+        if (activeInstance === this) {
+            activeInstance = null
+        }
         super.onDestroy()
+    }
+
+    private fun isSourceNotificationActive(key: String): Boolean? {
+        return try {
+            activeNotifications?.any { it.key == key } ?: false
+        } catch (_: Throwable) {
+            null
+        }
     }
 
     private fun processIncomingNotification(sbn: StatusBarNotification) {
@@ -280,6 +292,12 @@ class LiveUpdateNotificationListenerService : NotificationListenerService() {
     }
 
     companion object {
+        @Volatile
+        private var activeInstance: LiveUpdateNotificationListenerService? = null
+
+        fun isSourceNotificationActive(key: String): Boolean? {
+            return activeInstance?.isSourceNotificationActive(key)
+        }
         private const val TAG = "LiveUpdateListener"
         private const val INITIAL_REBIND_DELAY_MS = 1_000L
         private const val MAX_REBIND_DELAY_MS = 30_000L

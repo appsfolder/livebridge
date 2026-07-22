@@ -14,22 +14,24 @@ Future<T?> showLbModalBottomSheet<T>({
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
     barrierColor: Colors.transparent,
     transitionDuration: const Duration(milliseconds: 220),
-    pageBuilder: (
-      BuildContext dialogContext,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-    ) => builder(dialogContext),
-    transitionBuilder: (
-      BuildContext dialogContext,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,
-    ) {
-      return _LbModalBottomSheetScaffold(
-        routeAnimation: animation,
-        child: child,
-      );
-    },
+    pageBuilder:
+        (
+          BuildContext dialogContext,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+        ) => builder(dialogContext),
+    transitionBuilder:
+        (
+          BuildContext dialogContext,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+          Widget child,
+        ) {
+          return _LbModalBottomSheetScaffold(
+            routeAnimation: animation,
+            child: child,
+          );
+        },
   );
 }
 
@@ -52,13 +54,12 @@ class LbModalBottomSheetSurface extends StatelessWidget {
     final LbPalette palette = LbPalette.of(context);
     final double bottomInset = MediaQuery.paddingOf(context).bottom;
 
-    return GestureDetector(
-      onVerticalDragStart: onHandleDragStart,
-      onVerticalDragUpdate: onHandleDragUpdate,
-      onVerticalDragEnd: onHandleDragEnd,
-      behavior: HitTestBehavior.translucent,
-      child: Material(
-        color: Colors.transparent,
+    return Material(
+      color: Colors.transparent,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.sizeOf(context).height * 0.88,
+        ),
         child: Container(
           width: double.infinity,
           padding: EdgeInsets.fromLTRB(
@@ -69,26 +70,38 @@ class LbModalBottomSheetSurface extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: palette.surfaceRaised,
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(25),
-            ),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(25)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: LbSpacing.xs),
-                child: Container(
-                  width: LbSpacing.modalSheetHandleWidth,
-                  height: LbSpacing.modalSheetHandleHeight,
-                  decoration: BoxDecoration(
-                    color: palette.textMuted.withValues(alpha: 0.55),
-                    borderRadius: BorderRadius.circular(999),
+              GestureDetector(
+                onVerticalDragStart: onHandleDragStart,
+                onVerticalDragUpdate: onHandleDragUpdate,
+                onVerticalDragEnd: onHandleDragEnd,
+                behavior: HitTestBehavior.opaque,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: LbSpacing.xl,
+                    vertical: LbSpacing.xs,
+                  ),
+                  child: Container(
+                    width: LbSpacing.modalSheetHandleWidth,
+                    height: LbSpacing.modalSheetHandleHeight,
+                    decoration: BoxDecoration(
+                      color: palette.textMuted.withValues(alpha: 0.55),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: LbSpacing.modalSheetContentTopGap),
-              child,
+              Flexible(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: child,
+                ),
+              ),
             ],
           ),
         ),
@@ -154,14 +167,8 @@ class _LbModalBottomSheetScaffoldState
 
   void _animateDragOffsetTo(double target) {
     _stopSettleAnimation();
-    _settleAnimation = Tween<double>(
-      begin: _dragOffset,
-      end: target,
-    ).animate(
-      CurvedAnimation(
-        parent: _settleController,
-        curve: Curves.easeOutCubic,
-      ),
+    _settleAnimation = Tween<double>(begin: _dragOffset, end: target).animate(
+      CurvedAnimation(parent: _settleController, curve: Curves.easeOutCubic),
     )..addListener(_handleSettleTick);
     _settleController.forward(from: 0);
   }

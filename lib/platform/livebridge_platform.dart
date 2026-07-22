@@ -89,6 +89,10 @@ class LiveBridgePlatform {
       _askBool('getHideLockscreenContentEnabled');
   static Future<bool> setHideLockscreenContentEnabled(bool value) =>
       _askBool('setHideLockscreenContentEnabled', {'value': value});
+  static Future<bool> getConvertedNotificationSoundEnabled() =>
+      _askBool('getConvertedNotificationSoundEnabled');
+  static Future<bool> setConvertedNotificationSoundEnabled(bool value) =>
+      _askBool('setConvertedNotificationSoundEnabled', {'value': value});
   static Future<bool> getHintsDisabled() => _askBool('getHintsDisabled');
   static Future<bool> setHintsDisabled(bool value) =>
       _askBool('setHintsDisabled', {'value': value});

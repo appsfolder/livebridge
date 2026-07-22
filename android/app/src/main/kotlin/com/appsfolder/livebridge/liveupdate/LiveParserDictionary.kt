@@ -598,6 +598,7 @@ internal object LiveParserDictionaryLoader {
 
     private val languagePacks = listOf(
         DictionaryLanguagePack("en", "liveupdate_dictionary_en.json"),
+        DictionaryLanguagePack("pt-br", "liveupdate_dictionary_pt-BR.json"),
         DictionaryLanguagePack("ru", "liveupdate_dictionary_ru.json"),
         DictionaryLanguagePack("zh", "liveupdate_dictionary_zh.json"),
         DictionaryLanguagePack("ko", "liveupdate_dictionary_ko.json")
@@ -646,30 +647,23 @@ internal object LiveParserDictionaryLoader {
                 }
             }
 
-            var bundledDictionary = LiveParserDictionary.default()
+            var loaded = LiveParserDictionary.default()
             for (pack in languagePacks) {
                 if (pack.id !in enabledLanguageIds) {
                     continue
                 }
-                val loadedFromAssets = loadFromAssets(
-                    context = context,
-                    assetFileName = pack.assetFileName
-                ) ?: continue
-                bundledDictionary = bundledDictionary.mergedWith(loadedFromAssets)
+                val overrideRaw = prefs.getParserDictionaryLanguageOverrideRaw(pack.id)
+                val languageDictionary = overrideRaw
+                    ?.let { raw -> LiveParserDictionary.fromJson(raw) }
+                    ?: loadFromAssets(
+                        context = context,
+                        assetFileName = pack.assetFileName
+                    )
+                    ?: continue
+                loaded = loaded.mergedWith(languageDictionary)
             }
 
-            val loaded = languagePacks.fold(bundledDictionary) { current, pack ->
-                if (pack.id !in enabledLanguageIds) {
-                    return@fold current
-                }
-                val overrideRaw = prefs.getParserDictionaryLanguageOverrideRaw(pack.id)
-                if (overrideRaw.isNullOrBlank()) {
-                    return@fold current
-                }
-                LiveParserDictionary.fromJson(overrideRaw)
-                    ?.let(current::mergedWith)
-                    ?: current
-            }.let { merged ->
+            loaded = loaded.let { merged ->
                 if (legacyCustomRaw.isNullOrBlank()) {
                     merged
                 } else {

@@ -1,0 +1,584 @@
+{
+  "smart_rules": [
+    {
+      "id": "food",
+      "max_stage": 4,
+      "package_hints": [
+        "ifood",
+        "rappi",
+        "ubereats",
+        "uber.eats",
+        "99food",
+        "aiqfome",
+        "aiq",
+        "delivery",
+        "deliverymuch",
+        "delivery.much",
+        "ze.delivery",
+        "zedelivery",
+        "zé delivery",
+        "kfc",
+        "mcdonalds",
+        "mcdonald",
+        "burgerking",
+        "burger.king",
+        "bk",
+        "subway",
+        "dominos",
+        "domino",
+        "habibs",
+        "giraffas",
+        "outback",
+        "pizza",
+        "food",
+        "eats"
+      ],
+      "text_triggers": [
+        "pedido",
+        "entrega",
+        "delivery",
+        "comida",
+        "lanche",
+        "restaurante",
+        "mercado",
+        "refeição",
+        "motoboy",
+        "entregador",
+        "entregadora",
+        "retirada",
+        "retirar",
+        "cozinha",
+        "preparo",
+        "pedido confirmado",
+        "pedido aceito",
+        "saiu para entrega",
+        "a caminho"
+      ],
+      "exclude_patterns": [
+        "(anivers[aá]rio|feliz anivers[aá]rio|birthday)",
+        "(desconto|cupom|promo[cç][aã]o|promocional|oferta|cashback|cash\\s*back|c[oó]digo\\s+promocional|voucher|brinde|ganhe\\s+\\d+%|\\d+%\\s*(?:off|de\\s+desconto)|frete\\s+gr[aá]tis|entrega\\s+gr[aá]tis)",
+        "(pagamento\\s*(?:falhou|recusado|negado|n[aã]o\\s+aprovado|n[aã]o\\s+autorizado|pendente)|compra\\s+cancelada|pedido\\s+cancelado|cancelamos\\s+seu\\s+pedido|estorno|reembolso|valor\\s+estornado)",
+        "(carrinho|sacola|checkout|finalize\\s+(?:sua\\s+)?compra|complete\\s+(?:seu\\s+)?pedido|concluir\\s+pedido|fechar\\s+pedido|retomar\\s+pedido)",
+        "(pedido\\s+m[ií]nimo|compra\\s+m[ií]nima|nas\\s+compras\\s+acima\\s+de|compre\\s+e\\s+ganhe)",
+        "(correios|transportadora|rastreio|rastreamento|c[oó]digo\\s+de\\s+rastreio|objeto\\s+postado|objeto\\s+saiu|sua\\s+encomenda|sua\\s+compra\\s+chegou|pacote|retire\\s+sua\\s+encomenda|locker|ponto\\s+de\\s+retirada|marketplace|mercado\\s+livre|amazon|shopee|shein|magalu|americanas)"
+      ],
+      "signals": [
+        {
+          "stage": 4,
+          "pattern": "(pedido\\s*(?:entregue|finalizado|conclu[ií]do)|entrega\\s*(?:realizada|conclu[ií]da|finalizada)|seu\\s+pedido\\s+chegou|j[aá]\\s+entregamos|foi\\s+entregue|bom\\s+apetite|aproveite\\s+(?:sua\\s+)?refei[cç][aã]o|obrigado\\s+por\\s+pedir)"
+        },
+        {
+          "stage": 3,
+          "pattern": "(pedido[^\\n]{0,60}(?:saiu\\s+para\\s+entrega|est[aá]\\s+a\\s+caminho|a\\s+caminho|em\\s+rota|em\\s+deslocamento|chegando)|entrega[^\\n]{0,60}(?:a\\s+caminho|em\\s+rota|chegando)|(?:entregador|entregadora|motoboy|motofretista|rider)[^\\n]{0,80}(?:saiu|retirou|pegou|coletou|est[aá]\\s+a\\s+caminho|a\\s+caminho|em\\s+rota|chegando|pr[oó]ximo|pr[oó]xima)|sua\\s+comida\\s+est[aá]\\s+a\\s+caminho|estamos\\s+levando\\s+seu\\s+pedido|acompanhe\\s+a\\s+entrega)"
+        },
+        {
+          "stage": 2,
+          "pattern": "(pedido[^\\n]{0,60}(?:pronto|preparado|separado|embalado|aguardando\\s+(?:retirada|entregador)|liberado\\s+para\\s+retirada|pronto\\s+para\\s+retirada)|pronto\\s+para\\s+retirada|retire\\s+(?:seu\\s+)?pedido|j[aá]\\s+pode\\s+retirar|(?:entregador|entregadora|motoboy)[^\\n]{0,60}(?:aceitou|foi\\s+definido|foi\\s+designado))"
+        },
+        {
+          "stage": 1,
+          "pattern": "(pedido[^\\n]{0,60}(?:em\\s+preparo|est[aá]\\s+sendo\\s+preparado|come[cç]ou\\s+a\\s+ser\\s+preparado|est[aá]\\s+na\\s+cozinha|preparando|em\\s+produ[cç][aã]o)|restaurante[^\\n]{0,60}(?:aceitou|confirmou|recebeu|est[aá]\\s+preparando)|cozinha[^\\n]{0,60}(?:iniciou|come[cç]ou)|estamos\\s+preparando\\s+seu\\s+pedido)"
+        },
+        {
+          "stage": 0,
+          "pattern": "(pedido[^\\n]{0,60}(?:recebido|realizado|feito|criado|confirmado|aceito|aprovado|registrado|pago)|pagamento[^\\n]{0,60}(?:aprovado|confirmado|recebido|realizado)|recebemos\\s+seu\\s+pedido|confirmamos\\s+seu\\s+pedido|seu\\s+pedido\\s+foi\\s+aceito)"
+        }
+      ]
+    },
+    {
+      "id": "taxi",
+      "max_stage": 4,
+      "package_hints": [
+        "uber",
+        "99",
+        "99app",
+        "cabify",
+        "indrive",
+        "in.driver",
+        "taxi",
+        "táxi",
+        "mobizap",
+        "yango",
+        "didi",
+        "lyft",
+        "bolt",
+        "grab"
+      ],
+      "text_triggers": [
+        "corrida",
+        "viagem",
+        "táxi",
+        "taxi",
+        "motorista",
+        "carro",
+        "veículo",
+        "placa",
+        "embarque",
+        "desembarque",
+        "partida",
+        "destino",
+        "passageiro",
+        "app de corrida"
+      ],
+      "signals": [
+        {
+          "stage": 4,
+          "pattern": "(corrida\\s+(?:finalizada|conclu[ií]da|encerrada)|viagem\\s+(?:finalizada|conclu[ií]da|encerrada)|voc[eê]\\s+chegou\\s+ao\\s+destino|chegamos\\s+ao\\s+destino|destino\\s+alcan[cç]ado|pagamento\\s+da\\s+corrida|avalie\\s+(?:sua\\s+)?(?:corrida|viagem|motorista))"
+        },
+        {
+          "stage": 3,
+          "pattern": "(corrida\\s+(?:iniciada|come[cç]ou|em\\s+andamento)|viagem\\s+(?:iniciada|come[cç]ou|em\\s+andamento)|voc[eê]\\s+est[aá]\\s+em\\s+viagem|embarque\\s+confirmado|aproveite\\s+(?:sua\\s+)?viagem|siga\\s+viagem|a\\s+caminho\\s+do\\s+destino)"
+        },
+        {
+          "stage": 2,
+          "pattern": "(motorista[^\\n]{0,80}(?:est[aá]\\s+chegando|chega\\s+em|a\\s+caminho|est[aá]\\s+pr[oó]ximo|est[aá]\\s+perto|chegou|j[aá]\\s+chegou)|carro[^\\n]{0,80}(?:est[aá]\\s+chegando|a\\s+caminho|chegou)|chegando\\s+em\\s*\\d+\\s*(?:min|minutos?)|v[aá]\\s+at[eé]\\s+o\\s+local\\s+de\\s+embarque|dirija-se\\s+ao\\s+embarque)"
+        },
+        {
+          "stage": 1,
+          "pattern": "(motorista[^\\n]{0,80}(?:encontrado|definido|designado|aceitou|confirmou|foi\\s+encontrado|foi\\s+chamado)|corrida[^\\n]{0,80}(?:aceita|confirmada)|viagem[^\\n]{0,80}(?:aceita|confirmada)|encontramos\\s+um\\s+motorista|seu\\s+motorista\\s+ser[aá])"
+        },
+        {
+          "stage": 0,
+          "pattern": "(procurando\\s+(?:um\\s+)?motorista|buscando\\s+(?:um\\s+)?motorista|chamando\\s+(?:um\\s+)?motorista|solicitando\\s+(?:sua\\s+)?corrida|pedido\\s+de\\s+corrida\\s+enviado|aguardando\\s+(?:motorista|aceite)|encontrando\\s+(?:um\\s+)?motorista)"
+        }
+      ]
+    },
+    {
+      "id": "navigation",
+      "max_stage": 4,
+      "package_hints": [
+        "google.android.apps.maps",
+        "waze",
+        "maps",
+        "map",
+        "navigator",
+        "navigation",
+        "navegacao",
+        "navegação",
+        "navi",
+        "here",
+        "tomtom",
+        "moovit",
+        "citymapper",
+        "amap",
+        "baidu.BaiduMap"
+      ],
+      "text_triggers": [
+        "rota",
+        "trajeto",
+        "navegação",
+        "navegacao",
+        "destino",
+        "vire à esquerda",
+        "vire a esquerda",
+        "vire à direita",
+        "vire a direita",
+        "mantenha à esquerda",
+        "mantenha a esquerda",
+        "mantenha à direita",
+        "mantenha a direita",
+        "siga em frente",
+        "continue",
+        "pegue a saída",
+        "saída",
+        "rotatória",
+        "retorno",
+        "faça o retorno",
+        "radar",
+        "trânsito"
+      ],
+      "exclude_patterns": [
+        "(anivers[aá]rio|feliz anivers[aá]rio|birthday)",
+        "(desconto|cupom|promo[cç][aã]o|oferta|cashback|\\d+%\\s*(?:off|de\\s+desconto)|frete\\s+gr[aá]tis)",
+        "(newsletter|boletim|siga-nos|baixar\\s+app|download\\s+do\\s+app|atualiza[cç][aã]o\\s+do\\s+mapa)"
+      ],
+      "signals": [
+        {
+          "stage": 4,
+          "pattern": "(voc[eê]\\s+chegou|chegou\\s+ao\\s+destino|destino\\s+alcan[cç]ado|rota\\s+(?:finalizada|conclu[ií]da|encerrada)|navega[cç][aã]o\\s+(?:finalizada|encerrada)|fim\\s+da\\s+rota)"
+        },
+        {
+          "stage": 3,
+          "pattern": "(destino[^\\n]{0,80}(?:à\\s+direita|a\\s+direita|à\\s+esquerda|a\\s+esquerda|logo\\s+à\\s+frente|logo\\s+a\\s+frente|pr[oó]ximo|pr[oó]xima)|voc[eê]\\s+est[aá]\\s+quase\\s+l[aá]|faltam\\s*\\d+\\s*(?:m|metros?|km|quil[oô]metros?)|aproximando-se\\s+do\\s+destino|quase\\s+no\\s+destino)"
+        },
+        {
+          "stage": 2,
+          "pattern": "(em\\s*\\d+[\\d\\s.,]*\\s*(?:m|metros?|km|quil[oô]metros?)|\\b\\d+[\\d\\s.,]*\\s*(?:m|metros?|km|quil[oô]metros?)\\b|vire\\s+(?:à|a)\\s+(?:esquerda|direita)|mantenha-se?\\s+(?:à|a)\\s+(?:esquerda|direita)|pegue\\s+a\\s+sa[ií]da|entre\\s+na\\s+rotat[oó]ria|saia\\s+da\\s+rotat[oó]ria|fa[cç]a\\s+o\\s+retorno|continue\\s+(?:em\\s+frente|reto|na\\s+via)|siga\\s+(?:em\\s+frente|reto|pela)|acesse\\s+a\\s+via|use\\s+a\\s+faixa|radar\\s+à\\s+frente|tr[aâ]nsito\\s+à\\s+frente)"
+        },
+        {
+          "stage": 1,
+          "pattern": "(rota\\s+(?:iniciada|calculada|tra[cç]ada|definida)|navega[cç][aã]o\\s+(?:iniciada|come[cç]ou)|iniciando\\s+(?:a\\s+)?rota|siga\\s+a\\s+rota|come[cç]ar\\s+navega[cç][aã]o)"
+        }
+      ]
+    },
+    {
+      "id": "external_device",
+      "max_stage": 2,
+      "package_hints": [
+        "camera",
+        "bluetooth",
+        "accessory",
+        "usb",
+        "gopro",
+        "dji",
+        "wearable",
+        "galaxywearable",
+        "miui",
+        "samsung",
+        "garmin",
+        "huaweihealth",
+        "fitbit",
+        "amazfit",
+        "zepp"
+      ],
+      "text_triggers": [
+        "câmera",
+        "camera",
+        "bluetooth",
+        "acessório",
+        "acessorio",
+        "usb",
+        "fone",
+        "fone de ouvido",
+        "relógio",
+        "relogio",
+        "smartwatch",
+        "pulseira",
+        "wearable",
+        "emparelhado",
+        "pareado",
+        "conectado",
+        "conectando",
+        "desconectado",
+        "dispositivo"
+      ],
+      "exclude_patterns": [
+        "(anivers[aá]rio|feliz anivers[aá]rio|birthday)",
+        "(desconto|cupom|promo[cç][aã]o|oferta|cashback|\\d+%\\s*(?:off|de\\s+desconto))",
+        "(roteador|ponto\\s+de\\s+acesso|hotspot|tethering|compartilhamento\\s+de\\s+internet|wi-?fi|wifi|rede\\s+wi-?fi|\\b\\d+\\s+dispositivos?\\s+conectados?)"
+      ],
+      "signals": [
+        {
+          "stage": 2,
+          "pattern": "(conectad[oa]s?\\b|emparelhad[oa]s?\\b|paread[oa]s?\\b|conex[aã]o\\s+estabelecida|emparelhamento\\s+conclu[ií]do|pareamento\\s+conclu[ií]do|dispositivo\\s+conectado|fone\\s+conectado|rel[oó]gio\\s+conectado)"
+        },
+        {
+          "stage": 1,
+          "pattern": "(conectando\\b|emparelhando\\b|pareando\\b|conex[aã]o\\s+em\\s+andamento|tentando\\s+conectar|procurando\\s+dispositivo|buscando\\s+dispositivo)"
+        }
+      ]
+    },
+    {
+      "id": "vpn",
+      "max_stage": 1,
+      "package_hints": [
+        "vpn",
+        "wireguard",
+        "openvpn",
+        "nordvpn",
+        "protonvpn",
+        "surfshark",
+        "expressvpn",
+        "outline",
+        "amnezia",
+        "clash",
+        "v2ray",
+        "hiddify",
+        "tailscale",
+        "zerotier",
+        "shadowsocks",
+        "singbox",
+        "hysteria"
+      ],
+      "text_triggers": [
+        "vpn",
+        "wireguard",
+        "openvpn",
+        "túnel",
+        "tunel",
+        "conexão segura",
+        "conexao segura",
+        "conexão protegida",
+        "conexao protegida",
+        "proxy",
+        "procurador",
+        "nó",
+        "servidor vpn",
+        "conectado",
+        "conectada"
+      ],
+      "signals": [
+        {
+          "stage": 1,
+          "pattern": "(?<!\\d)\\d{1,4}(?:[.,]\\d{1,2})?\\s*(?:[kmg]?i?b|[kmg]?b|kb|mb|gb)\\s*(?:(?:/\\s*s)|(?:/\\s*seg)|(?:/\\s*sec)|ps)\\b|(?:vpn|t[uú]nel|proxy)[^\\n]{0,60}(?:conectad[oa]|ativo|protegido|seguro)|conex[aã]o\\s+(?:segura|protegida|estabelecida|ativa)"
+        }
+      ]
+    }
+  ],
+  "blocked_source_packages": [],
+  "privacy_redaction_placeholders": [
+    "conteúdo sensível oculto",
+    "conteúdo oculto",
+    "conteudo sensivel oculto",
+    "conteudo oculto",
+    "notificação com conteúdo oculto",
+    "notificacao com conteudo oculto",
+    "notificação oculta",
+    "notificacao oculta",
+    "desbloqueie para ver",
+    "desbloqueie para visualizar",
+    "desbloqueie o dispositivo para ver",
+    "oculto por segurança",
+    "mensagem oculta",
+    "prévia oculta",
+    "previa oculta"
+  ],
+  "known_navigation_packages": [
+    "com.google.android.apps.maps",
+    "com.waze",
+    "com.here.app.maps",
+    "com.tomtom.gplay.navapp",
+    "com.citymapper.app.release",
+    "com.tranzmate",
+    "ru.dublgis.dgismobile",
+    "ru.yandex.yandexmaps",
+    "com.autonavi.minimap",
+    "com.baidu.BaiduMap"
+  ],
+  "navigation_package_markers": [
+    "navigation",
+    "navigator",
+    ".maps",
+    "maps",
+    "map",
+    "navi",
+    "waze",
+    "moovit",
+    "rotas",
+    "navegacao",
+    "navegação"
+  ],
+  "navigation_distance_pattern": "(?<!\\d)\\d{1,4}(?:[\\s.,]\\d{1,2})?\\s*(?:km|quil[oô]metros?|m|metros?)\\b",
+  "navigation_instruction_pattern": "(vire\\s+(?:à|a)\\s+(?:esquerda|direita)|mantenha-se?\\s+(?:à|a)\\s+(?:esquerda|direita)|pegue\\s+a\\s+sa[ií]da|entre\\s+na\\s+rotat[oó]ria|saia\\s+da\\s+rotat[oó]ria|fa[cç]a\\s+o\\s+retorno|siga\\s+(?:em\\s+frente|reto|pela)|continue\\s+(?:em\\s+frente|reto)|acesse\\s+a\\s+via|use\\s+a\\s+faixa|radar\\s+à\\s+frente|tr[aâ]nsito\\s+à\\s+frente)",
+  "otp_strong_triggers": [
+    "otp",
+    "código de verificação",
+    "codigo de verificacao",
+    "código verificador",
+    "codigo verificador",
+    "código de confirmação",
+    "codigo de confirmacao",
+    "código de autenticação",
+    "codigo de autenticacao",
+    "código de autorização",
+    "codigo de autorizacao",
+    "código de segurança",
+    "codigo de seguranca",
+    "código de acesso",
+    "codigo de acesso",
+    "código de login",
+    "codigo de login",
+    "código para entrar",
+    "codigo para entrar",
+    "senha temporária",
+    "senha temporaria",
+    "senha de uso único",
+    "senha de uso unico",
+    "token de segurança",
+    "token de seguranca",
+    "token",
+    "2fa",
+    "dois fatores",
+    "duplo fator",
+    "validação",
+    "validacao",
+    "verificação",
+    "verificacao",
+    "confirmação",
+    "confirmacao",
+    "autenticação",
+    "autenticacao",
+    "pix copia e cola",
+    "código pix",
+    "codigo pix"
+  ],
+  "otp_loose_trigger_pattern": "(?:(?:\\bc[oó]digo\\b|\\botp\\b|\\btoken\\b|\\bsenha\\b|verifica[cç][aã]o|confirma[cç][aã]o|autentica[cç][aã]o|autoriza[cç][aã]o)\\s*[:#-]?\\s*\\d(?:[\\s-]?\\d){3,7})",
+  "money_context_pattern": "(R\\$|BRL|real|reais|pix|boleto|cart[aã]o|cr[eé]dito|d[eé]bito|pre[cç]o|valor|total|subtotal|pagamento|pago|compra|cobran[cç]a|cobrado|d[eé]bito|transfer[eê]ncia|saldo|fatura|parcela|taxa|frete|reembolso|estorno)",
+  "text_progress_percent_pattern": "(?<!\\d)(\\d{1,3})\\s*%",
+  "text_progress_context_window": 80,
+  "text_progress_include_context_pattern": "(progresso|conclu[ií]d[oa]|concluir|baixando|download|enviando|upload|subindo|atualizando|instalando|sincronizando|sync|processando|processado|renderizando|codificando|decodificando|carregando|importando|exportando|backup|restaurando|extraindo|compactando|descompactando|preparando|faltam|restante)",
+  "text_progress_exclude_context_pattern": "(desconto|cupom|promo[cç][aã]o|oferta|cashback|cash\\s*back|off\\b|economize|ganhe|brinde|b[oô]nus|frete\\s+gr[aá]tis|entrega\\s+gr[aá]tis|pedido\\s+m[ií]nimo|compra\\s+m[ií]nima|\\d{1,7}\\s*(?:R\\$|reais|BRL)|umidade|clima|tempo|temperatura|press[aã]o|chuva|vento|previs[aã]o|comiss[aã]o|taxa|juros|imposto|financiamento|empr[eé]stimo|cart[aã]o|fatura|bateria|carga)",
+  "weather_package_hints": [
+    "weather",
+    "clima",
+    "tempo",
+    "previsao",
+    "previsão",
+    "climatempo",
+    "br.com.climatempo",
+    "sec.android.daemonapp",
+    "meteo",
+    "accuweather",
+    "weatherchannel",
+    "gismeteo",
+    "yandex.weather",
+    "clime",
+    "1weather",
+    "todayweather"
+  ],
+  "weather_context_pattern": "(clima|tempo|previs[aã]o|temperatura|sensação|sensacao|sensação térmica|sensacao termica|umidade|vento|rajada|chuva|precipita[cç][aã]o|press[aã]o|uv|iqar|aqi|hoje|amanh[aã]|manh[aã]|tarde|noite|ensolarado|sol|nublado|encoberto|chuvoso|temporal|trovoada|raio|rel[aâ]mpago|neblina|névoa|geada)",
+  "weather_temperature_pattern": "(?<!\\d)([+\\-−]?\\d{1,3})\\s*(?:°(?:\\s*(?:c|f)(?!\\p{L}))?|℃|℉)",
+  "weather_day_pattern": "(hoje|amanh[aã]|manh[aã]|tarde|noite|madrugada|agora|fim\\s+de\\s+semana|segunda|terça|ter[cç]a|quarta|quinta|sexta|s[aá]bado|domingo)",
+  "weather_condition_pattern": "(ensolarado|sol|céu\\s+limpo|ceu\\s+limpo|claro|nublado|encoberto|chuva|chuvoso|garoa|temporal|trovoada|raio|rel[aâ]mpago|neve|granizo|neblina|n[eé]voa|vento|ventania)",
+  "weather_condition_thunder_pattern": "(trovoada|trov[aã]o|raio|rel[aâ]mpago|temporal|tempestade)",
+  "weather_condition_rain_pattern": "(chuva|chuvoso|garoa|pancadas|precipita[cç][aã]o)",
+  "weather_condition_snow_pattern": "(neve|nevasca|granizo)",
+  "weather_condition_fog_pattern": "(neblina|n[eé]voa|cerra[cç][aã]o|nevoeiro)",
+  "weather_condition_wind_pattern": "(vento|ventania|rajada|ventoso)",
+  "weather_condition_sun_pattern": "(ensolarado|sol|céu\\s+limpo|ceu\\s+limpo|claro)",
+  "weather_condition_cloud_pattern": "(nublado|encoberto|nebulosidade|nuvens)",
+  "external_device_name_patterns": [
+    "(?:conectad[oa]|conectando|emparelhad[oa]|emparelhando|paread[oa]|pareando)\\s*(?:a|ao|à|com)?\\s*[\"«]?([\\p{L}\\p{N}][\\p{L}\\p{N} ._#\\-]{1,40})[\"»]?(?=\\s|$|[,.!])",
+    "[\"«]?([\\p{L}\\p{N}][\\p{L}\\p{N} ._#\\-]{1,40})[\"»]?\\s*(?:est[aá]\\s+)?(?:conectad[oa]|conectando|emparelhad[oa]|emparelhando|paread[oa]|pareando)\\b"
+  ],
+  "external_device_generic_names": [
+    "dispositivo",
+    "dispositivos",
+    "1 dispositivo",
+    "2 dispositivos",
+    "3 dispositivos",
+    "4 dispositivos",
+    "5 dispositivos",
+    "câmera",
+    "camera",
+    "acessório",
+    "acessorio",
+    "bluetooth",
+    "usb",
+    "fone",
+    "fone de ouvido",
+    "relógio",
+    "relogio",
+    "smartwatch",
+    "pulseira",
+    "wearable",
+    "hotspot",
+    "ponto de acesso",
+    "wifi",
+    "wi-fi"
+  ],
+  "vpn_speed_pattern": "(?<!\\d)\\d{1,4}(?:[.,]\\d{1,2})?\\s*(?:[kmg]?i?b|[kmg]?b|kb|mb|gb)\\s*(?:(?:/\\s*s)|(?:/\\s*seg)|(?:/\\s*sec)|ps)\\b",
+  "vpn_context_pattern": "(\\bvpn\\b|wireguard|openvpn|hiddify|clash|v2ray|singbox|outline|amnezia|tailscale|zerotier|t[uú]nel|tunel|proxy|servidor\\s+vpn|conex[aã]o\\s+segura|conex[aã]o\\s+protegida)",
+  "vpn_package_markers": [
+    "hiddify",
+    "wireguard",
+    "openvpn",
+    "nordvpn",
+    "protonvpn",
+    "surfshark",
+    "expressvpn",
+    "outline",
+    "amnezia",
+    "clash",
+    "v2ray",
+    "hysteria",
+    "singbox",
+    "tailscale",
+    "zerotier",
+    "shadowsocks",
+    "vpn"
+  ],
+  "vpn_download_markers": [
+    "↓",
+    "dl",
+    "downlink",
+    "download",
+    "down",
+    "rx",
+    "recv",
+    "receive",
+    "incoming",
+    "inbound",
+    "ingress",
+    "entrada",
+    "recebido",
+    "receber",
+    "baixando",
+    "download"
+  ],
+  "vpn_upload_markers": [
+    "↑",
+    "ul",
+    "uplink",
+    "upload",
+    "up",
+    "tx",
+    "send",
+    "outgoing",
+    "outbound",
+    "egress",
+    "saída",
+    "saida",
+    "enviado",
+    "enviar",
+    "subindo",
+    "upload"
+  ],
+  "otp_code_patterns": [
+    "(?:\\bc[oó]digo\\b|\\botp\\b|\\btoken\\b|\\bsenha\\b|verifica[cç][aã]o|confirma[cç][aã]o|autentica[cç][aã]o|autoriza[cç][aã]o)[^\\d\\n]{0,80}(\\d(?:[\\s-]?\\d){3,7})(?!\\d)",
+    "(?<!\\S)(\\d{4,8})(?!\\d)",
+    "(?<!\\S)(\\d(?:[\\s-]?\\d){3,7})(?!\\d)",
+    "(?<!\\S)([A-Z0-9]{4,8})(?!\\w)"
+  ],
+  "order_context_hints": [
+    "pedido",
+    "entrega",
+    "delivery",
+    "corrida",
+    "viagem"
+  ],
+  "entity_token_patterns": [
+    "(?:pedido|order|corrida|viagem|entrega|protocolo)\\s*(?:#|n[ºo°]?|id|c[oó]digo|n[uú]mero)\\s*([a-zA-Z0-9-]{2,20})",
+    "(?:pedido|corrida|viagem|entrega)\\s+([a-zA-Z0-9-]*\\d[a-zA-Z0-9-]{1,19})",
+    "(?:#|n[ºo°])\\s*([a-zA-Z0-9-]{2,20})"
+  ],
+  "status_labels": {
+    "food": {
+      "pt-BR": {
+        "0": "Pago",
+        "1": "Preparando",
+        "2": "Pronto",
+        "3": "A caminho",
+        "4": "Entregue"
+      }
+    },
+    "taxi": {
+      "pt-BR": {
+        "0": "Buscando",
+        "1": "Motorista",
+        "2": "Chegando",
+        "3": "Em viagem",
+        "4": "Concluída"
+      }
+    },
+    "navigation": {
+      "pt-BR": {
+        "1": "Rota",
+        "2": "Navegação",
+        "3": "Quase lá",
+        "4": "Chegou"
+      }
+    },
+    "external_device": {
+      "pt-BR": {
+        "1": "Conectando",
+        "2": "Conectado"
+      }
+    },
+    "vpn": {
+      "pt-BR": {
+        "1": "VPN"
+      }
+    }
+  }
+}

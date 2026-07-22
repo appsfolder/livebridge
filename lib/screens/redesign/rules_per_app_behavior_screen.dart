@@ -17,6 +17,7 @@ import '../../widgets/redesign/lb_defaults_card.dart';
 import '../../widgets/redesign/lb_detail_screen.dart';
 import '../../widgets/redesign/lb_icon.dart';
 import '../../widgets/redesign/lb_installed_app_avatar.dart';
+import '../../widgets/redesign/lb_incremental_list_component.dart';
 import '../../widgets/redesign/lb_list_component.dart';
 import '../../widgets/redesign/lb_modal_bottom_sheet.dart';
 import '../../widgets/redesign/lb_search_pill.dart';
@@ -513,7 +514,8 @@ class _RulesPerAppBehaviorScreenState extends State<RulesPerAppBehaviorScreen> {
         if (_isAppsLoading)
           const LbAppsLoadingState()
         else
-          LbListComponent(
+          LbIncrementalListComponent(
+            key: ValueKey<Object>((_showSystemApps, _searchQuery)),
             items: _buildAppRows(),
             rowHeight: LbSpacing.recentRowHeight,
             leadingSize: LbSpacing.recentAvatarSize,
