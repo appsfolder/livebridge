@@ -712,6 +712,7 @@ class ConverterPrefs(context: Context) {
             .remove(KEY_PARSER_DICTIONARY_RU_OVERRIDE)
             .remove(KEY_PARSER_DICTIONARY_ZH_OVERRIDE)
             .remove(KEY_PARSER_DICTIONARY_KO_OVERRIDE)
+            .remove(KEY_PARSER_DICTIONARY_TR_OVERRIDE)
             .apply()
     }
 
@@ -764,6 +765,7 @@ class ConverterPrefs(context: Context) {
             .remove(KEY_PARSER_DICTIONARY_RU_OVERRIDE)
             .remove(KEY_PARSER_DICTIONARY_ZH_OVERRIDE)
             .remove(KEY_PARSER_DICTIONARY_KO_OVERRIDE)
+            .remove(KEY_PARSER_DICTIONARY_TR_OVERRIDE)
             .apply()
     }
 
@@ -1189,6 +1191,7 @@ class ConverterPrefs(context: Context) {
             "ru" -> KEY_PARSER_DICTIONARY_RU_OVERRIDE
             "zh" -> KEY_PARSER_DICTIONARY_ZH_OVERRIDE
             "ko" -> KEY_PARSER_DICTIONARY_KO_OVERRIDE
+            "tr" -> KEY_PARSER_DICTIONARY_TR_OVERRIDE
             else -> null
         }
     }
@@ -1305,6 +1308,8 @@ class ConverterPrefs(context: Context) {
             "parser_dictionary_zh_override"
         private const val KEY_PARSER_DICTIONARY_KO_OVERRIDE =
             "parser_dictionary_ko_override"
+        private const val KEY_PARSER_DICTIONARY_TR_OVERRIDE =
+            "parser_dictionary_tr_override"
 
         private const val KEY_PACKAGE_FILTER_LEGACY = "package_filter"
         private const val MIN_AOSP_CUTTING_LENGTH = 7
@@ -1317,7 +1322,7 @@ class ConverterPrefs(context: Context) {
         private const val MAX_CONVERSION_LOG_MAX_BYTES = 25 * 1024 * 1024
         private const val DEFAULT_CONVERSION_LOG_MAX_BYTES = 5 * 1024 * 1024
         private val SUPPORTED_PARSER_DICTIONARY_LANGUAGE_IDS =
-            setOf("en", "pt-br", "ru", "zh", "ko")
+            setOf("en", "pt-br", "ru", "zh", "ko", "tr")
         private val DEFAULT_PARSER_DICTIONARY_LANGUAGE_IDS =
             SUPPORTED_PARSER_DICTIONARY_LANGUAGE_IDS
     }

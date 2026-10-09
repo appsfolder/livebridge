@@ -37,6 +37,11 @@ const List<DictionaryLanguageOption> lbDictionaryLanguages =
         label: '한국어',
         assetFileName: 'liveupdate_dictionary_ko.json',
       ),
+      DictionaryLanguageOption(
+        id: 'tr',
+        label: 'Türkçe',
+        assetFileName: 'liveupdate_dictionary_tr.json',
+      ),
     ];
 
 const String lbDictionaryRemoteBaseUrl =

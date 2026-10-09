@@ -1,0 +1,448 @@
+{
+  "smart_rules": [
+    {
+      "id": "food",
+      "max_stage": 4,
+      "package_hints": [
+        "yemeksepeti",
+        "getir",
+        "tiklagelsin",
+        "migros",
+        "fuudy",
+        "yemek",
+        "kfc",
+        "dominos",
+        "burgerking",
+        "mcdonalds",
+        "popeyes",
+        "delivery",
+        "food"
+      ],
+      "text_triggers": [
+        "sipariş",
+        "siparis",
+        "kurye",
+        "yemek",
+        "restoran",
+        "teslimat"
+      ],
+      "exclude_patterns": [
+        "(doğum\\s+gün[üu])",
+        "(indirim|kupon|kampanya|promosyon|f[ıi]rsat|hediye\\s+çeki|%\\s*\\d+|\\d+\\s*%|ücretsiz\\s+teslimat|bedava)",
+        "(ödeme[^\\n]{0,40}(?:başar[ıi]s[ıi]z|al[ıi]namad[ıi]|reddedildi|onaylanmad[ıi]|tamamlanamad[ıi])|sipariş[^\\n]{0,40}iptal|iptal\\s+edildi)",
+        "((?<!yemek)sepet(?:in|te)|sipariş(?:ini|inizi)\\s+tamamla|al[ıi]şverişi\\s+tamamla)",
+        "(tl\\s+ve\\s+üzeri|üzeri\\s+sipariş|minimum\\s+sepet)",
+        "(kargo|gönderi(?:n|niz)\\b|takip\\s+(?:no|numaras[ıi]|kodu)|teslimat\\s+noktas[ıi]|dağ[ıi]t[ıi]ma\\s+ç[ıi]k|hepsijet|trendyol\\s+express|\\bptt\\b)"
+      ],
+      "signals": [
+        {
+          "stage": 4,
+          "pattern": "((?<!kuryeye\\s)teslim\\s+edil(?:di|miştir)|teslimat[^\\n]{0,30}tamamland[ıi])"
+        },
+        {
+          "stage": 3,
+          "pattern": "(sipariş[^\\n]{0,60}(?:yola\\s+ç[ıi]kt[ıi]|yolda)|kurye[^\\n]{0,60}(?:yola\\s+ç[ıi]kt[ıi]|yolda|teslim\\s+al(?:d[ıi]|[ıi]nd[ıi])|yaklaş[ıi]yor|geliyor|kap[ıi]n[ıi]zda)|kuryeye\\s+(?:teslim\\s+edildi|verildi))"
+        },
+        {
+          "stage": 2,
+          "pattern": "(sipariş[^\\n]{0,60}(?:haz[ıi]r(?:land[ıi])?(?!\\p{L})(?!\\s+ol(?:du[ğg]unda|unca))|paketlendi)|kurye[^\\n]{0,40}(?:atand[ıi]|bekleniyor)|teslim\\s+al[ıi]nmaya\\s+haz[ıi]r)"
+        },
+        {
+          "stage": 1,
+          "pattern": "(sipariş[^\\n]{0,60}(?:haz[ıi]rlan[ıi]yor|haz[ıi]rlanmaya\\s+başla|pişiriliyor|mutfakta)|restoran[^\\n]{0,60}(?:haz[ıi]rl[ıi]yor|haz[ıi]rlamaya\\s+başla)|haz[ıi]rlan[ıi]yor)"
+        },
+        {
+          "stage": 0,
+          "pattern": "(sipariş[^\\n]{0,60}(?:(?<!teslim\\s)al[ıi]nd[ıi]|onayland[ıi]|oluşturuldu|iletildi)|ödeme[^\\n]{0,40}(?:al[ıi]nd[ıi]|onayland[ıi]|başar[ıi]l[ıi]))"
+        }
+      ]
+    },
+    {
+      "id": "taxi",
+      "max_stage": 4,
+      "package_hints": [
+        "bitaksi",
+        "itaksi",
+        "taksi",
+        "taxi",
+        "uber",
+        "bolt",
+        "yango"
+      ],
+      "text_triggers": [
+        "taksi",
+        "yolculuk",
+        "yolculuğ",
+        "sürücü",
+        "şoför"
+      ],
+      "signals": [
+        {
+          "stage": 4,
+          "pattern": "(yolculu[kğ][^\\n]{0,30}(?:tamamland[ıi]|sona\\s+erdi|bitti)|var[ıi]ş\\s+noktas[ıi]na\\s+ulaşt[ıi]n[ıi]z)"
+        },
+        {
+          "stage": 3,
+          "pattern": "(yolculu[kğ][^\\n]{0,30}başlad[ıi]|iyi\\s+yolculuklar)"
+        },
+        {
+          "stage": 2,
+          "pattern": "((?:sürücü|şoför|taksi|arac[ıi]n[ıi]z)[^\\n]{0,60}(?:geliyor|yolda|yaklaş[ıi]yor|geldi|ulaşt[ıi]|bekliyor|kap[ıi]da))"
+        },
+        {
+          "stage": 1,
+          "pattern": "((?:sürücü|şoför|taksi)[^\\n]{0,40}(?:bulundu|atand[ıi]|kabul\\s+etti|eşleşti))"
+        },
+        {
+          "stage": 0,
+          "pattern": "((?:sürücü|şoför|taksi|araç)\\s+aran[ıi]yor|(?:sürücü|şoför)[^\\n]{0,20}bekleniyor)"
+        }
+      ]
+    },
+    {
+      "id": "navigation",
+      "max_stage": 4,
+      "package_hints": [
+        "ru.yandex.yandexnavi",
+        "ru.yandex.yandexmaps",
+        "google.android.apps.maps",
+        "waze",
+        "here",
+        "tomtom",
+        "maps",
+        "map",
+        "navigator",
+        "navigation",
+        "navigasyon",
+        "navi",
+        "harita"
+      ],
+      "text_triggers": [
+        "rota",
+        "güzergah",
+        "navigasyon",
+        "sola dön",
+        "sağa dön",
+        "soldan devam",
+        "sağdan devam",
+        "çıkıştan",
+        "u dönüşü",
+        "kavşak",
+        "varış noktası",
+        "hedefinize",
+        "vardınız"
+      ],
+      "exclude_patterns": [
+        "(doğum\\s+gün[üu])",
+        "(indirim|kupon|kampanya|promosyon|f[ıi]rsat|%\\s*\\d+|\\d+\\s*%|bedava)",
+        "(bülten|abonelikten\\s+ç[ıi]k|bizi\\s+takip\\s+edin|uygulamay[ıi]\\s+indir)"
+      ],
+      "signals": [
+        {
+          "stage": 4,
+          "pattern": "(hedef(?:e|inize)\\s+ulaşt[ıi]n[ıi]z|var[ıi]ş\\s+noktas[ıi]na\\s+ulaşt[ıi]n[ıi]z|(?<!neredeyse\\s)vard[ıi]n[ıi]z|rota\\s+tamamland[ıi]|navigasyon\\s+sona\\s+erdi)"
+        },
+        {
+          "stage": 3,
+          "pattern": "((?:hedefiniz|var[ıi]ş\\s+noktan[ıi]z)[^\\n]{0,40}(?:sağda|solda|sağ[ıi]n[ıi]zda|solunuzda)|neredeyse\\s+vard[ıi]n[ıi]z|hedefe\\s+az\\s+kald[ıi])"
+        },
+        {
+          "stage": 2,
+          "pattern": "(\\b\\d+[\\d.,]*\\s*(?:m|km|metre|kilometre)\\b|(?:sola|sağa)\\s+dön|(?:soldan|sağdan)\\s+(?:devam|gidin|ilerleyin)|düz\\s+(?:devam|ilerleyin)|devam\\s+edin|ç[ıi]k[ıi]ştan\\s+ç[ıi]k|u\\s+dönüşü|dönel\\s+kavşa|kavşak|şeritte\\s+kal[ıi]n)"
+        },
+        {
+          "stage": 1,
+          "pattern": "(rota\\s+(?:oluşturuldu|başlat[ıi]ld[ıi]|hesapland[ıi])|navigasyon\\s+(?:başlat[ıi]ld[ıi]|başlad[ıi])|rotay[ıi]\\s+takip\\s+edin)"
+        }
+      ]
+    },
+    {
+      "id": "external_device",
+      "max_stage": 2,
+      "package_hints": [
+        "camera",
+        "bluetooth",
+        "accessory",
+        "usb",
+        "gopro",
+        "dji",
+        "wearable",
+        "galaxywearable",
+        "miui"
+      ],
+      "text_triggers": [
+        "bluetooth",
+        "kamera",
+        "aksesuar",
+        "usb",
+        "kulaklık",
+        "bağlandı",
+        "bağlanıyor",
+        "eşleştirildi",
+        "eşleştiriliyor",
+        "eşlendi"
+      ],
+      "exclude_patterns": [
+        "(doğum\\s+gün[üu])",
+        "(indirim|kupon|kampanya|promosyon|f[ıi]rsat|%\\s*\\d+|\\d+\\s*%|bedava)",
+        "(erişim\\s+noktas[ıi]|hotspot|internet\\s+paylaş[ıi]m[ıi]|tethering|wi-?fi|internet\\s+bağlant[ıi]s[ıi]|ağa\\s+bağl|\\b\\d+\\s+cihaz\\b)"
+      ],
+      "signals": [
+        {
+          "stage": 2,
+          "pattern": "(bağland[ıi](?!\\p{L})|bağl[ıi](?!\\p{L})(?!\\s+(?:değil|olarak))|eşleştirildi|eşlendi)"
+        },
+        {
+          "stage": 1,
+          "pattern": "(bağlan[ıi]yor|eşleştiriliyor|eşleniyor)"
+        }
+      ]
+    },
+    {
+      "id": "vpn",
+      "max_stage": 1,
+      "package_hints": [
+        "vpn",
+        "wireguard",
+        "openvpn",
+        "nordvpn",
+        "protonvpn",
+        "surfshark",
+        "expressvpn",
+        "outline",
+        "amnezia",
+        "clash",
+        "v2ray",
+        "hiddify",
+        "tailscale",
+        "zerotier",
+        "shadowsocks"
+      ],
+      "text_triggers": [
+        "vpn",
+        "wireguard",
+        "openvpn",
+        "tünel",
+        "güvenli bağlantı"
+      ],
+      "signals": [
+        {
+          "stage": 1,
+          "pattern": "(?<!\\d)\\d{1,4}(?:[.,]\\d{1,2})?\\s*(?:[kmg]?i?b)\\s*(?:(?:/\\s*sn)|(?:/\\s*sec)|(?:/\\s*s)|ps)\\b|bağland[ıi](?!\\p{L})|bağl[ıi](?!\\p{L})(?!\\s+değil)"
+        }
+      ]
+    }
+  ],
+  "blocked_source_packages": [],
+  "privacy_redaction_placeholders": [
+    "sensitive content hidden",
+    "content hidden",
+    "hidden content",
+    "notification content hidden",
+    "unlock to view",
+    "içerik gizlendi",
+    "içerik gizli",
+    "hassas içerik gizlendi",
+    "hassas bildirim içeriği gizlendi",
+    "hassas bildirim içeriği gizli",
+    "bildirim içeriği gizlendi",
+    "görüntülemek için kilidi açın",
+    "görmek için kilidi açın"
+  ],
+  "known_navigation_packages": [
+    "ru.yandex.yandexnavi",
+    "ru.yandex.yandexmaps",
+    "com.google.android.apps.maps",
+    "com.waze"
+  ],
+  "navigation_package_markers": [
+    "navigation",
+    "navigator",
+    ".maps",
+    "navi",
+    "navigasyon",
+    "harita"
+  ],
+  "navigation_distance_pattern": "(?<!\\d)\\d{1,4}(?:[\\s.,]\\d{1,2})?\\s*(?:km|kilometre|m|metre)\\b",
+  "navigation_instruction_pattern": "((?:sola|sağa)\\s+dön(?:ünüz|ün)?|(?:soldan|sağdan)\\s+(?:devam\\s+edin|gidin|ilerleyin)|düz\\s+devam\\s+edin|ç[ıi]k[ıi]ştan\\s+ç[ıi]k[ıi]n|u\\s+dönüşü(?:\\s+yap[ıi]n)?|dönel\\s+kavşak(?:tan)?)",
+  "otp_strong_triggers": [
+    "otp",
+    "2fa",
+    "doğrulama kodu",
+    "dogrulama kodu",
+    "onay kodu",
+    "güvenlik kodu",
+    "guvenlik kodu",
+    "giriş kodu",
+    "giris kodu",
+    "aktivasyon kodu",
+    "erişim kodu",
+    "erisim kodu",
+    "sms kodu",
+    "tek kullanımlık",
+    "tek kullanimlik",
+    "tek seferlik",
+    "kodunuz"
+  ],
+  "otp_loose_trigger_pattern": "(?:(?:(?<!(?:bu|takip|posta|alan|indirim|kupon|promosyon|kampanya|hediye|referans|davet|sipari[şs]|rezervasyon|[üu]r[üu]n|stok)\\s)\\bkod(?:unuzdur|unuz|umuz|un|u)?|(?<!\\p{L})[şs]ifre(?:nizdir|niz|miz|si|n)?|\\bparola(?:n[ıi]z|s[ıi])?)(?!\\p{L})\\s*(?:[:#=(-]|olarak)?\\s*(?:\\d{3}[\\s-]\\d{3}|\\d{4}[\\s-]\\d{4}|\\d{4,8})(?!\\d))|(?:(?<![\\p{L}\\p{N}])(?:\\d{3}[\\s-]\\d{3}|\\d{4}[\\s-]\\d{4}|\\d{4,8})(?:\\s*[-–:\\])])?\\s+(?:(?!tl\\b|try\\b|lira)[\\p{L}'’.]+\\s+)?(?:(?:tek\\s+kullan[ıi]ml[ıi]k|tek\\s+seferlik|do[ğg]rulama|onay|g[üu]venlik|giri[şs]|teslim(?:at)?|sms|otp)\\s+)?(?:kod(?:unuzdur|unuzu|unuz|unu|udur|un|lu|u)|[şs]ifre(?:nizdir|niz|sidir|sini|si)|parola(?:n[ıi]z|s[ıi]))(?!\\p{L})(?!\\s*[:#=(-]?\\s*\\d))",
+  "otp_loose_trigger_spans_code": true,
+  "money_context_pattern": "(₺|\\btl\\b|\\d[.,]\\d{2}\\s*try\\b|\\blira|kuruş|kurus|(?:bu|takip|posta|alan|indirim|kupon|promosyon|kampanya|hediye|referans|davet|sipari[şs]|rezervasyon|[üu]r[üu]n|stok)\\s+(?:kodu?|no|numaras[ıi])(?!\\p{L})|\\b0\\d{3}\\s?\\d{3}\\s?\\d{2}\\s?\\d{2}\\b|\\b0850\\s?\\d{3}\\b|\\b444\\s?\\d\\s?\\d{3}\\b|numaram[ıi]z)",
+  "text_progress_percent_pattern": "(?<=%)\\s?(\\d{1,3})(?!\\d)|(?<!\\d)(\\d{1,3})\\s*%",
+  "text_progress_context_window": 80,
+  "text_progress_include_context_pattern": "(kalan|kald[ıi]|ilerleme|tamamland[ıi]|tamamlan[ıi]yor|indiriliyor|yükleniyor|güncelleniyor|kuruluyor|eşitleniyor|senkronize|işleniyor|işlendi|aktar[ıi]l[ıi]yor|kopyalan[ıi]yor|taş[ıi]n[ıi]yor|yedekleniyor|dönüştürülüyor|s[ıi]k[ıi]şt[ıi]r[ıi]l[ıi]yor|ç[ıi]kar[ıi]l[ıi]yor)",
+  "text_progress_exclude_context_pattern": "(indirim|kupon|kampanya|promosyon|f[ıi]rsat|hediye|bonus|kazan|tasarruf|puan|\\d{2,7}\\s*(?:tl|₺|lira)|\\bnem\\b|hava\\s+durumu|s[ıi]cakl[ıi]k|bas[ıi]nç|yağ[ıi]ş|komisyon|vergi|\\bkdv\\b|faiz|kredi|taksit|\\bpil\\b|şarj|batarya)",
+  "weather_package_hints": [
+    "weather",
+    "sec.android.daemonapp",
+    "meteo",
+    "accuweather",
+    "weatherchannel",
+    "yandex.weather",
+    "clime",
+    "1weather",
+    "todayweather",
+    "havadurumu",
+    "meteoroloji"
+  ],
+  "weather_context_pattern": "(hava\\s+durumu|\\bhava\\b|s[ıi]cakl[ıi]k|hissedilen|\\bnem\\b|rüzgar|rüzgâr|yağ[ıi]ş|bas[ıi]nç|tahmin|\\buv\\b|bugün|yar[ıi]n|güneşli|bulutlu|kapal[ıi]|yağmur|sağanak|\\bkar\\b|karl[ıi]|\\bsis(?:li)?\\b|puslu|f[ıi]rt[ıi]na|gök\\s*gürültü)",
+  "weather_temperature_pattern": "(?<!\\d)([+\\-−]?\\d{1,3})\\s*(?:°(?:\\s*(?:c|f)(?!\\p{L}))?|℃|℉)",
+  "weather_day_pattern": "(bugün|yar[ıi]n|sabah|öğleden\\s+sonra|öğlen|akşam|gece)",
+  "weather_condition_pattern": "(güneşli|aç[ıi]k|bulutlu|kapal[ıi]|yağmurlu|yağmur|sağanak|karl[ıi]|\\bkar\\b|\\bsis(?:li)?\\b|rüzgarl[ıi]|rüzgârl[ıi])",
+  "weather_condition_thunder_pattern": "(gök\\s*gürültü|f[ıi]rt[ıi]na|şimşek|y[ıi]ld[ıi]r[ıi]m)",
+  "weather_condition_rain_pattern": "(yağmur|sağanak|çisenti|çiseleme|(?<!kar\\s)yağ[ıi]ş)",
+  "weather_condition_snow_pattern": "(\\bkar\\b|karl[ıi]|tipi)",
+  "weather_condition_fog_pattern": "(\\bsis(?:li)?\\b|puslu|\\bpus\\b)",
+  "weather_condition_wind_pattern": "(rüzgar|rüzgâr|esinti)",
+  "weather_condition_sun_pattern": "(güneş|aç[ıi]k)",
+  "weather_condition_cloud_pattern": "(bulut|kapal[ıi])",
+  "external_device_name_patterns": [
+    "(?:bağland[ıi]|bağlan[ıi]yor|bağl[ıi]|eşleştirildi|eşlendi)\\s*[:\\-–]\\s*[\"«]?([\\p{L}\\p{N}][\\p{L}\\p{N} ._#\\-]{1,40})[\"»]?(?=\\s|$|[,.!])",
+    "[\"«]?([\\p{L}\\p{N}][\\p{L}\\p{N} ._#\\-]{1,40}?)[\"»]?\\s*(?:cihaz[ıi]na\\s+|ile\\s+)?(?:bağland[ıi]|bağlan[ıi]yor|bağl[ıi]|eşleştirildi|eşleştiriliyor|eşlendi)(?!\\p{L})"
+  ],
+  "external_device_generic_names": [
+    "cihaz",
+    "cihazlar",
+    "1 cihaz",
+    "2 cihaz",
+    "3 cihaz",
+    "4 cihaz",
+    "5 cihaz",
+    "kamera",
+    "aksesuar",
+    "bluetooth",
+    "usb",
+    "kulaklık",
+    "wifi",
+    "wi-fi",
+    "hotspot",
+    "erişim noktası",
+    "kişisel erişim noktası",
+    "mobil erişim noktası"
+  ],
+  "vpn_speed_pattern": "(?<!\\d)\\d{1,4}(?:[.,]\\d{1,2})?\\s*(?:[kmg]?i?b)\\s*(?:(?:/\\s*sn)|(?:/\\s*sec)|(?:/\\s*s)|ps)\\b",
+  "vpn_context_pattern": "(\\bvpn\\b|wireguard|openvpn|hiddify|clash|v2ray|singbox|outline|amnezia|tailscale|zerotier|proxy|tünel|vekil\\s+sunucu)",
+  "vpn_package_markers": [
+    "hiddify",
+    "wireguard",
+    "openvpn",
+    "nordvpn",
+    "protonvpn",
+    "surfshark",
+    "expressvpn",
+    "outline",
+    "amnezia",
+    "clash",
+    "v2ray",
+    "hysteria",
+    "singbox",
+    "tailscale",
+    "zerotier",
+    "shadowsocks",
+    "vpn"
+  ],
+  "vpn_download_markers": [
+    "↓",
+    "dl",
+    "downlink",
+    "download",
+    "down",
+    "rx",
+    "recv",
+    "receive",
+    "incoming",
+    "inbound",
+    "ingress",
+    "indirme",
+    "indirilen",
+    "alınan",
+    "gelen"
+  ],
+  "vpn_upload_markers": [
+    "↑",
+    "ul",
+    "uplink",
+    "upload",
+    "up",
+    "tx",
+    "send",
+    "outgoing",
+    "outbound",
+    "egress",
+    "yükleme",
+    "yüklenen",
+    "gönderilen",
+    "giden"
+  ],
+  "otp_code_patterns": [
+    "(?i:\\bkod[a-z]{0,7}|(?<!\\p{L})[şs][iİ]fre[a-zİ]{0,6}|\\bparola[a-zıİ]{0,4}|\\botp)\\s*[:#=(-]?\\s*((?:\\d{3}[\\s-]\\d{3}|\\d{4}[\\s-]\\d{4}|\\d{4,8}))(?!\\d)",
+    "(?<![\\p{L}\\p{N}])((?:\\d{3}[\\s-]\\d{3}|\\d{4}[\\s-]\\d{4}|\\d{4,8}))(?=(?:\\s*[-–:\\])])?\\s+(?:[\\p{L}'’.]+\\s+){0,3}(?i:kod|[şs][iİ]fre|parola))",
+    "(?<!\\S)(\\d{4,8})(?!\\d)",
+    "(?<!\\S)(\\d(?:[\\s-]?\\d){3,7})(?!\\d)",
+    "(?<!\\S)([A-Z0-9]{4,8})(?!\\w)"
+  ],
+  "order_context_hints": [],
+  "entity_token_patterns": [
+    "(?:sipariş|siparis|yolculuk)\\s*(?:#|no\\.?|numaras[ıi]|kodu)\\s*:?\\s*([a-zA-Z0-9-]{2,16})",
+    "([a-zA-Z0-9-]*\\d[a-zA-Z0-9-]{1,15})\\s+(?:numaral[ıi]|no['’]?lu)\\s+sipariş",
+    "(?:#|№)\\s*([a-zA-Z0-9-]{2,16})"
+  ],
+  "status_labels": {
+    "food": {
+      "tr": {
+        "0": "Alındı",
+        "1": "Hazırlanıyor",
+        "2": "Hazır",
+        "3": "Yolda",
+        "4": "Teslim edildi"
+      }
+    },
+    "taxi": {
+      "tr": {
+        "0": "Aranıyor",
+        "1": "Sürücü",
+        "2": "Geliyor",
+        "3": "Yolculukta",
+        "4": "Tamamlandı"
+      }
+    },
+    "navigation": {
+      "tr": {
+        "1": "Rota",
+        "2": "Navigasyon",
+        "3": "Az kaldı",
+        "4": "Varıldı"
+      }
+    },
+    "external_device": {
+      "tr": {
+        "1": "Bağlanıyor",
+        "2": "Bağlandı"
+      }
+    },
+    "vpn": {
+      "tr": {
+        "1": "VPN"
+      }
+    }
+  }
+}

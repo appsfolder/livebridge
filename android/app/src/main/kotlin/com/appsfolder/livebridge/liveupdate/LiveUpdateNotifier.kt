@@ -1700,13 +1700,13 @@ object LiveUpdateNotifier {
     private fun isPrivacyRedactionPlaceholder(text: String, placeholders: Set<String>): Boolean {
         val normalized = text
             .trim()
-            .lowercase(Locale.ROOT)
+            .lowercaseForMatching()
             .replace(Regex("\\s+"), " ")
 
         return placeholders.any { placeholder ->
             val normalizedPlaceholder = placeholder
                 .trim()
-                .lowercase(Locale.ROOT)
+                .lowercaseForMatching()
                 .replace(Regex("\\s+"), " ")
             normalizedPlaceholder.isNotBlank() &&
                     (normalized == normalizedPlaceholder ||
@@ -2212,7 +2212,7 @@ object LiveUpdateNotifier {
                     isWeatherPackage ||
                     isExternalDevicePackage ||
                     isVpnPackage
-        ).lowercase(Locale.ROOT)
+        ).lowercaseForMatching()
 
         for (rule in parserDictionary.smartRules) {
             if (hasNativeProgress && rule.id != "weather") {
@@ -2406,10 +2406,11 @@ object LiveUpdateNotifier {
         }
 
         val percentPattern = parserDictionary.textProgressPercentPattern
-        val combinedLower = combinedText.lowercase(Locale.ROOT)
+        val combinedLower = combinedText.lowercaseForMatching()
         val matches = percentPattern.findAll(combinedText)
         for (match in matches) {
-            val percentValue = match.groupValues.getOrNull(1)?.toIntOrNull() ?: continue
+            val percentValue = match.groupValues.drop(1).firstOrNull { it.isNotEmpty() }
+                ?.toIntOrNull() ?: continue
             if (percentValue !in 0..100) {
                 continue
             }
@@ -2479,7 +2480,7 @@ object LiveUpdateNotifier {
             return null
         }
 
-        val combinedLower = combinedText.lowercase(Locale.ROOT)
+        val combinedLower = combinedText.lowercaseForMatching()
         val hasStrongTrigger = parserDictionary.otpStrongTriggers.any(combinedLower::contains)
         val hasLooseTrigger = parserDictionary.otpLooseTriggerPattern.containsMatchIn(combinedLower)
         if (!hasStrongTrigger && !hasLooseTrigger) {
@@ -2491,6 +2492,8 @@ object LiveUpdateNotifier {
 
         val candidates = mutableMapOf<String, OtpCandidate>()
         val triggerRanges = collectOtpTriggerRanges(combinedLower, parserDictionary)
+        val codeTriggerRanges = parserDictionary.otpCodeTriggerPattern
+            .findAll(combinedLower).map { it.range }.toList()
 
         for ((patternIndex, pattern) in parserDictionary.otpCodePatterns.withIndex()) {
             for (match in pattern.findAll(combinedText)) {
@@ -2504,7 +2507,11 @@ object LiveUpdateNotifier {
                 if (!hasOtpTokenBoundaries(combinedText, valueRange.first, valueRange.last + 1)) {
                     continue
                 }
-                if (isLikelyMoneyCandidate(
+                // A number matched as part of a trigger phrase is the code itself, not an amount or phone.
+                val inTrigger = codeTriggerRanges.any {
+                    it.first <= valueRange.first && valueRange.last <= it.last
+                }
+                if (!inTrigger && isLikelyMoneyCandidate(
                         combinedLower,
                         valueRange.first,
                         valueRange.last + 1,
@@ -2533,7 +2540,8 @@ object LiveUpdateNotifier {
                         start = valueRange.first,
                         endExclusive = valueRange.last + 1,
                         patternIndex = patternIndex,
-                        triggerRanges = triggerRanges
+                        triggerRanges = triggerRanges,
+                        inTrigger = inTrigger
                     )
                 )
                 val previous = candidates[digits]
@@ -2582,9 +2590,10 @@ object LiveUpdateNotifier {
         start: Int,
         endExclusive: Int,
         patternIndex: Int,
-        triggerRanges: List<IntRange>
+        triggerRanges: List<IntRange>,
+        inTrigger: Boolean
     ): Int {
-        var score = if (patternIndex == 0) 400 else 0
+        var score = if (patternIndex == 0 || inTrigger) 400 else 0
         val nearestTrigger = triggerRanges.minOfOrNull { triggerRange ->
             when {
                 endExclusive <= triggerRange.first -> triggerRange.first - endExclusive
@@ -2599,7 +2608,7 @@ object LiveUpdateNotifier {
             score += 12
         }
         score += (8 - rawValue.count(Char::isDigit)) * 3
-        if (isLikelyPhoneCandidate(textLower, start, endExclusive)) {
+        if (!inTrigger && isLikelyPhoneCandidate(textLower, start, endExclusive)) {
             score -= 500
         }
         return score
@@ -2614,7 +2623,7 @@ object LiveUpdateNotifier {
         val windowEnd = (endExclusive + 28).coerceAtMost(textLower.length)
         val context = textLower.substring(windowStart, windowEnd)
         val hasPhoneMarker = Regex(
-            "(?:phone|mobile|telephone|tel\\.?|call|whatsapp|телефон|мобильн|звон|номер\\s+телефона|telefon|nomor\\s+(?:telepon|hp))",
+            "(?:phone|mobile|telephone|tel\\.?|call|whatsapp|телефон|мобильн|звон|номер\\s+телефона|telefon|nomor\\s+(?:telepon|hp)|\\bcep\\b|aray[ıi]n|ça[ğg]r[ıi]\\s+merkez|m[üu][şs]teri\\s+hizmet)",
             RegexOption.IGNORE_CASE
         ).containsMatchIn(context)
         val hasInternationalPrefix = textLower
@@ -3179,6 +3188,7 @@ object LiveUpdateNotifier {
             NativeAppStrings.language(context) == "zh" -> "已复制"
             NativeAppStrings.language(context) == "es" -> "Copiado"
             NativeAppStrings.language(context) == "de" -> "Kopiert"
+            NativeAppStrings.language(context) == "tr" -> "Kopyalandı"
             else -> "Copied"
         }
 
@@ -4030,7 +4040,7 @@ object LiveUpdateNotifier {
     }
 
     private fun otpActionLabel(context: Context): String {
-        return NativeAppStrings.text(context, "Copy code", "Скопировать код", "Copiar código", "Code kopieren")
+        return NativeAppStrings.text(context, "Copy code", "Скопировать код", "Copiar código", "Code kopieren", "Kodu kopyala")
     }
 
     private fun copySourceActions(

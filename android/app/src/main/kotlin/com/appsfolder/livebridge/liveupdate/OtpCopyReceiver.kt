@@ -26,7 +26,7 @@ class OtpCopyReceiver : BroadcastReceiver() {
 
     private fun copiedToastText(context: Context): String {
         return NativeAppStrings.text(context, "Code copied", "Код скопирован",
-            "Código copiado", "Code kopiert")
+            "Código copiado", "Code kopiert", "Kod kopyalandı")
     }
 
     companion object {

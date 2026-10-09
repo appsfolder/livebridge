@@ -45,7 +45,9 @@ internal data class LiveParserDictionary(
     val otpCodePatterns: List<Regex>,
     val orderContextHints: Set<String>,
     val entityTokenPatterns: List<Regex>,
-    val statusLabels: Map<String, StageLabelsByLocale>
+    val statusLabels: Map<String, StageLabelsByLocale>,
+    // Loose triggers of languages whose pattern spans exactly the code it announces.
+    val otpCodeTriggerPattern: Regex = Regex(EMPTY_REGEX_PATTERN)
 ) {
     fun resolveStatusText(ruleId: String, stageValue: Int, locale: Locale?): String? {
         val labels = statusLabels[ruleId.lowercase(Locale.ROOT)] ?: return null
@@ -142,7 +144,8 @@ internal data class LiveParserDictionary(
             otpCodePatterns = mergeRegexLists(otpCodePatterns, other.otpCodePatterns),
             orderContextHints = orderContextHints + other.orderContextHints,
             entityTokenPatterns = mergeRegexLists(entityTokenPatterns, other.entityTokenPatterns),
-            statusLabels = mergeStatusLabels(statusLabels, other.statusLabels)
+            statusLabels = mergeStatusLabels(statusLabels, other.statusLabels),
+            otpCodeTriggerPattern = mergeRegex(otpCodeTriggerPattern, other.otpCodeTriggerPattern)
         )
     }
 
@@ -376,7 +379,12 @@ internal data class LiveParserDictionary(
                 otpCodePatterns = otpCodePatterns,
                 orderContextHints = orderContextHints,
                 entityTokenPatterns = entityTokenPatterns,
-                statusLabels = statusLabels
+                statusLabels = statusLabels,
+                otpCodeTriggerPattern = if (root.optBoolean("otp_loose_trigger_spans_code")) {
+                    otpLooseTriggerPattern
+                } else {
+                    defaults.otpCodeTriggerPattern
+                }
             )
         }
 
@@ -601,7 +609,8 @@ internal object LiveParserDictionaryLoader {
         DictionaryLanguagePack("pt-br", "liveupdate_dictionary_pt-BR.json"),
         DictionaryLanguagePack("ru", "liveupdate_dictionary_ru.json"),
         DictionaryLanguagePack("zh", "liveupdate_dictionary_zh.json"),
-        DictionaryLanguagePack("ko", "liveupdate_dictionary_ko.json")
+        DictionaryLanguagePack("ko", "liveupdate_dictionary_ko.json"),
+        DictionaryLanguagePack("tr", "liveupdate_dictionary_tr.json")
     )
 
     @Volatile

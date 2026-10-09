@@ -8,11 +8,12 @@ internal object NativeAppStrings {
         context.resources.configuration.locales.get(0)?.language.orEmpty()
     )
 
-    fun text(context: Context, en: String, ru: String = en, es: String = en, de: String = en): String =
+    fun text(context: Context, en: String, ru: String = en, es: String = en, de: String = en, tr: String = en): String =
         when (language(context)) {
             "ru" -> ru
             "es" -> es
             "de" -> de
+            "tr" -> tr
             else -> en
         }
 }
